@@ -1,6 +1,6 @@
 package com.make_profile.service.impl.resume;
 
-import com.make_profile.dto.resume.CommonResumeDto;
+import com.make_profile.dto.candidates.*;
 import com.make_profile.dto.resume.EducationDto;
 import com.make_profile.dto.resume.ExperienceDto;
 import com.make_profile.dto.resume.ProjectDto;
@@ -34,7 +34,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
     private Configuration configuration;
 
     @Override
-    public void createResumeTemplate(CommonResumeDto commonResumeDto) {
+    public void createResumeTemplate(CandidateDto candidateDto) {
         logger.debug("Service :: createResumeTemplate :: Extered");
 
         Map<String, Object> variables = new HashedMap<>();
@@ -42,25 +42,42 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
         StringBuilder subject = new StringBuilder();
         try {
 
-            variables.put("phone", commonResumeDto.getPhone());
-            variables.put("name", commonResumeDto.getName());
-            variables.put("email", commonResumeDto.getEmail());
-            variables.put("summary", commonResumeDto.getSummary());
+            variables.put("phone", candidateDto.getMobileNumber());
+            variables.put("name", candidateDto.getName());
+            variables.put("email", candidateDto.getEmail());
+            //variables.put("summary", candidateDto.getSummary());
 
-            if (Objects.nonNull(commonResumeDto.getLinkedin()) && !commonResumeDto.getLinkedin().isEmpty()) {
-                variables.put("linkedin", commonResumeDto.getLinkedin());
+            if (Objects.nonNull(candidateDto.getLinkedIn()) && !candidateDto.getLinkedIn().isEmpty()) {
+                variables.put("linkedin", candidateDto.getLinkedIn());
             }
 
-            if (Objects.nonNull(commonResumeDto.getExperiences()) && !commonResumeDto.getExperiences().isEmpty()) {
+            if (Objects.nonNull(candidateDto.getExperiences()) && !candidateDto.getExperiences().isEmpty()) {
 
-                List<ExperienceDto> experienceList = new ArrayList<>();
+                List<CandidateExperienceDto> experienceList = new ArrayList<>();
 
-                commonResumeDto.getExperiences().forEach(exp -> {
-                    ExperienceDto experiences = new ExperienceDto();
-                    experiences.setRole(exp.getRole());
-                    experiences.setCompany(exp.getCompany());
-                    experiences.setDuration(exp.getDuration());
-                    experiences.setResponsibilities(exp.getResponsibilities());
+                candidateDto.getExperiences().forEach(exp -> {
+                    CandidateExperienceDto experiences = new CandidateExperienceDto();
+                    experiences.setDesignation(exp.getDesignation());
+                    experiences.setCompanyName(exp.getCompanyName());
+                    experiences.setExperienceYearEndDate(exp.getExperienceYearStartDate());
+                    experiences.setExperienceYearEndDate(exp.getExperienceYearEndDate());
+
+                    if (Objects.nonNull(exp.getProjects()) && !exp.getProjects().isEmpty()) {
+
+                        List<CandidateProjectDetailsDto> projectsList = new ArrayList<>();
+
+                        exp.getProjects().forEach(project -> {
+                            CandidateProjectDetailsDto pro = new CandidateProjectDetailsDto();
+
+                            pro.setProjectRole(project.getProjectRole());
+                            pro.setProjectName(project.getProjectName());
+                            pro.setProjectDescription(project.getProjectDescription());
+                            pro.setProjectSkills(pro.getProjectSkills());
+                            projectsList.add(pro);
+                            pro = null;
+                        });
+                        variables.put("projects", projectsList);
+                    }
 
                     experienceList.add(experiences);
                     experiences = null;
@@ -68,72 +85,72 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
                 variables.put("experiences", experienceList);
             }
 
-            if (Objects.nonNull(commonResumeDto.getProjects()) && !commonResumeDto.getProjects().isEmpty()) {
 
-                List<ProjectDto> projectsList = new ArrayList<>();
 
-                commonResumeDto.getProjects().forEach(project -> {
-                    ProjectDto pro = new ProjectDto();
-                    pro.setName(project.getName());
-                    pro.setDetails(project.getDetails());
+            variables.put("skills", candidateDto.getSkills());
 
-                    projectsList.add(pro);
-                    pro = null;
+            if (Objects.nonNull(candidateDto.getCertificates()) && !candidateDto.getCertificates().isEmpty()) {
+
+                List<CandidateCertificatesDto> certificatesList = new ArrayList<>();
+
+                candidateDto.getCertificates().forEach(certificate -> {
+                    CandidateCertificatesDto cer = new CandidateCertificatesDto();
+
+                    cer.setCourseName(certificate.getCourseName());
+                    cer.setCourseStartDate(certificate.getCourseStartDate());
+                    cer.setCourseEndDate(certificate.getCourseEndDate());
+                    certificatesList.add(cer);
+
+                    cer =null;
                 });
-                variables.put("projects", projectsList);
+
+                variables.put("certifications", candidateDto.getCertificates());
             }
 
-            variables.put("skills", commonResumeDto.getSkills());
+            if (Objects.nonNull(candidateDto.getQualification()) && !candidateDto.getQualification().isEmpty()) {
+                List<CandidateQualificationDto> educationList = new ArrayList<>();
 
-            if (Objects.nonNull(commonResumeDto.getCertifications())
-                    && !commonResumeDto.getCertifications().isEmpty()) {
-                variables.put("certifications", commonResumeDto.getCertifications());
-            }
+                candidateDto.getQualification().forEach(quali -> {
+                    CandidateQualificationDto qulification = new CandidateQualificationDto();
 
-            if (Objects.nonNull(commonResumeDto.getEducation()) && !commonResumeDto.getEducation().isEmpty()) {
-                List<EducationDto> educationList = new ArrayList<>();
+                    qulification.setInstutionName(quali.getInstutionName());
+                    qulification.setDepartment(quali.getDepartment());
+                    qulification.setQualificationStartYear(quali.getQualificationStartYear());
+                    qulification.setQualificationEndYear(quali.getQualificationEndYear());
 
-                commonResumeDto.getEducation().forEach(edu -> {
-                    EducationDto education = new EducationDto();
-
-                    education.setDegree(edu.getDegree());
-                    education.setInstitution(edu.getInstitution());
-                    education.setYear(edu.getYear());
-                    education.setPercentage(edu.getPercentage());
-
-                    educationList.add(education);
-                    education = null;
+                    educationList.add(qulification);
+                    qulification = null;
                 });
                 variables.put("education", educationList);
             }
 
-            if (Objects.nonNull(commonResumeDto.getSoftSkills()) && !commonResumeDto.getSoftSkills().isEmpty()) {
-                variables.put("softSkills", commonResumeDto.getSoftSkills());
-            }
-
-            if (Objects.nonNull(commonResumeDto.getAwards()) && !commonResumeDto.getAwards().isEmpty()) {
-                variables.put("awards", commonResumeDto.getAwards());
-            }
-
-            if (Objects.nonNull(commonResumeDto.getDob()) && !commonResumeDto.getAwards().isEmpty()) {
-                variables.put("dob", commonResumeDto.getDob());
-            }
-
-            if (Objects.nonNull(commonResumeDto.getGender()) && !commonResumeDto.getAwards().isEmpty()) {
-                variables.put("gender", commonResumeDto.getGender());
-            }
-
-            if (Objects.nonNull(commonResumeDto.getLanguages()) && !commonResumeDto.getAwards().isEmpty()) {
-                variables.put("languages", commonResumeDto.getLanguages());
-            }
+//            if (Objects.nonNull(candidateDto.getSoftSkills()) && !candidateDto.getSoftSkills().isEmpty()) {
+//                variables.put("softSkills", candidateDto.getSoftSkills());
+//            }
+//
+//            if (Objects.nonNull(candidateDto.getAwards()) && !candidateDto.getAwards().isEmpty()) {
+//                variables.put("awards", candidateDto.getAwards());
+//            }
+//
+//            if (Objects.nonNull(candidateDto.getDob()) && !candidateDto.getAwards().isEmpty()) {
+//                variables.put("dob", candidateDto.getDob());
+//            }
+//
+//            if (Objects.nonNull(candidateDto.getGender()) && !candidateDto.getAwards().isEmpty()) {
+//                variables.put("gender", candidateDto.getGender());
+//            }
+//
+//            if (Objects.nonNull(candidateDto.getLanguages()) && !candidateDto.getAwards().isEmpty()) {
+//                variables.put("languages", candidateDto.getLanguages());
+//            }
 
             template = configuration.getTemplate("formal_resume.ftl");
 
             String processTemplateIntoString = FreeMarkerTemplateUtils.processTemplateIntoString(template, variables);
 
-            convertHtmlToPdf(processTemplateIntoString, commonResumeDto.getName() + ".pdf");
+            convertHtmlToPdf(processTemplateIntoString, candidateDto.getName() + ".pdf");
 
-            convertHtmlToDocx(processTemplateIntoString, commonResumeDto.getName() +
+            convertHtmlToDocx(processTemplateIntoString, candidateDto.getName() +
                     ".docx");
 
         } catch (Exception e) {

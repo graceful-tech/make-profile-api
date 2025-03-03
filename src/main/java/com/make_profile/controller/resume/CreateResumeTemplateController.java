@@ -1,5 +1,6 @@
 package com.make_profile.controller.resume;
 
+import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.dto.resume.CommonResumeDto;
 import com.make_profile.service.resume.CreateResumeTemplateService;
 import org.slf4j.Logger;
@@ -22,11 +23,11 @@ public class CreateResumeTemplateController {
     CreateResumeTemplateService createResumeTemplateService;
 
     @PostMapping("/resume")
-    public ResponseEntity<?> createResumeTemplate(@RequestBody CommonResumeDto commonResumeDto) {
+    public ResponseEntity<?> createResumeTemplate(@RequestBody CandidateDto candidateDto) {
 
         logger.debug("Controller :: createResumeTemplate :: Entered");
 
-        createResumeTemplateService.createResumeTemplate(commonResumeDto);
+        createResumeTemplateService.createResumeTemplate(candidateDto);
 
         logger.debug("Controller :: createResumeTemplate :: Exited");
 
