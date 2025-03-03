@@ -7,6 +7,8 @@ public class MakeProfileUserDto {
     private Long id;
 
     private String name;
+    
+    private String mobileNumber;
 
     private String email;
 
@@ -54,4 +56,14 @@ public class MakeProfileUserDto {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+    
+    
 }
