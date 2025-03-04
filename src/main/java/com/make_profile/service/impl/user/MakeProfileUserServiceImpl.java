@@ -9,7 +9,6 @@ import com.make_profile.entity.user.MakeProfileUserEntity;
 import com.make_profile.repository.user.MakeProfileUserRepository;
 import com.make_profile.service.user.MakeProfileUserService;
 
-
 @Service
 public class MakeProfileUserServiceImpl implements MakeProfileUserService {
 
@@ -20,10 +19,12 @@ public class MakeProfileUserServiceImpl implements MakeProfileUserService {
 	ModelMapper modelMapper;
 
 	@Override
-	public void createUser(MakeProfileUserDto makeProfileUserDto) {
+	public MakeProfileUserDto createUser(MakeProfileUserDto makeProfileUserDto) {
 
 		MakeProfileUserEntity makeProfileUserEntity = modelMapper.map(makeProfileUserDto, MakeProfileUserEntity.class);
-		makeProfileUserRepository.save(makeProfileUserEntity);
+		MakeProfileUserEntity save = makeProfileUserRepository.save(makeProfileUserEntity);
+		MakeProfileUserDto user = modelMapper.map(save, MakeProfileUserDto.class);
+		return user;
 	}
 
 }

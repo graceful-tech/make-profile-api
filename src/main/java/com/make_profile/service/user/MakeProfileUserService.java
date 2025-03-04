@@ -4,7 +4,7 @@ import com.make_profile.dto.user.MakeProfileUserDto;
 
 public interface MakeProfileUserService {
 
-	void createUser(MakeProfileUserDto makeProfileUserDto);
+	MakeProfileUserDto createUser(MakeProfileUserDto makeProfileUserDto);
 
 	
 
