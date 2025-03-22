@@ -1,76 +1,83 @@
 package com.make_profile.dto.candidates;
 
+import java.time.LocalDate;
+
 public class CandidateQualificationDto {
 
-    private Long id;
+	private Long id;
 
-    private String instutionName;
+	private String instutionName;
 
-    private String department;
+	private String department;
 
-    private String qualificationStartYear;
+	private LocalDate qualificationStartYear;
 
-    private String qualificationEndYear;
+	private LocalDate qualificationEndYear;
 
-    private Double percentage;
+	private Double percentage;
 
-    public Long getId() {
-        return id;
-    }
+	private Boolean isDeleted;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getInstutionName() {
-        return instutionName;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setInstutionName(String instutionName) {
-        this.instutionName = instutionName;
-    }
+	public String getInstutionName() {
+		return instutionName;
+	}
 
-    public String getDepartment() {
-        return department;
-    }
+	public void setInstutionName(String instutionName) {
+		this.instutionName = instutionName;
+	}
 
-    public void setDepartment(String department) {
-        this.department = department;
-    }
+	public String getDepartment() {
+		return department;
+	}
 
-    public String getQualificationStartYear() {
-        return qualificationStartYear;
-    }
+	public void setDepartment(String department) {
+		this.department = department;
+	}
 
-    public void setQualificationStartYear(String qualificationStartYear) {
-        this.qualificationStartYear = qualificationStartYear;
-    }
+	public LocalDate getQualificationStartYear() {
+		return qualificationStartYear;
+	}
 
-    public String getQualificationEndYear() {
-        return qualificationEndYear;
-    }
+	public void setQualificationStartYear(LocalDate qualificationStartYear) {
+		this.qualificationStartYear = qualificationStartYear;
+	}
 
-    public void setQualificationEndYear(String qualificationEndYear) {
-        this.qualificationEndYear = qualificationEndYear;
-    }
+	public LocalDate getQualificationEndYear() {
+		return qualificationEndYear;
+	}
 
-    public Double getPercentage() {
-        return percentage;
-    }
+	public void setQualificationEndYear(LocalDate qualificationEndYear) {
+		this.qualificationEndYear = qualificationEndYear;
+	}
 
-    public void setPercentage(Double percentage) {
-        this.percentage = percentage;
-    }
+	public Double getPercentage() {
+		return percentage;
+	}
 
-    @Override
-    public String toString() {
-        return  "{" +
-                "id=" + id +
-                ", instutionName='" + instutionName + '\'' +
-                ", department='" + department + '\'' +
-                ", qualificationStartYear='" + qualificationStartYear + '\'' +
-                ", qualificationEndYear='" + qualificationEndYear + '\'' +
-                ", percentage=" + percentage +
-                '}';
-    }
+	public void setPercentage(Double percentage) {
+		this.percentage = percentage;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	@Override
+	public String toString() {
+		return "{" + "id=" + id + ", instutionName='" + instutionName + '\'' + ", department='" + department + '\''
+				+ ", qualificationStartYear='" + qualificationStartYear + '\'' + ", qualificationEndYear='"
+				+ qualificationEndYear + '\'' + ", percentage=" + percentage + '}';
+	}
 }

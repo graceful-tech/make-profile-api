@@ -33,7 +33,7 @@
         .section {
             display: flex;
             flex-direction: column;
-            margin-top: 5px; /* Reduced gap between sections */
+            margin-top: 5px;  
         }
         .section-title {
             font-size: 18px;
@@ -47,6 +47,12 @@
         }
         .content ul {
             padding-left: 20px;
+        }
+        .sub-heading{
+            font-size: 13px;
+            font-weight: bold;
+            border-bottom: 2px solid #000;
+            margin-bottom: 3px;
         }
         /* Print styles for A4 */
         @media print {
@@ -62,6 +68,8 @@
     </style>
 </head>
 <body>
+
+
     <div class="container">
         <div class="header">
             ${name}  <br />
@@ -80,38 +88,47 @@
      </#if>   
         
     
-   <#if experiences?size gt 0>
-        <div class="section">
-           <div class="section-title">Work Experience</div>
-             <div class="content">
-                <#list experiences as experience>
-                    <b>${experience.role}, ${experience.company} (${experience.duration})</b>
-                    <ul>
-                        <#list experience.responsibilities as responsibility>
-                            <li>${responsibility}</li>
-                        </#list>
-                    </ul>
-                </#list>
-            </div>
+  <#if experiences?size gt 0>
+     <div class="section">
+        <div class="section-title">Work Experience</div>
+        <div class="content">
+            <#list experiences as experience>
+                <b>${experience.role}, ${experience.companyName} (${experience.experienceYearStartDate} - 
+                <#if experience.experienceYearEndDate?has_content>
+                ${experience.experienceYearEndDate})
+                <#else>
+                  Present
+                </#if> 
+                
+                </b>
+    
+                <#if experience.projects?size gt 0>
+                    <div class="section" style="padding-left:15px;">
+                        <div class="sub-heading">Projects</div>
+                        <div class="content">
+                            <#list experience.projects as project>
+                             
+                               <div>Project Name : ${project.projectName}</div>
+                               <div>Project Role : ${project.projectRole}</div>
+                                
+                                <ul>
+                                <div Style="padding-top:5px;">Skills</div>
+                                    <#list project.projectSkills as skill>
+                                        <li>${skill}</li>
+                                    </#list>
+                                </ul>
+                                <div class="content">${project.projectDescription}</div>
+                            </#list>
+                        </div>
+                    </div>
+                </#if>
+            </#list>
         </div>
-   </#if> 
+    </div>
+ </#if>
+ 
 
-   <#if projects?size gt 0>
-        <div class="section">
-            <div class="section-title">Projects</div>
-            <div class="content">
-                <#list projects as project>
-                    <b>${project.name}</b>
-                    <ul>
-                        <#list project.details as detail>
-                            <li>${detail}</li>
-                        </#list>
-                    </ul>
-                </#list>
-            </div>
-        </div>
-   </#if> 
-
+   
    <#if skills?size gt 0>
         <div class="section">
             <div class="section-title">Skills</div>
@@ -125,58 +142,21 @@
         </div>
     </#if> 
 
-   <#if certifications?size gt 0>
-        <div class="section">
-            <div class="section-title">Certifications</div>
-            <div class="flex-container">
-                <#list certifications as certification>
-                    <div class="flex-item">${certification}</div>
-                </#list>
-            </div>
-        </div>
-   </#if>
    
-   
-   <#if education?size gt 0>
-        <div class="section">
-            <div class="section-title">Education</div>
-            <div class="content">
-                <#list education as edu>
-                    <div>${edu.degree}, ${edu.institution} (${edu.year})</div>
-                </#list>
-            </div>
-        </div>
-    </#if>  
-
     <div class="section">
         <div class="section-title">Personal Information</div>
         <div class="content">
             <ul>
                 <li><b>Date of Birth:</b> ${dob}</li>
-                <li><b>Gender:</b> ${gender}</li>
-                <li><b>Languages Known:</b> ${languages}</li>
+                <li><b>Address:</b> ${address}</li>
             </ul>
         </div>
     </div>
 
-    <#if softSkills?size gt 0>
-        <div class="section">
-            <div class="section-title">Soft Skills</div>
-            <div class="flex-container">
-                <#list softSkills as skill>
-                    <div class="flex-item">${skill}</div>
-                </#list>
-            </div>
-        </div>
-    </#if> 
-  
-   <#if awards?has_content>
-        <div class="section">
-            <div class="section-title">Awards</div>
-            <div class="content">${awards}</div>
-        </div>
-   </#if>   
      
+  
     </div>
+    
+    
 </body>
 </html>

@@ -1,89 +1,95 @@
 package com.make_profile.dto.candidates;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CandidateExperienceDto {
 
-    private Long id;
+	private Long id;
 
-    private String companyName;
+	private String companyName;
 
-    private String designation;
+	private String role;
 
-    private String experienceYearStartDate;
+	private LocalDate experienceYearStartDate;
 
-    private String experienceYearEndDate;
+	private LocalDate experienceYearEndDate;
 
-    private Boolean currentlyWorking;
+	private Boolean currentlyWorking;
 
-    private List<CandidateProjectDetailsDto> projects;
+	private Boolean isDeleted;
 
-    public Long getId() {
-        return id;
-    }
+	private List<CandidateProjectDetailsDto> projects;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getCompanyName() {
-        return companyName;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
+	public String getCompanyName() {
+		return companyName;
+	}
 
-    public String getDesignation() {
-        return designation;
-    }
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
 
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
+	public String getRole() {
+		return role;
+	}
 
-    public String getExperienceYearStartDate() {
-        return experienceYearStartDate;
-    }
+	public void setRole(String role) {
+		this.role = role;
+	}
 
-    public void setExperienceYearStartDate(String experienceYearStartDate) {
-        this.experienceYearStartDate = experienceYearStartDate;
-    }
+	public LocalDate getExperienceYearStartDate() {
+		return experienceYearStartDate;
+	}
 
-    public String getExperienceYearEndDate() {
-        return experienceYearEndDate;
-    }
+	public void setExperienceYearStartDate(LocalDate experienceYearStartDate) {
+		this.experienceYearStartDate = experienceYearStartDate;
+	}
 
-    public void setExperienceYearEndDate(String experienceYearEndDate) {
-        this.experienceYearEndDate = experienceYearEndDate;
-    }
+	public LocalDate getExperienceYearEndDate() {
+		return experienceYearEndDate;
+	}
 
-    public Boolean getCurrentlyWorking() {
-        return currentlyWorking;
-    }
+	public void setExperienceYearEndDate(LocalDate experienceYearEndDate) {
+		this.experienceYearEndDate = experienceYearEndDate;
+	}
 
-    public void setCurrentlyWorking(Boolean currentlyWorking) {
-        this.currentlyWorking = currentlyWorking;
-    }
+	public Boolean getCurrentlyWorking() {
+		return currentlyWorking;
+	}
 
-    public List<CandidateProjectDetailsDto> getProjects() {
-        return projects;
-    }
+	public void setCurrentlyWorking(Boolean currentlyWorking) {
+		this.currentlyWorking = currentlyWorking;
+	}
 
-    public void setProjects(List<CandidateProjectDetailsDto> projects) {
-        this.projects = projects;
-    }
+	public List<CandidateProjectDetailsDto> getProjects() {
+		return projects;
+	}
 
-    @Override
-    public String toString() {
-        return  "{" +
-                "id=" + id +
-                ", companyName='" + companyName + '\'' +
-                ", designation='" + designation + '\'' +
-                ", experienceYearStartDate='" + experienceYearStartDate + '\'' +
-                ", experienceYearEndDate='" + experienceYearEndDate + '\'' +
-                ", currentlyWorking=" + currentlyWorking +
-                ", projects=" + projects +
-                '}';
-    }
+	public void setProjects(List<CandidateProjectDetailsDto> projects) {
+		this.projects = projects;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	@Override
+	public String toString() {
+		return "{" + "id=" + id + ", companyName='" + companyName + '\'' + ", role='" + role + '\''
+				+ ", experienceYearStartDate='" + experienceYearStartDate + '\'' + ", experienceYearEndDate='"
+				+ experienceYearEndDate + '\'' + ", currentlyWorking=" + currentlyWorking + ", projects=" + projects
+				+ '}';
+	}
 }

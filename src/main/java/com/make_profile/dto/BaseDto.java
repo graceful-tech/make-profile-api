@@ -4,94 +4,53 @@ import java.time.LocalDateTime;
 
 public class BaseDto {
 
-    private Long createdUser;
+	private LocalDateTime createdDate;
 
-    private String createdUserName;
+	private LocalDateTime modifiedDate;
 
-    private LocalDateTime createdDate;
+	private String loggedUserName;
 
-    private Long modifiedUser;
+	private int page;
 
-    private String modifiedUserName;
+	private int limit;
 
-    private LocalDateTime modifiedDate;
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
 
-    private String loggedUserName;
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
 
-    private int page;
+	public LocalDateTime getModifiedDate() {
+		return modifiedDate;
+	}
 
-    private int limit;
+	public void setModifiedDate(LocalDateTime modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 
+	public String getLoggedUserName() {
+		return loggedUserName;
+	}
 
-    public Long getCreatedUser() {
-        return createdUser;
-    }
+	public void setLoggedUserName(String loggedUserName) {
+		this.loggedUserName = loggedUserName;
+	}
 
-    public void setCreatedUser(Long createdUser) {
-        this.createdUser = createdUser;
-    }
+	public int getPage() {
+		return page;
+	}
 
-    public String getCreatedUserName() {
-        return createdUserName;
-    }
+	public void setPage(int page) {
+		this.page = page;
+	}
 
-    public void setCreatedUserName(String createdUserName) {
-        this.createdUserName = createdUserName;
-    }
+	public int getLimit() {
+		return limit;
+	}
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Long getModifiedUser() {
-        return modifiedUser;
-    }
-
-    public void setModifiedUser(Long modifiedUser) {
-        this.modifiedUser = modifiedUser;
-    }
-
-    public String getModifiedUserName() {
-        return modifiedUserName;
-    }
-
-    public void setModifiedUserName(String modifiedUserName) {
-        this.modifiedUserName = modifiedUserName;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(LocalDateTime modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    public String getLoggedUserName() {
-        return loggedUserName;
-    }
-
-    public void setLoggedUserName(String loggedUserName) {
-        this.loggedUserName = loggedUserName;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
 }

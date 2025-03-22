@@ -14,21 +14,9 @@
 	<packaging>war</packaging>
 	<name>make-profile</name>
 	<description>Project for Make Profile</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<skipTests>True</skipTests>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -79,16 +67,6 @@
 			<version>1.4.4</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>5.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>5.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-mock</artifactId>
 			<version>2.0.8</version>
@@ -98,11 +76,11 @@
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.13.3</version>
 		</dependency>
-		<!--<dependency>
-			<groupId>org.apache.pdfbox</groupId>
-			<artifactId>pdfbox</artifactId>
-			<version>3.0.0</version>
-		</dependency>-->
+		<dependency>
+			<groupId>com.theokanning.openai-gpt3-java</groupId>
+			<artifactId>api</artifactId>
+			<version>0.18.2</version>
+		</dependency>
 		<dependency>
 			<groupId>com.textkernel</groupId>
 			<artifactId>tx-java</artifactId>
@@ -117,7 +95,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-json</artifactId>
 		</dependency>
-
 
 		<!-- Google OAuth -->
 		<dependency>
@@ -167,18 +144,6 @@
 			version -->
 		</dependency>
 
-		<!-- Facebook -->
-		<dependency>
-			<groupId>org.springframework.social</groupId>
-			<artifactId>spring-social-facebook</artifactId>
-			<version>2.0.3.RELEASE</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.apis</groupId>
-			<artifactId>google-api-services-sheets</artifactId>
-			<version>v4-rev20230227-2.0.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.google.api-client</groupId>
@@ -230,12 +195,6 @@
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 			<version>2.0.27</version>  <!-- Compatible with openhtmltopdf-pdfbox -->
-		</dependency>
-		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>3.1.1</version>
-			<scope>compile</scope>
 		</dependency>
 
 	</dependencies>

@@ -1,66 +1,72 @@
 package com.make_profile.dto.candidates;
 
+import java.util.List;
+
 public class CandidateProjectDetailsDto {
 
-    private Long id;
+	private Long id;
 
-    private String projectName;
+	private String projectName;
 
-    private String projectSkills;
+	private List<String> projectSkills;
 
-    private String projectRole;
+	private String projectRole;
 
-    private String projectDescription;
+	private String projectDescription;
 
+	private boolean isProjectDeleted;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getProjectName() {
-        return projectName;
-    }
+	public String getProjectName() {
+		return projectName;
+	}
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
 
-    public String getProjectSkills() {
-        return projectSkills;
-    }
+	public List<String> getProjectSkills() {
+		return projectSkills;
+	}
 
-    public void setProjectSkills(String projectSkills) {
-        this.projectSkills = projectSkills;
-    }
+	public void setProjectSkills(List<String> projectSkills) {
+		this.projectSkills = projectSkills;
+	}
 
-    public String getProjectRole() {
-        return projectRole;
-    }
+	public String getProjectRole() {
+		return projectRole;
+	}
 
-    public void setProjectRole(String projectRole) {
-        this.projectRole = projectRole;
-    }
+	public void setProjectRole(String projectRole) {
+		this.projectRole = projectRole;
+	}
 
-    public String getProjectDescription() {
-        return projectDescription;
-    }
+	public String getProjectDescription() {
+		return projectDescription;
+	}
 
-    public void setProjectDescription(String projectDescription) {
-        this.projectDescription = projectDescription;
-    }
+	public void setProjectDescription(String projectDescription) {
+		this.projectDescription = projectDescription;
+	}
 
-    @Override
-    public String toString() {
-        return  "{" +
-                "id=" + id +
-                ", projectName='" + projectName + '\'' +
-                ", projectSkills='" + projectSkills + '\'' +
-                ", projectRole='" + projectRole + '\'' +
-                ", projectDescription='" + projectDescription + '\'' +
-                '}';
-    }
+	public boolean isProjectDeleted() {
+		return isProjectDeleted;
+	}
+
+	public void setProjectDeleted(boolean isProjectDeleted) {
+		this.isProjectDeleted = isProjectDeleted;
+	}
+
+	@Override
+	public String toString() {
+		return "{" + "id=" + id + ", projectName='" + projectName + '\'' + ", projectSkills='" + projectSkills + '\''
+				+ ", projectRole='" + projectRole + '\'' + ", projectDescription='" + projectDescription + '\'' + '}';
+	}
 }

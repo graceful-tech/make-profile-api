@@ -1,43 +1,53 @@
 package com.make_profile.dto.candidates;
 
+import java.time.LocalDate;
+
 public class CandidateAchievementsDto {
 
-    private Long id;
+	private Long id;
 
-    private String achievementsName;
+	private String achievementsName;
 
-    private String achievementsDate;
+	private LocalDate achievementsDate;
 
-    public Long getId() {
-        return id;
-    }
+	private Boolean isDeleted;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getAchievementsName() {
-        return achievementsName;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setAchievementsName(String achievementsName) {
-        this.achievementsName = achievementsName;
-    }
+	public String getAchievementsName() {
+		return achievementsName;
+	}
 
-    public String getAchievementsDate() {
-        return achievementsDate;
-    }
+	public void setAchievementsName(String achievementsName) {
+		this.achievementsName = achievementsName;
+	}
 
-    public void setAchievementsDate(String achievementsDate) {
-        this.achievementsDate = achievementsDate;
-    }
+	public LocalDate getAchievementsDate() {
+		return achievementsDate;
+	}
 
-    @Override
-    public String toString() {
-        return  "{" +
-                "id=" + id +
-                ", achievementsName='" + achievementsName + '\'' +
-                ", achievementsDate='" + achievementsDate + '\'' +
-                '}';
-    }
+	public void setAchievementsDate(LocalDate achievementsDate) {
+		this.achievementsDate = achievementsDate;
+
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	@Override
+	public String toString() {
+		return "{" + "id=" + id + ", achievementsName='" + achievementsName + '\'' + ", achievementsDate='"
+				+ achievementsDate + '\'' + '}';
+	}
 }
