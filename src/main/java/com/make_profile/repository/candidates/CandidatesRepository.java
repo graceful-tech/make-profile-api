@@ -1,5 +1,7 @@
 package com.make_profile.repository.candidates;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +15,10 @@ import jakarta.transaction.Transactional;
 @Transactional
 public interface CandidatesRepository extends JpaRepository<CandidateEntity, Long> {
 
-	@Query(value = "select * from candidates where mobile_number  = :mobileNumber or alternate_mobile_number  = :mobileNumber ", nativeQuery = true)
+	@Query(value = "select * from candidates where mobile_number  = :mobileNumber ", nativeQuery = true)
 	CandidateEntity getCandidateDetailsByMobileNumber(@Param("mobileNumber") String mobileNumber);
 
+	@Query(value = "select tenant from hurecom_v2.datasource_configuration where customer_id in (select id from hurecom_v2.customers where is_active ='Y') ", nativeQuery = true)
+	List<String> getAllTenant();
+ 
 }

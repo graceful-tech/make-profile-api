@@ -1,39 +1,21 @@
-package com.make_profile.entity.master;
+package com.make_profile.dto.master;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+public class AppliedJobDto {
 
-@Entity
-@Table(name = "applied_jobs")
-public class AppliedJobsEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = true, length = 500)
 	private String skills;
 
-	@Column(nullable = true)
 	private String location;
 
-	@Column(nullable = true)
 	private String source;
 
-	@Column(nullable = true)
 	private String status;
 
-	@Column(nullable = true)
 	private Long candidateId;
 
-	@Column(nullable = true)
 	private String jobId;
-	
-	@Column(nullable = true)
+
 	private String tenant;
 
 	public Long getId() {
@@ -76,20 +58,20 @@ public class AppliedJobsEntity {
 		this.status = status;
 	}
 
-	public String getJobId() {
-		return jobId;
-	}
-
-	public void setJobId(String jobId) {
-		this.jobId = jobId;
-	}
-
 	public Long getCandidateId() {
 		return candidateId;
 	}
 
 	public void setCandidateId(Long candidateId) {
 		this.candidateId = candidateId;
+	}
+
+	public String getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(String jobId) {
+		this.jobId = jobId;
 	}
 
 	public String getTenant() {
@@ -101,5 +83,5 @@ public class AppliedJobsEntity {
 	}
 	
 	
-
+	
 }

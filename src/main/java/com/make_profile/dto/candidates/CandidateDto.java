@@ -46,6 +46,11 @@ public class CandidateDto extends BaseDto {
 	private List<CandidateAchievementsDto> achievements;
 
 	private MultipartFile candidateLogo;
+	
+	
+	private String score;
+	
+	private boolean matches;
 
 	public Long getId() {
 		return id;
@@ -206,5 +211,23 @@ public class CandidateDto extends BaseDto {
 	public void setCandidateLogo(MultipartFile candidateLogo) {
 		this.candidateLogo = candidateLogo;
 	}
+
+	public String getScore() {
+		return score;
+	}
+
+	public void setScore(String score) {
+		this.score = score;
+	}
+
+	public boolean isMatches() {
+		return matches;
+	}
+
+	public void setMatches(boolean matches) {
+		this.matches = matches;
+	}
+	
+	 
 
 }
