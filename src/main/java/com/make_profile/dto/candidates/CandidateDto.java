@@ -46,11 +46,20 @@ public class CandidateDto extends BaseDto {
 	private List<CandidateAchievementsDto> achievements;
 
 	private MultipartFile candidateLogo;
-	
-	
+
+	private List<String> softSkills;
+
+	private List<String> coreCompentencies;
+
 	private String score;
-	
+
 	private boolean matches;
+
+	private List<CandidateCollegeProjectDto> collegeProject;
+
+	private String summary;
+
+	private String careerObjective;
 
 	public Long getId() {
 		return id;
@@ -227,7 +236,45 @@ public class CandidateDto extends BaseDto {
 	public void setMatches(boolean matches) {
 		this.matches = matches;
 	}
-	
-	 
+
+	public List<String> getSoftSkills() {
+		return softSkills;
+	}
+
+	public void setSoftSkills(List<String> softSkills) {
+		this.softSkills = softSkills;
+	}
+
+	public List<String> getCoreCompentencies() {
+		return coreCompentencies;
+	}
+
+	public void setCoreCompentencies(List<String> coreCompentencies) {
+		this.coreCompentencies = coreCompentencies;
+	}
+
+	public List<CandidateCollegeProjectDto> getCollegeProject() {
+		return collegeProject;
+	}
+
+	public void setCollegeProject(List<CandidateCollegeProjectDto> collegeProject) {
+		this.collegeProject = collegeProject;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public String getCareerObjective() {
+		return careerObjective;
+	}
+
+	public void setCareerObjective(String careerObjective) {
+		this.careerObjective = careerObjective;
+	}
 
 }

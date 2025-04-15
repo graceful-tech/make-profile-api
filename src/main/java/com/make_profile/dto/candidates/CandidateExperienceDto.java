@@ -19,6 +19,8 @@ public class CandidateExperienceDto {
 
 	private Boolean isDeleted;
 
+	private List<String> Responsibilities;
+
 	private List<CandidateProjectDetailsDto> projects;
 
 	public Long getId() {
@@ -85,11 +87,28 @@ public class CandidateExperienceDto {
 		this.isDeleted = isDeleted;
 	}
 
+	public List<String> getResponsibilities() {
+		return Responsibilities;
+	}
+
+	public void setResponsibilities(List<String> responsibilities) {
+		Responsibilities = responsibilities;
+	}
+
 	@Override
 	public String toString() {
-		return "{" + "id=" + id + ", companyName='" + companyName + '\'' + ", role='" + role + '\''
-				+ ", experienceYearStartDate='" + experienceYearStartDate + '\'' + ", experienceYearEndDate='"
-				+ experienceYearEndDate + '\'' + ", currentlyWorking=" + currentlyWorking + ", projects=" + projects
-				+ '}';
+		return "{" + "id=" + id + ", companyName=" + companyName + ", role=" + role + ", experienceYearStartDate="
+				+ experienceYearStartDate + ", experienceYearEndDate=" + experienceYearEndDate + ", currentlyWorking="
+				+ currentlyWorking + ", isDeleted=" + isDeleted + ", Responsibilities=" + Responsibilities
+				+ ", projects=" + projects + +'}';
 	}
+
+//	@Override
+//	public String toString() {
+//		return "{" + "id=" + id + ", companyName='" + companyName + '\'' + ", role='" + role + '\''
+//				+ ", experienceYearStartDate='" + experienceYearStartDate + '\'' + ", experienceYearEndDate='"
+//				+ experienceYearEndDate + '\'' + ", currentlyWorking=" + currentlyWorking + ", projects=" + projects
+//				+ '}';
+//	}
+
 }

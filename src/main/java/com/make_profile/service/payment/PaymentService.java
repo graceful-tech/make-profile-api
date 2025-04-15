@@ -1,4 +1,4 @@
-package com.make_profile.service.impl.payment;
+package com.make_profile.service.payment;
 
 import com.make_profile.dto.payment.PaymentDto;
 import com.make_profile.dto.payment.PaymentOrderDto;

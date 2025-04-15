@@ -73,6 +73,15 @@ public class CandidateEntity extends BaseEntity {
 	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
 	private List<CandidateCertificateEntity> certificates;
 
+	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	private List<CandidateCollegeProjectEntity> collegeProject;
+
+	@Column(nullable = true, length = 1000)
+	private String softSkills;
+
+	@Column(nullable = true, length = 1000)
+	private String coreCompentencies;
+
 	public Long getId() {
 		return id;
 	}
@@ -215,6 +224,30 @@ public class CandidateEntity extends BaseEntity {
 
 	public void setCertificates(List<CandidateCertificateEntity> certificates) {
 		this.certificates = certificates;
+	}
+
+	public String getSoftSkills() {
+		return softSkills;
+	}
+
+	public void setSoftSkills(String softSkills) {
+		this.softSkills = softSkills;
+	}
+
+	public String getCoreCompentencies() {
+		return coreCompentencies;
+	}
+
+	public void setCoreCompentencies(String coreCompentencies) {
+		this.coreCompentencies = coreCompentencies;
+	}
+
+	public List<CandidateCollegeProjectEntity> getCollegeProject() {
+		return collegeProject;
+	}
+
+	public void setCollegeProject(List<CandidateCollegeProjectEntity> collegeProject) {
+		this.collegeProject = collegeProject;
 	}
 
 }

@@ -3,8 +3,6 @@ package com.make_profile.entity.candidates;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.make_profile.dto.candidates.CandidateProjectDetailsDto;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,6 +36,9 @@ public class CandidateExperienceEntity {
 
 	@Column(nullable = true)
 	private Boolean currentlyWorking;
+
+	@Column(nullable = true, length = 1500)
+	private String responsibilities;
 
 	@ManyToOne
 	@JoinColumn(name = "candidate_id")
@@ -108,6 +109,14 @@ public class CandidateExperienceEntity {
 
 	public void setProjects(List<CandidateProjectEntity> projects) {
 		this.projects = projects;
+	}
+
+	public String getResponsibilities() {
+		return responsibilities;
+	}
+
+	public void setResponsibilities(String responsibilities) {
+		this.responsibilities = responsibilities;
 	}
 
 }

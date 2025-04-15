@@ -13,7 +13,10 @@ import jakarta.transaction.Transactional;
 @Transactional
 public interface CandidateCertificateRepository extends JpaRepository<CandidateCertificateEntity, Long> {
 
-	@Query(value = "select * from candidate_certification where id:id", nativeQuery = true)
+	@Query(value = "select * from candidate_certification where id = :id", nativeQuery = true)
 	CandidateCertificateEntity getCertificateById(@Param("id") Long id);
+
+	@Query(value = "select * from candidate_certification where candidate_id = :candidateId", nativeQuery = true)
+	CandidateCertificateEntity getCertificateByCandidateId(@Param("candidateId") Long candidateId);
 
 }

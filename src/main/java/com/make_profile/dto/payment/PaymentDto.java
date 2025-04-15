@@ -20,11 +20,9 @@ public class PaymentDto extends PageDto {
 
 	private Long paymentOrderId;
 
-	private Long customerId;
+	private Long candidateId;
 
 	private String paymentStatus;
-
-	private String tenant;
 
 	public String getPaymentType() {
 		return paymentType;
@@ -82,14 +80,6 @@ public class PaymentDto extends PageDto {
 		this.paymentOrderId = paymentOrderId;
 	}
 
-	public Long getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
-	}
-
 	public String getPaymentStatus() {
 		return paymentStatus;
 	}
@@ -98,12 +88,12 @@ public class PaymentDto extends PageDto {
 		this.paymentStatus = paymentStatus;
 	}
 
-	public String getTenant() {
-		return tenant;
+	public Long getCandidateId() {
+		return candidateId;
 	}
 
-	public void setTenant(String tenant) {
-		this.tenant = tenant;
+	public void setCandidateId(Long candidateId) {
+		this.candidateId = candidateId;
 	}
 
 }

@@ -1,9 +1,11 @@
 package com.make_profile.service.openai;
 
-import com.google.gson.JsonObject;
+import com.make_profile.dto.candidates.CandidateDto;
 
 public interface MakeProfileOpenAiService {
 
 	void makeProfileAi(String content);
+
+	CandidateDto getSummaryFromAi(String Content);
 
 }

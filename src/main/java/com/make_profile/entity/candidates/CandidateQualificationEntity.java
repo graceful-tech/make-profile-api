@@ -34,6 +34,9 @@ public class CandidateQualificationEntity {
 	@Column
 	private Double percentage;
 
+	@Column(nullable = true)
+	private String fieldOfStudy;
+
 	@ManyToOne
 	@JoinColumn(name = "candidate_id")
 	private CandidateEntity candidateId;
@@ -92,6 +95,14 @@ public class CandidateQualificationEntity {
 
 	public void setPercentage(Double percentage) {
 		this.percentage = percentage;
+	}
+
+	public String getFieldOfStudy() {
+		return fieldOfStudy;
+	}
+
+	public void setFieldOfStudy(String fieldOfStudy) {
+		this.fieldOfStudy = fieldOfStudy;
 	}
 
 }

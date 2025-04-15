@@ -1,4 +1,4 @@
-package com.make_profile.service.payment;
+package com.make_profile.service.impl.payment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ import com.make_profile.entity.common.EnvironmentEntity;
 import com.make_profile.entity.common.payment.PaymentOrderEntity;
 import com.make_profile.repository.common.EnvironmentRepository;
 import com.make_profile.repository.common.payment.PaymentOrderRepository;
-import com.make_profile.service.impl.payment.PaymentService;
+import com.make_profile.service.payment.PaymentService;
 import com.make_profile.utility.CommonConstants;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
@@ -112,6 +112,8 @@ public class PaymentServiceImpl implements PaymentService {
 
 				paymentOrderEntity.setStatus("completed");
 				paymentOrderRepository.save(paymentOrderEntity);
+				
+				
 
 			} else if (paymentDto.getPaymentStatus().equalsIgnoreCase("Failed")) {
 				PaymentOrderEntity paymentOrderEntity = paymentOrderRepository.getPaymentOrder(paymentDto.getOrderId());

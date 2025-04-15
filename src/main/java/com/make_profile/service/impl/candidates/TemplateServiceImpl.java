@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,16 +61,16 @@ public class TemplateServiceImpl implements TemplateService {
 
 					if (!qualifi.getIsDeleted()) {
 						Long i = 0L;
-						TemplateAppliedEntity experience = new TemplateAppliedEntity();
+						TemplateAppliedEntity qualification = new TemplateAppliedEntity();
 
-						experience.setCandidateId(usedTemplateEntity.getCandidateId());
-						experience.setUsedTemplateId(usedTemplateEntity.getId());
-						experience.setSectionName("QUALIFICATION");
-						experience.setSectionId(i++);
+						qualification.setCandidateId(usedTemplateEntity.getCandidateId());
+						qualification.setUsedTemplateId(usedTemplateEntity.getId());
+						qualification.setSectionName("QUALIFICATION");
+						qualification.setSectionId(i++);
 						// experience.setVisible(true);
-						templateAppliedEnity.add(experience);
+						templateAppliedEnity.add(qualification);
 
-						experience = null;
+						qualification = null;
 					}
 				});
 			}
@@ -79,16 +80,16 @@ public class TemplateServiceImpl implements TemplateService {
 
 					if (!achieve.getIsDeleted()) {
 						Long i = 0L;
-						TemplateAppliedEntity experience = new TemplateAppliedEntity();
+						TemplateAppliedEntity achievements = new TemplateAppliedEntity();
 
-						experience.setCandidateId(usedTemplateEntity.getCandidateId());
-						experience.setUsedTemplateId(usedTemplateEntity.getId());
-						experience.setSectionName("ACHIEVEMENTS");
-						experience.setSectionId(i++);
+						achievements.setCandidateId(usedTemplateEntity.getCandidateId());
+						achievements.setUsedTemplateId(usedTemplateEntity.getId());
+						achievements.setSectionName("ACHIEVEMENTS");
+						achievements.setSectionId(i++);
 						// experience.setVisible(true);
-						templateAppliedEnity.add(experience);
+						templateAppliedEnity.add(achievements);
 
-						experience = null;
+						achievements = null;
 					}
 				});
 			}
@@ -98,16 +99,36 @@ public class TemplateServiceImpl implements TemplateService {
 
 					if (!certifi.getIsDeleted()) {
 						Long i = 0L;
-						TemplateAppliedEntity experience = new TemplateAppliedEntity();
+						TemplateAppliedEntity ceritificates = new TemplateAppliedEntity();
 
-						experience.setCandidateId(usedTemplateEntity.getCandidateId());
-						experience.setUsedTemplateId(usedTemplateEntity.getId());
-						experience.setSectionName("CERTIFICATES");
-						experience.setSectionId(i++);
+						ceritificates.setCandidateId(usedTemplateEntity.getCandidateId());
+						ceritificates.setUsedTemplateId(usedTemplateEntity.getId());
+						ceritificates.setSectionName("CERTIFICATES");
+						ceritificates.setSectionId(i++);
 						// experience.setVisible(true);
-						templateAppliedEnity.add(experience);
+						templateAppliedEnity.add(ceritificates);
 
-						experience = null;
+						ceritificates = null;
+					}
+				});
+			}
+
+			if (Objects.nonNull(candidateDto.getCollegeProject())
+					&& !CollectionUtils.isEmpty(candidateDto.getCollegeProject())) {
+				candidateDto.getQualification().forEach(certifi -> {
+
+					if (!certifi.getIsDeleted()) {
+						Long i = 0L;
+						TemplateAppliedEntity collegeProject = new TemplateAppliedEntity();
+
+						collegeProject.setCandidateId(usedTemplateEntity.getCandidateId());
+						collegeProject.setUsedTemplateId(usedTemplateEntity.getId());
+						collegeProject.setSectionName("COLLEGE PROJECT");
+						collegeProject.setSectionId(i++);
+						// experience.setVisible(true);
+						templateAppliedEnity.add(collegeProject);
+
+						collegeProject = null;
 					}
 				});
 			}

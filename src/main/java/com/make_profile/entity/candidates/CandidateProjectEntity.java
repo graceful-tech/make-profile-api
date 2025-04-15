@@ -20,7 +20,7 @@ public class CandidateProjectEntity {
 	@Column(nullable = true, length = 50)
 	private String projectName;
 
-	@Column(nullable = true, length = 1000)
+	@Column(nullable = true, length = 1500)
 	private String projectSkills;
 
 	@Column(nullable = true, length = 50)

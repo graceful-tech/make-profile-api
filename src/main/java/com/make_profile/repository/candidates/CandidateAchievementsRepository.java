@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 public interface CandidateAchievementsRepository extends JpaRepository<CandidateAchievementsEntity, Long> {
 
-	@Query(value = "select * from candidate_achievements where id:id", nativeQuery = true)
+	@Query(value = "select * from candidate_achievements where id = :id", nativeQuery = true)
 	CandidateAchievementsEntity getAchievementsById(@Param("id") Long id);
 
 }

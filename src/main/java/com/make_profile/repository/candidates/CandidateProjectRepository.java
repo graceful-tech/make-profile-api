@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 public interface CandidateProjectRepository extends JpaRepository<CandidateProjectEntity, Long> {
 
-	@Query(value = "select * from candidate_project_details where id:id", nativeQuery = true)
+	@Query(value = "select * from candidate_project_details where id = :id", nativeQuery = true)
 	CandidateProjectEntity getProjectById(@Param("id") Long id);
 
 }

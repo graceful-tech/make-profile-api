@@ -16,7 +16,7 @@ import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.service.resume.CreateResumeTemplateService;
 
 @RestController
-@RequestMapping("/create")
+@RequestMapping("/resume")
 public class CreateResumeTemplateController {
 
     private static final Logger logger = LoggerFactory.getLogger(CreateResumeTemplateController.class);
@@ -24,7 +24,7 @@ public class CreateResumeTemplateController {
     @Autowired
     CreateResumeTemplateService createResumeTemplateService;
 
-    @PostMapping("/resume")
+    @PostMapping("/create")
     public ResponseEntity<?> createResumeTemplate(@RequestBody CandidateDto candidateDto) {
 
         logger.debug("Controller :: createResumeTemplate :: Entered");

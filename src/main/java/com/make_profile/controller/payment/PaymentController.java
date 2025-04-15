@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.make_profile.dto.payment.PaymentDto;
 import com.make_profile.dto.payment.PaymentOrderDto;
-import com.make_profile.service.impl.payment.PaymentService;
+import com.make_profile.service.payment.PaymentService;
 
 @RestController
 @RequestMapping("/payment")
@@ -23,6 +23,7 @@ public class PaymentController {
 	@Autowired
 	PaymentService paymentService;
 
+	@PostMapping("/generate-order")
 	public ResponseEntity<?> generatePayment(@RequestBody PaymentOrderDto paymentOrderDto) {
 
 		logger.debug("Controller :: generatePayment :: Entered");

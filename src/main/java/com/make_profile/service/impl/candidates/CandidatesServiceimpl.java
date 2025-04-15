@@ -1,26 +1,40 @@
 package com.make_profile.service.impl.candidates;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.make_profile.dto.candidates.CandidateAchievementsDto;
+import com.make_profile.dto.candidates.CandidateCertificatesDto;
 import com.make_profile.dto.candidates.CandidateDto;
+import com.make_profile.dto.candidates.CandidateExperienceDto;
+import com.make_profile.dto.candidates.CandidateImageDto;
+import com.make_profile.dto.candidates.CandidateProjectDetailsDto;
+import com.make_profile.dto.candidates.CandidateQualificationDto;
 import com.make_profile.entity.candidates.CandidateAchievementsEntity;
 import com.make_profile.entity.candidates.CandidateCertificateEntity;
+import com.make_profile.entity.candidates.CandidateCollegeProjectEntity;
 import com.make_profile.entity.candidates.CandidateEntity;
 import com.make_profile.entity.candidates.CandidateExperienceEntity;
+import com.make_profile.entity.candidates.CandidateImageEntity;
 import com.make_profile.entity.candidates.CandidateProjectEntity;
 import com.make_profile.entity.candidates.CandidateQualificationEntity;
 import com.make_profile.entity.templates.UsedTemplateEntity;
 import com.make_profile.repository.candidates.CandidateAchievementsRepository;
 import com.make_profile.repository.candidates.CandidateCertificateRepository;
+import com.make_profile.repository.candidates.CandidateCollegeProjectRepository;
 import com.make_profile.repository.candidates.CandidateExperienceRepository;
+import com.make_profile.repository.candidates.CandidateImageRepository;
 import com.make_profile.repository.candidates.CandidateProjectRepository;
 import com.make_profile.repository.candidates.CandidateQualificationRepository;
 import com.make_profile.repository.candidates.CandidatesRepository;
@@ -28,6 +42,8 @@ import com.make_profile.repository.templates.TemplateAppliedRepository;
 import com.make_profile.repository.templates.UsedTemplateRepository;
 import com.make_profile.service.candidates.CandidateService;
 import com.make_profile.service.candidates.TemplateService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CandidatesServiceimpl implements CandidateService {
@@ -64,12 +80,18 @@ public class CandidatesServiceimpl implements CandidateService {
 	@Autowired
 	TemplateService templateService;
 
+	@Autowired
+	CandidateImageRepository candidateImageRepository;
+
+	@Autowired
+	CandidateCollegeProjectRepository candidateCollegeProjectRepository;
+
 	@Override
 	public CandidateDto createCandidate(CandidateDto candidateDto) {
 
 		logger.debug("Service :: createResumeTemplate :: Entered");
 
-		CandidateDto candiateDto = null;
+		CandidateDto candidateResponseDto = null;
 
 		try {
 
@@ -86,24 +108,65 @@ public class CandidatesServiceimpl implements CandidateService {
 
 			CandidateEntity convertDtoToEntity = convertCandidateDtoToEntity(candidateDto);
 
+			if (Objects.nonNull(candidateDto.getExperiences())
+					&& !CollectionUtils.isEmpty(candidateDto.getExperiences())) {
+				List<CandidateExperienceEntity> convertCandidateExpeienceToEntity = convertCandidateExpeienceToEntity(
+						candidateDto, convertDtoToEntity);
+
+				if (Objects.nonNull(convertCandidateExpeienceToEntity)
+						&& !CollectionUtils.isEmpty(convertCandidateExpeienceToEntity)) {
+					convertDtoToEntity.setExperiences(convertCandidateExpeienceToEntity);
+				}
+			}
+
+			if (Objects.nonNull(candidateDto.getQualification())
+					&& !CollectionUtils.isEmpty(candidateDto.getQualification())) {
+				List<CandidateQualificationEntity> convertCandidateQualificationToEntity = convertCandidateQualificationToEntity(
+						candidateDto, convertDtoToEntity);
+
+				if (Objects.nonNull(convertCandidateQualificationToEntity)
+						&& !CollectionUtils.isEmpty(convertCandidateQualificationToEntity)) {
+					convertDtoToEntity.setQualification(convertCandidateQualificationToEntity);
+				}
+			}
+
+			if (Objects.nonNull(candidateDto.getCertificates())
+					&& !CollectionUtils.isEmpty(candidateDto.getCertificates())) {
+				List<CandidateCertificateEntity> convertCandidateCertificateToEntity = convertCandidateCertificateToEntity(
+						candidateDto, convertDtoToEntity);
+
+				if (Objects.nonNull(convertCandidateCertificateToEntity)
+						&& !CollectionUtils.isEmpty(convertCandidateCertificateToEntity)) {
+					convertDtoToEntity.setCertificates(convertCandidateCertificateToEntity);
+				}
+			}
+
+			if (Objects.nonNull(candidateDto.getAchievements())
+					&& !CollectionUtils.isEmpty(candidateDto.getAchievements())) {
+				List<CandidateAchievementsEntity> convertCandidateAchievementsToEntity = convertCandidateAchievementsToEntity(
+						candidateDto, convertDtoToEntity);
+
+				if (Objects.nonNull(convertCandidateAchievementsToEntity)
+						&& !CollectionUtils.isEmpty(convertCandidateAchievementsToEntity)) {
+					convertDtoToEntity.setAchievements(convertCandidateAchievementsToEntity);
+				}
+			}
+
+			if (Objects.nonNull(candidateDto.getCollegeProject())
+					&& !CollectionUtils.isEmpty(candidateDto.getCollegeProject())) {
+
+				List<CandidateCollegeProjectEntity> convertCandidateCollegeProjectDtoToEntity = convertCandidateCollegeProjectDtoToEntity(
+						candidateDto, convertDtoToEntity);
+
+				if (Objects.nonNull(convertCandidateCollegeProjectDtoToEntity)
+						&& !CollectionUtils.isEmpty(convertCandidateCollegeProjectDtoToEntity)) {
+					convertDtoToEntity.setCollegeProject(convertCandidateCollegeProjectDtoToEntity);
+
+				}
+
+			}
+
 			CandidateEntity candidateEntity = candidatesRepository.save(convertDtoToEntity);
-
-			if (Objects.nonNull(candidateDto.getExperiences())) {
-				convertCandidateExpeienceToEntity(candidateDto, candidateEntity);
-			}
-
-			if (Objects.nonNull(candidateDto.getQualification())) {
-				convertCandidateQualificationToEntity(candidateDto, candidateEntity);
-
-			}
-
-			if (Objects.nonNull(candidateDto.getCertificates())) {
-				convertCandidateCertificateToEntity(candidateDto, candidateEntity);
-			}
-
-			if (Objects.nonNull(candidateDto.getExperiences())) {
-				convertCandidateAchievementsToEntity(candidateDto, candidateEntity);
-			}
 
 			UsedTemplateEntity usedTemplate = new UsedTemplateEntity();
 
@@ -115,16 +178,9 @@ public class CandidatesServiceimpl implements CandidateService {
 
 			usedTemplate = null;
 
-//			candidateEntity = null;
-			
 			CandidateEntity candidate = candidatesRepository.findById(candidateEntity.getId()).get();
 
-			candiateDto = modelMapper.map(candidatesRepository.findById(candidateEntity.getId()).get(),
-					CandidateDto.class);
-			
-			candiateDto.setLanguagesKnown(Arrays.asList(candidate.getLanguagesKnown().split(",")));
-			candiateDto.setSkills(Arrays.asList(candidate.getSkills().split(",")));
-			
+			candidateResponseDto = convertCandidateEntityToDto(candidate);
 
 			candidateEntity = null;
 
@@ -132,12 +188,12 @@ public class CandidatesServiceimpl implements CandidateService {
 			logger.debug("Service :: createResumeTemplate :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: createResumeTemplate :: Entered");
-		return candiateDto;
+		return candidateResponseDto;
 	}
 
 	public CandidateEntity convertCandidateDtoToEntity(CandidateDto candidateDto) {
 		logger.debug("Service :: convertCandidateDtoToEntity :: Entered");
-		CandidateEntity candidateEntity = null;
+		CandidateEntity candidateEntity = new CandidateEntity();
 		try {
 			candidateEntity = modelMapper.map(candidateDto, CandidateEntity.class);
 
@@ -155,6 +211,17 @@ public class CandidatesServiceimpl implements CandidateService {
 				candidateEntity.setIsFresher(false);
 			}
 
+			if (Objects.nonNull(candidateDto.getCoreCompentencies())) {
+				String coreCompentencies = candidateDto.getCoreCompentencies().stream()
+						.collect(Collectors.joining(","));
+				candidateEntity.setCoreCompentencies(coreCompentencies);
+			}
+
+			if (Objects.nonNull(candidateDto.getSoftSkills())) {
+				String softSkills = candidateDto.getSoftSkills().stream().collect(Collectors.joining(","));
+				candidateEntity.setSoftSkills(softSkills);
+			}
+
 		} catch (Exception e) {
 			logger.error("Service :: convertCandidateDtoToEntity :: Exception :: " + e.getMessage());
 		}
@@ -162,96 +229,180 @@ public class CandidatesServiceimpl implements CandidateService {
 		return candidateEntity;
 	}
 
-	public void convertCandidateExpeienceToEntity(CandidateDto candidateDto, CandidateEntity candidateEntity) {
+	public CandidateDto convertCandidateEntityToDto(CandidateEntity candidateEntity) {
+		logger.debug("Service :: convertCandidateDtoToEntity :: Entered");
+		CandidateDto candidateResponseDto = new CandidateDto();
+		try {
+			candidateResponseDto = modelMapper.map(candidateEntity, CandidateDto.class);
+
+			candidateResponseDto.setLanguagesKnown(Arrays.asList(candidateEntity.getLanguagesKnown().split(",")));
+
+			candidateResponseDto.setSkills(Arrays.asList(candidateEntity.getSkills().split(",")));
+
+			if (Objects.nonNull(candidateEntity.getSoftSkills()) && !candidateEntity.getSoftSkills().isEmpty()) {
+				candidateResponseDto.setSoftSkills(Arrays.asList(candidateEntity.getSoftSkills().split(",")));
+			}
+
+			if (Objects.nonNull(candidateEntity.getCoreCompentencies())
+					&& !candidateEntity.getCoreCompentencies().isEmpty()) {
+				candidateResponseDto
+						.setCoreCompentencies(Arrays.asList(candidateEntity.getCoreCompentencies().split(",")));
+			}
+			 
+
+			if (Objects.nonNull(candidateEntity.getExperiences())
+					&& !CollectionUtils.isEmpty(candidateEntity.getExperiences())) {
+				for (int i = 0; i < candidateEntity.getExperiences().size(); i++) {
+					String responsibilities = candidateEntity.getExperiences().get(i).getResponsibilities();
+					candidateResponseDto.getExperiences().get(i)
+							.setResponsibilities(Arrays.asList(responsibilities.split(",")));
+				}
+			}
+
+			if (Objects.nonNull(candidateEntity.getExperiences().get(0).getProjects())
+					&& !CollectionUtils.isEmpty(candidateEntity.getExperiences().get(0).getProjects())) {
+
+				for (int i = 0; i < candidateEntity.getExperiences().size(); i++) {
+					List<CandidateProjectEntity> projectsList = candidateEntity.getExperiences().get(i).getProjects();
+
+					for (int j = 0; j < projectsList.size(); j++) {
+						String projectSkills = projectsList.get(j).getProjectSkills();
+						candidateResponseDto.getExperiences().get(i).getProjects().get(j)
+								.setProjectSkills(Arrays.asList(projectSkills.split(",")));
+
+					}
+				}
+			}
+
+			if (Objects.nonNull(candidateEntity.getCollegeProject())
+					&& !CollectionUtils.isEmpty(candidateEntity.getCollegeProject())) {
+				for (int i = 0; i < candidateEntity.getCollegeProject().size(); i++) {
+					String collegeProjectSkills = candidateEntity.getCollegeProject().get(i).getCollegeProjectSkills();
+					candidateResponseDto.getCollegeProject().get(i)
+							.setCollegeProjectSkills(Arrays.asList(collegeProjectSkills.split(",")));
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error("Service :: convertCandidateDtoToEntity :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: convertCandidateDtoToEntity :: Exited");
+		return candidateResponseDto;
+	}
+
+	public List<CandidateExperienceEntity> convertCandidateExpeienceToEntity(CandidateDto candidateDto,
+			CandidateEntity candidateEntity) {
 		logger.debug("Service :: convertCandidateExpeienceToEntity :: Entered");
+		List<CandidateExperienceEntity> candidateExperienceList = new ArrayList<>();
+		List<CandidateProjectEntity> candidateProjectDetailsList = new ArrayList<>();
 
 		try {
+
 			if (Objects.nonNull(candidateDto.getExperiences()) && !candidateDto.getExperiences().isEmpty()) {
 
 				candidateDto.getExperiences().stream().forEach(experience -> {
 
-					if (Objects.isNull(experience.getId()) || experience.getId().equals("")) {
+					if (Objects.isNull(experience.getId())) {
 
-						CandidateExperienceEntity candidateExperience = new CandidateExperienceEntity();
+						CandidateExperienceEntity candidateExperience = modelMapper.map(experience,
+								CandidateExperienceEntity.class);
 
 						candidateExperience.setCandidateId(candidateEntity);
-						candidateExperience.setCompanyName(experience.getCompanyName());
-						candidateExperience.setRole(experience.getRole());
-						candidateExperience.setCurrentlyWorking(experience.getCurrentlyWorking());
-						candidateExperience.setExperienceYearStartDate(experience.getExperienceYearStartDate());
-						candidateExperience.setExperienceYearEndDate(experience.getExperienceYearEndDate());
-
-						CandidateExperienceEntity candidateExperienceId = candidateExperienceRepository
-								.save(candidateExperience);
-
-						candidateExperience = null;
+						if (Objects.nonNull(experience.getResponsibilities())) {
+							String responsibilities = experience.getResponsibilities().stream()
+									.collect(Collectors.joining(","));
+							candidateExperience.setResponsibilities(responsibilities);
+						}
 
 						if (Objects.nonNull(experience.getProjects())) {
 
-							experience.getProjects().stream().forEach(project -> {
+							for (CandidateProjectDetailsDto project : experience.getProjects()) {
 								CandidateProjectEntity candidateProject = modelMapper.map(project,
 										CandidateProjectEntity.class);
 
-								candidateProject.setCandidateExperience(candidateExperienceId);
-								candidateProjectRepository.save(candidateProject);
+								if (Objects.nonNull(project.getProjectSkills())) {
+									String projectSkills = project.getProjectSkills().stream()
+											.collect(Collectors.joining(","));
+									candidateProject.setProjectSkills(projectSkills);
+								}
+
+								candidateProject.setCandidateExperience(candidateExperience);
+								candidateProjectDetailsList.add(candidateProject);
+
 								candidateProject = null;
-							});
+							}
 						}
+						candidateExperience.setProjects(candidateProjectDetailsList);
+
+						candidateExperienceList.add(candidateExperience);
+
+						candidateExperience = null;
 					} else {
-						if (Objects.nonNull(experience.getId()) && experience.getId() > 0) {
-							CandidateExperienceEntity experienceById = candidateExperienceRepository
-									.getExperienceById(experience.getId());
+						if (Objects.nonNull(experience.getId())) {
 
 							if (!experience.getIsDeleted()) {
-								if (Objects.nonNull(experienceById)) {
-									experienceById.setCandidateId(candidateEntity);
-									experienceById.setCompanyName(experience.getCompanyName());
-									experienceById.setRole(experience.getRole());
-									experienceById.setCurrentlyWorking(experience.getCurrentlyWorking());
-									experienceById.setExperienceYearStartDate(experience.getExperienceYearStartDate());
-									experienceById.setExperienceYearEndDate(experience.getExperienceYearEndDate());
+								if (Objects.nonNull(experience.getId())) {
+									CandidateExperienceEntity exp = modelMapper.map(experience,
+											CandidateExperienceEntity.class);
 
-									CandidateExperienceEntity updateCandidateExperienceId = candidateExperienceRepository
-											.save(experienceById);
+									exp.setCandidateId(candidateEntity);
 
-									experienceById = null;
+									if (Objects.nonNull(exp.getResponsibilities())) {
+										String responsibilities = experience.getResponsibilities().stream()
+												.collect(Collectors.joining(","));
+										exp.setResponsibilities(responsibilities);
+									}
 
 									if (Objects.nonNull(experience.getProjects())) {
 
 										experience.getProjects().stream().forEach(project -> {
 
 											if (!project.isProjectDeleted()) {
+												if (Objects.isNull(project.getId())) {
+													CandidateProjectEntity candidateProjectEntity = modelMapper
+															.map(project, CandidateProjectEntity.class);
 
-												if (Objects.nonNull(project.getId()) && !project.getId().equals("")) {
+													if (Objects.nonNull(project.getProjectSkills())) {
+														String projectSkills = project.getProjectSkills().stream()
+																.collect(Collectors.joining(","));
+														candidateProjectEntity.setProjectSkills(projectSkills);
+													}
+
+													candidateProjectEntity.setCandidateExperience(exp);
+													candidateProjectDetailsList.add(candidateProjectEntity);
+													exp.setProjects(candidateProjectDetailsList);
+
+													candidateProjectEntity = null;
+												} else {
 													CandidateProjectEntity projectById = candidateProjectRepository
 															.getProjectById(project.getId());
-
+													projectById.setId(project.getId());
 													projectById.setProjectDescription(project.getProjectDescription());
 													projectById.setProjectName(project.getProjectName());
 													projectById.setProjectRole(project.getProjectRole());
-													projectById.setCandidateExperience(updateCandidateExperienceId);
+
 													if (Objects.nonNull(project.getProjectSkills())) {
 														String projectSkills = project.getProjectSkills().stream()
 																.collect(Collectors.joining(","));
 														projectById.setProjectSkills(projectSkills);
 													}
 
-													candidateProjectRepository.save(projectById);
-													projectById = null;
-												} else {
-													CandidateProjectEntity candidateProject = modelMapper.map(project,
-															CandidateProjectEntity.class);
+													projectById.setId(project.getId());
+													projectById.setCandidateExperience(exp);
+													candidateProjectDetailsList.add(projectById);
+													exp.setProjects(candidateProjectDetailsList);
 
-													candidateProject
-															.setCandidateExperience(updateCandidateExperienceId);
-													candidateProjectRepository.save(candidateProject);
-													candidateProject = null;
+													projectById = null;
+
 												}
 											} else {
 												candidateProjectRepository.deleteById(project.getId());
 											}
 										});
+
 									}
+
+									candidateExperienceList.add(exp);
 								}
 							} else {
 								candidateExperienceRepository.deleteById(experience.getId());
@@ -261,32 +412,39 @@ public class CandidatesServiceimpl implements CandidateService {
 							}
 						}
 					}
+
 				});
+
 			}
 
 		} catch (Exception e) {
 			logger.error("Service :: convertCandidateExpeienceToEntity :: Exception :: " + e.getMessage());
 		}
 		logger.debug("Service :: convertCandidateExpeienceToEntity :: Exited");
+		return candidateExperienceList;
 	}
 
-	public void convertCandidateQualificationToEntity(CandidateDto candidateDto, CandidateEntity candidateEntity) {
+	public List<CandidateQualificationEntity> convertCandidateQualificationToEntity(CandidateDto candidateDto,
+			CandidateEntity candidateEntity) {
 		logger.debug("Service :: convertCandidateQualificationToEntity :: Entered");
+
+		List<CandidateQualificationEntity> candidateQualificationEntityList = new ArrayList<>();
 		try {
 
 			if (Objects.nonNull(candidateDto.getQualification()) && !candidateDto.getQualification().isEmpty()) {
 
 				candidateDto.getQualification().stream().forEach(qualification -> {
 
-					if (Objects.isNull(qualification.getId()) || qualification.getId().equals("")) {
+					if (Objects.isNull(qualification.getId())) {
 
 						CandidateQualificationEntity candidateQualification = modelMapper.map(qualification,
 								CandidateQualificationEntity.class);
 
 						candidateQualification.setCandidateId(candidateEntity);
-						candidateQualificationRepository.save(candidateQualification);
+
+						candidateQualificationEntityList.add(candidateQualification);
 					} else {
-						if (Objects.nonNull(qualification.getId()) && qualification.getId() > 0) {
+						if (Objects.nonNull(qualification.getId())) {
 							CandidateQualificationEntity qualificationById = candidateQualificationRepository
 									.getQualificationById(qualification.getId());
 
@@ -294,12 +452,18 @@ public class CandidatesServiceimpl implements CandidateService {
 
 								if (Objects.nonNull(qualificationById)) {
 
+									qualificationById.setId(qualification.getId());
 									qualificationById.setInstutionName(qualification.getInstutionName());
 									qualificationById
 											.setQualificationStartYear(qualification.getQualificationStartYear());
 									qualificationById.setQualificationEndYear(qualification.getQualificationEndYear());
+
 									qualificationById.setCandidateId(candidateEntity);
-									candidateQualificationRepository.save(qualificationById);
+									qualificationById.setFieldOfStudy(qualification.getFieldOfStudy());
+
+									candidateQualificationEntityList.add(qualificationById);
+
+									qualificationById = null;
 								}
 							} else {
 								candidateQualificationRepository.deleteById(qualification.getId());
@@ -315,10 +479,15 @@ public class CandidatesServiceimpl implements CandidateService {
 			logger.error("Service :: convertCandidateQualificationToEntity :: Exception :: " + e.getMessage());
 		}
 		logger.debug("Service :: convertCandidateQualificationToEntity :: Exited");
+		return candidateQualificationEntityList;
 	}
 
-	public void convertCandidateCertificateToEntity(CandidateDto candidateDto, CandidateEntity candidateEntity) {
+	public List<CandidateCertificateEntity> convertCandidateCertificateToEntity(CandidateDto candidateDto,
+			CandidateEntity candidateEntity) {
 		logger.debug("Service :: convertCandidateCertificateToEntity :: Entered");
+
+		List<CandidateCertificateEntity> candidateCertificateEntityList = new ArrayList<>();
+
 		try {
 			if (Objects.nonNull(candidateDto.getCertificates()) && !candidateDto.getCertificates().isEmpty()) {
 
@@ -329,7 +498,7 @@ public class CandidatesServiceimpl implements CandidateService {
 								CandidateCertificateEntity.class);
 
 						candidateCertificate.setCandidateId(candidateEntity);
-						candidateCertificateRepository.save(candidateCertificate);
+						candidateCertificateEntityList.add(candidateCertificate);
 					} else {
 						CandidateCertificateEntity certificateById = candidateCertificateRepository
 								.getCertificateById(certificate.getId());
@@ -337,11 +506,15 @@ public class CandidatesServiceimpl implements CandidateService {
 						if (!certificate.getIsDeleted()) {
 
 							if (Objects.nonNull(certificateById)) {
+								certificateById.setId(certificate.getId());
 								certificateById.setCourseName(certificate.getCourseName());
 								certificateById.setCourseStartDate(certificate.getCourseStartDate());
 								certificateById.setCourseEndDate(certificate.getCourseEndDate());
+
 								certificateById.setCandidateId(candidateEntity);
-								candidateCertificateRepository.save(certificateById);
+								candidateCertificateEntityList.add(certificateById);
+
+								certificateById = null;
 							}
 						} else {
 							candidateCertificateRepository.deleteById(certificate.getId());
@@ -355,21 +528,25 @@ public class CandidatesServiceimpl implements CandidateService {
 			logger.error("Service :: convertCandidateCertificateToEntity :: Exception :: " + e.getMessage());
 		}
 		logger.debug("Service :: convertCandidateCertificateToEntity :: Exited");
+		return candidateCertificateEntityList;
 	}
 
-	public void convertCandidateAchievementsToEntity(CandidateDto candidateDto, CandidateEntity candidateEntity) {
+	public List<CandidateAchievementsEntity> convertCandidateAchievementsToEntity(CandidateDto candidateDto,
+			CandidateEntity candidateEntity) {
 		logger.debug("Service :: convertCandidateAchievementsToEntity :: Entered");
+
+		List<CandidateAchievementsEntity> candidateAchievementsEntityList = new ArrayList<>();
 		try {
 			if (Objects.nonNull(candidateDto.getAchievements()) && !candidateDto.getAchievements().isEmpty()) {
 
 				candidateDto.getAchievements().stream().forEach(achievements -> {
 
-					if (Objects.isNull(achievements.getId()) || achievements.getId().equals("")) {
+					if (Objects.isNull(achievements.getId())) {
 						CandidateAchievementsEntity candidateAchievement = modelMapper.map(achievements,
 								CandidateAchievementsEntity.class);
 
 						candidateAchievement.setCandidateId(candidateEntity);
-						candidateAchievementsRepository.save(candidateAchievement);
+						candidateAchievementsEntityList.add(candidateAchievement);
 
 					} else {
 						CandidateAchievementsEntity achievementsById = candidateAchievementsRepository
@@ -377,11 +554,15 @@ public class CandidatesServiceimpl implements CandidateService {
 
 						if (!achievements.getIsDeleted()) {
 							if (Objects.nonNull(achievementsById)) {
+
+								achievementsById.setId(achievements.getId());
 								achievementsById.setAchievementsName(achievements.getAchievementsName());
 								achievementsById.setAchievementsDate(achievements.getAchievementsDate());
 								achievementsById.setCandidateId(candidateEntity);
 
-								candidateAchievementsRepository.save(achievementsById);
+								candidateAchievementsEntityList.add(achievementsById);
+
+								achievementsById = null;
 							}
 						} else {
 							candidateAchievementsRepository.deleteById(achievements.getId());
@@ -395,6 +576,105 @@ public class CandidatesServiceimpl implements CandidateService {
 			logger.error("Service :: convertCandidateAchievementsToEntity :: Exception :: " + e.getMessage());
 		}
 		logger.debug("Service :: convertCandidateAchievementsToEntity :: Exited");
+		return candidateAchievementsEntityList;
+	}
+
+	public List<CandidateCollegeProjectEntity> convertCandidateCollegeProjectDtoToEntity(CandidateDto candidateDto,
+			CandidateEntity candidateEntity) {
+		logger.debug("Service :: convertCandidateCollegeProjectDtoToEntity :: Entered");
+
+		List<CandidateCollegeProjectEntity> candidateCollegeProjectEntityList = new ArrayList<>();
+
+		try {
+			if (Objects.nonNull(candidateDto.getCollegeProject()) && !candidateDto.getCollegeProject().isEmpty()) {
+
+				candidateDto.getCollegeProject().stream().forEach(collegeProject -> {
+
+					if (Objects.isNull(collegeProject.getId()) || collegeProject.getId() > 0) {
+						CandidateCollegeProjectEntity candidateProject = modelMapper.map(collegeProject,
+								CandidateCollegeProjectEntity.class);
+
+						candidateProject.setCandidateId(candidateEntity);
+						candidateCollegeProjectEntityList.add(candidateProject);
+					} else {
+						CandidateCollegeProjectEntity collegeProjectById = candidateCollegeProjectRepository
+								.getCollegeProjectById(collegeProject.getId());
+
+						if (!collegeProject.getIsDeleted()) {
+
+							if (Objects.nonNull(collegeProjectById)) {
+								collegeProjectById.setId(collegeProject.getId());
+								collegeProjectById
+										.setCollegeProjectDescription(collegeProject.getCollegeProjectDescription());
+
+								String collegeProjectSkills = collegeProject.getCollegeProjectSkills().stream()
+										.collect(Collectors.joining(","));
+								collegeProjectById.setCollegeProjectSkills(collegeProjectSkills);
+
+								collegeProjectById.setCandidateId(candidateEntity);
+								candidateCollegeProjectEntityList.add(collegeProjectById);
+
+								collegeProjectById = null;
+							}
+						} else {
+							candidateCollegeProjectRepository.deleteById(collegeProject.getId());
+							templateAppliedRepository.deleteByCandidateSectionId(candidateEntity.getId(),
+									"COLLEGE PROJECTS", collegeProject.getId());
+						}
+					}
+				});
+			}
+		} catch (Exception e) {
+			logger.error("Service :: convertCandidateCollegeProjectDtoToEntity :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: convertCandidateCollegeProjectDtoToEntity :: Exited");
+		return candidateCollegeProjectEntityList;
+	}
+
+	@Override
+	public CandidateDto getCandidateById(Long id) {
+		logger.debug("Service :: getCandidateById :: Entered");
+
+		CandidateDto candidateResponseDto = null;
+		try {
+			CandidateEntity candidateEntity = candidatesRepository.findById(id).get();
+			candidateResponseDto = convertCandidateEntityToDto(candidateEntity);
+		} catch (Exception e) {
+			logger.error("Service :: getCandidateById :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: getCandidateById :: Exited");
+		return candidateResponseDto;
+	}
+
+	@Override
+	public byte[] uploadCandidateImage(CandidateImageDto candidateImageDto) {
+		logger.debug("Service :: uploadCandidateImage :: Entered");
+
+		CandidateImageEntity candidateImageEntity = null;
+		CandidateImageEntity candidateImage = new CandidateImageEntity();
+		CandidateImageEntity candidateId = null;
+
+		try {
+			Optional<CandidateImageEntity> findById = candidateImageRepository
+					.findById(candidateImageDto.getCandidateId());
+
+			boolean present = findById.isPresent();
+
+			if (present) {
+				candidateImageEntity = findById.get();
+				candidateImageEntity.setImage(candidateImageDto.getAttachment().getBytes());
+				candidateId = candidateImageRepository.save(candidateImageEntity);
+			} else {
+				candidateImage.setCandidateId(candidateImageDto.getCandidateId());
+				candidateImage.setImage(candidateImageDto.getAttachment().getBytes());
+				candidateId = candidateImageRepository.save(candidateImage);
+			}
+			candidateImage = null;
+		} catch (Exception e) {
+			logger.error("Service :: uploadCandidateImage :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: uploadCandidateImage :: Exited");
+		return candidateId.getImage();
 	}
 
 }

@@ -18,6 +18,8 @@ public class CandidateQualificationDto {
 
 	private Boolean isDeleted;
 
+	private String fieldOfStudy;
+
 	public Long getId() {
 		return id;
 	}
@@ -74,10 +76,20 @@ public class CandidateQualificationDto {
 		this.isDeleted = isDeleted;
 	}
 
+	public String getFieldOfStudy() {
+		return fieldOfStudy;
+	}
+
+	public void setFieldOfStudy(String fieldOfStudy) {
+		this.fieldOfStudy = fieldOfStudy;
+	}
+
 	@Override
 	public String toString() {
-		return "{" + "id=" + id + ", instutionName='" + instutionName + '\'' + ", department='" + department + '\''
-				+ ", qualificationStartYear='" + qualificationStartYear + '\'' + ", qualificationEndYear='"
-				+ qualificationEndYear + '\'' + ", percentage=" + percentage + '}';
+		return "{" + "id=" + id + ", instutionName=" + instutionName + ", department=" + department
+				+ ", qualificationStartYear=" + qualificationStartYear + ", qualificationEndYear="
+				+ qualificationEndYear + ", percentage=" + percentage + ", isDeleted=" + isDeleted + ", fieldOfStudy="
+				+ fieldOfStudy + '}';
 	}
+
 }

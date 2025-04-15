@@ -31,16 +31,16 @@ public class extractResultFromOpenAiServiceImpl implements ExtractResultFromOpen
 	ModelMapper modelmapper;
 
 	@Override
-	public String resultFromOpenAi(JsonObject jsonObject) {
+	public ResumeMatchResultDto resultFromOpenAi(JsonObject jsonObject) {
 		logger.debug("Service :: resultFromOpenAi :: Entered ");
+		JSONObject jSONObject = new JSONObject(jsonObject.toString());
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		ResumeMatchResultDto resumeMatchResultDto = new ResumeMatchResultDto();
+
+		List<RequirementFitDto> requirementLists = new ArrayList<>();
 		try {
-			JSONObject jSONObject = new JSONObject(jsonObject.toString());
-
-			ObjectMapper objectMapper = new ObjectMapper();
-
-			ResumeMatchResultDto resumeMatchResultDto = new ResumeMatchResultDto();
-
-			List<RequirementFitDto> requirementLists = new ArrayList<>();
 
 			String matchString = getValue("match", jSONObject);
 			boolean match = matchString != "" && matchString.equals("true") ? true : false;
@@ -60,19 +60,21 @@ public class extractResultFromOpenAiServiceImpl implements ExtractResultFromOpen
 
 			// to convert object to ListOfDto
 			if (Objects.nonNull(requirementMyresumeFit)) {
-				requirementLists = objectMapper.readValue(requirementMyresumeFit.toString(),new TypeReference<List<RequirementFitDto>>() {});
+				requirementLists = objectMapper.readValue(requirementMyresumeFit.toString(),
+						new TypeReference<List<RequirementFitDto>>() {
+						});
 			}
 			resumeMatchResultDto.setMatch(match);
 			resumeMatchResultDto.setMatchScore(matchScore);
 			resumeMatchResultDto.setFinalVerdict(finalVerdict);
 			resumeMatchResultDto.setImprovementSuggestions(getListFromString(improvementSuggestions));
 			resumeMatchResultDto.setRequirementMyresumeFit(requirementLists);
-			
+
 		} catch (Exception e) {
 			logger.debug("Service :: resultFromOpenAi :: Exception ");
 		}
 		logger.debug("Service :: resultFromOpenAi :: Exited ");
-		return null;
+		return resumeMatchResultDto;
 	}
 
 	private String keyFromJson(JSONObject jsonObject, String expectedKey) {
