@@ -1,20 +1,22 @@
 package com.make_profile.dto.user;
 
-import java.util.List;
+
 
 public class MakeProfileUserDto {
 
-    private Long id;
+	private Long id;
 
-    private String name;
-    
-    private String mobileNumber;
+	private String name;
 
-    private String email;
+	private String mobileNumber;
 
-    private String signInAccess;
+	private String email;
 
-    private String password;
+	private String signInAccess;
+
+	private String password;
+
+	private String token;
 
 	public Long getId() {
 		return id;
@@ -64,5 +66,12 @@ public class MakeProfileUserDto {
 		this.password = password;
 	}
 
-    
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 }

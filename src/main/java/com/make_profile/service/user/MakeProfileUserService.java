@@ -4,7 +4,9 @@ import com.make_profile.dto.user.MakeProfileUserDto;
 
 public interface MakeProfileUserService {
 
-	MakeProfileUserDto createUser(MakeProfileUserDto makeProfileUserDto);
+	boolean createUser(MakeProfileUserDto makeProfileUserDto);
+
+	MakeProfileUserDto createGoogleUser(MakeProfileUserDto makeProfileUserDto);
 
 	
 
