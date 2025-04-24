@@ -1,5 +1,6 @@
 package com.make_profile.service.impl.candidates;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -222,6 +223,16 @@ public class CandidatesServiceimpl implements CandidateService {
 				candidateEntity.setSoftSkills(softSkills);
 			}
 
+			candidateEntity.setCreatedUserName(candidateDto.getCreatedUserName());
+
+			if (candidateDto.getId() == null) {
+				candidateEntity.setCreatedUser(candidateDto.getCreatedUser());
+				candidateEntity.setCreatedDate(LocalDateTime.now());
+			} else {
+				candidateEntity.setModifiedUser(candidateDto.getCreatedUser());
+				candidateEntity.setModifiedUser(candidateDto.getCreatedUser());
+			}
+
 		} catch (Exception e) {
 			logger.error("Service :: convertCandidateDtoToEntity :: Exception :: " + e.getMessage());
 		}
@@ -248,7 +259,6 @@ public class CandidatesServiceimpl implements CandidateService {
 				candidateResponseDto
 						.setCoreCompentencies(Arrays.asList(candidateEntity.getCoreCompentencies().split(",")));
 			}
-			 
 
 			if (Objects.nonNull(candidateEntity.getExperiences())
 					&& !CollectionUtils.isEmpty(candidateEntity.getExperiences())) {
@@ -632,13 +642,17 @@ public class CandidatesServiceimpl implements CandidateService {
 	}
 
 	@Override
-	public CandidateDto getCandidateById(Long id) {
+	public CandidateDto getCandidateById(String userName) {
 		logger.debug("Service :: getCandidateById :: Entered");
 
 		CandidateDto candidateResponseDto = null;
+		CandidateEntity candidateEntity = null;
 		try {
-			CandidateEntity candidateEntity = candidatesRepository.findById(id).get();
-			candidateResponseDto = convertCandidateEntityToDto(candidateEntity);
+			candidateEntity = candidatesRepository.getCandidateByUserName(userName);
+			if (Objects.nonNull(candidateEntity)) {
+				candidateResponseDto = convertCandidateEntityToDto(candidateEntity);
+			}
+			candidateEntity = null;
 		} catch (Exception e) {
 			logger.error("Service :: getCandidateById :: Exception :: " + e.getMessage());
 		}
@@ -669,12 +683,33 @@ public class CandidatesServiceimpl implements CandidateService {
 				candidateImage.setImage(candidateImageDto.getAttachment().getBytes());
 				candidateId = candidateImageRepository.save(candidateImage);
 			}
+			candidateImageEntity = null;
 			candidateImage = null;
 		} catch (Exception e) {
 			logger.error("Service :: uploadCandidateImage :: Exception :: " + e.getMessage());
 		}
 		logger.debug("Service :: uploadCandidateImage :: Exited");
 		return candidateId.getImage();
+	}
+
+	@Override
+	public byte[] getCandidateImage(CandidateImageDto candidateImageDto) {
+		logger.debug("Service :: getCandidateImage :: Entered");
+
+		CandidateImageEntity imageByCandidateId = null;
+		try {
+			imageByCandidateId = candidateImageRepository.getImageByCandidateId(candidateImageDto.getCandidateId());
+
+			if (Objects.nonNull(imageByCandidateId)) {
+				return imageByCandidateId.getImage();
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			logger.error("Service :: getCandidateImage :: Exception :: " + e.getMessage());
+			return null;
+		}
+
 	}
 
 }

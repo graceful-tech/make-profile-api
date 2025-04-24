@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.make_profile.controller.BaseController;
@@ -32,10 +34,22 @@ public class AppliedJobController extends BaseController {
 
 		logger.debug("Controller :: create :: Exited");
 		if (saveAppplication == true) {
-			return new ResponseEntity<>(buildResponse(CommonConstants.PH_0001), HttpStatus.OK);
+			return new ResponseEntity<>(buildResponse(CommonConstants.PM_0001), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(buildResponse(CommonConstants.PH_0002), HttpStatus.OK);
+			return new ResponseEntity<>(buildResponse(CommonConstants.PM_0002), HttpStatus.OK);
 		}
+
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getAppliedJobs(@RequestParam("id") Long candidateId) {
+		logger.debug("Controller :: create :: Entered");
+
+		AppliedJobDto appliedJobs = appliedJobService.getAppliedJobs(candidateId);
+
+		logger.debug("Controller :: create :: Exited");
+
+		return new ResponseEntity<>(appliedJobs, HttpStatus.OK);
 
 	}
 

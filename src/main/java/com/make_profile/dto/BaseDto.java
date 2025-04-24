@@ -10,6 +10,12 @@ public class BaseDto {
 
 	private String loggedUserName;
 
+	private Long createdUser;
+
+	private String createdUserName;
+
+	private Long modifiedUser;
+
 	private int page;
 
 	private int limit;
@@ -53,4 +59,29 @@ public class BaseDto {
 	public void setLimit(int limit) {
 		this.limit = limit;
 	}
+
+	public Long getCreatedUser() {
+		return createdUser;
+	}
+
+	public void setCreatedUser(Long createdUser) {
+		this.createdUser = createdUser;
+	}
+
+	public String getCreatedUserName() {
+		return createdUserName;
+	}
+
+	public void setCreatedUserName(String createdUserName) {
+		this.createdUserName = createdUserName;
+	}
+
+	public Long getModifiedUser() {
+		return modifiedUser;
+	}
+
+	public void setModifiedUser(Long modifiedUser) {
+		this.modifiedUser = modifiedUser;
+	}
+
 }

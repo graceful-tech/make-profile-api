@@ -81,7 +81,5 @@ public class AppliedJobDto {
 	public void setTenant(String tenant) {
 		this.tenant = tenant;
 	}
-	
-	
-	
+
 }

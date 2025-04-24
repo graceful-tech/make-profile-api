@@ -12,14 +12,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections4.map.HashedMap;
 import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.hibernate.internal.build.AllowSysOut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.make_profile.dto.candidates.CandidateAchievementsDto;
 import com.make_profile.dto.candidates.CandidateCertificatesDto;
 import com.make_profile.dto.candidates.CandidateCollegeProjectDto;
@@ -313,4 +311,5 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 		return ResponseCandidateDetailsFromOpenAi;
 
 	}
-}
+
+ }

@@ -7,8 +7,10 @@ public interface CandidateService {
 
 	CandidateDto createCandidate(CandidateDto candidateDto);
 
-	CandidateDto getCandidateById(Long id);
+	CandidateDto getCandidateById(String id);
 
 	byte[] uploadCandidateImage(CandidateImageDto candidateImageDto);
+
+	byte[] getCandidateImage(CandidateImageDto candidateImageDto);
 
 }

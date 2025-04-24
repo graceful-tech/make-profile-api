@@ -13,6 +13,7 @@ import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.dto.openai.ChatCompleitonResponse;
 import com.make_profile.dto.openai.ChatCompletionRequest;
 import com.make_profile.dto.requirement.fit.ResumeMatchResultDto;
+import com.make_profile.service.openai.ConvertJsonIntoCandidateDtoService;
 import com.make_profile.service.openai.ExtractResultFromOpenAiService;
 import com.make_profile.service.openai.MakeProfileOpenAiService;
 
@@ -28,7 +29,7 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 	ExtractResultFromOpenAiService extractResultFromOpenAiService;
 
 	@Autowired
-	ConvertJsonToCandidateDtoServiceImpl convertJsonToCandidateDtoServiceImpl;
+	ConvertJsonIntoCandidateDtoService convertJsonIntoCandidateDtoService;
 
 	int count = 3;
 
@@ -122,94 +123,43 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 		logger.debug("Service :: getSummaryFromAi :: Entered ");
 		CandidateDto convertSummaryResponseString = null;
 		try {
-			
-			String dto="{\r\n"
-					+ "  \"id\": \"\",\r\n"
-					+ "  \"name\": \"\",\r\n"
-					+ "  \"mobileNumber\": \"\",\r\n"
-					+ "  \"email\": \"\",\r\n"
-					+ "  \"nationality\": \"\",\r\n"
-					+ "  \"gender\": \"\",\r\n"
-					+ "  \"languagesKnown\": [],\r\n"
-					+ "  \"isFresher\": \"\",\r\n"
-					+ "  \"skills\": [],\r\n"
-					+ "  \"linkedIn\": \"\",\r\n"
-					+ "  \"dob\": \"\",\r\n"
-					+ "  \"address\": \"\",\r\n"
-					+ "  \"maritalStatus\": \"\",\r\n"
-					+ "  \"summary\":\"\",\r\n"
-					+ "  \"careerObjective:\"\";\r\n"
-					+ "  \"experiences\": [\r\n"
-					+ "    {\r\n"
-					+ "      \"id\": \"\",\r\n"
-					+ "      \"companyName\": \"\",\r\n"
-					+ "      \"role\": \"\",\r\n"
-					+ "      \"experienceYearStartDate\": \"\",\r\n"
-					+ "      \"experienceYearEndDate\": \"\",\r\n"
-					+ "      \"currentlyWorking\": \"\",\r\n"
-					+ "      \"isDeleted\": \"\",\r\n"
-					+ "      \"Responsibilities\": [],\r\n"
-					+ "      \"projects\": [\r\n"
-					+ "        {\r\n"
-					+ "          // \"CandidateProjectDetailsDto\" placeholder\r\n"
-					+ "        }\r\n"
-					+ "      ]\r\n"
-					+ "    }\r\n"
-					+ "  ],\r\n"
-					+ "  \"qualification\": [\r\n"
-					+ "    {\r\n"
-					+ "      \"id\": \"\",\r\n"
-					+ "      \"instutionName\": \"\",\r\n"
-					+ "      \"department\": \"\",\r\n"
-					+ "      \"qualificationStartYear\": \"\",\r\n"
-					+ "      \"qualificationEndYear\": \"\",\r\n"
-					+ "      \"percentage\": \"\",\r\n"
-					+ "      \"isDeleted\": \"\",\r\n"
-					+ "      \"fieldOfStudy\": \"\"\r\n"
-					+ "    }\r\n"
-					+ "  ],\r\n"
-					+ "  \"certificates\": [\r\n"
-					+ "    {\r\n"
-					+ "      \"id\": \"\",\r\n"
-					+ "      \"courseName\": \"\",\r\n"
-					+ "      \"courseStartDate\": \"\",\r\n"
-					+ "      \"courseEndDate\": \"\",\r\n"
-					+ "      \"isDeleted\": \"\"\r\n"
-					+ "    }\r\n"
-					+ "  ],\r\n"
-					+ "  \"achievements\": [\r\n"
-					+ "    {\r\n"
-					+ "      \"id\": \"\",\r\n"
-					+ "      \"achievementsName\": \"\",\r\n"
-					+ "      \"achievementsDate\": \"\",\r\n"
-					+ "      \"isDeleted\": \"\"\r\n"
-					+ "    }\r\n"
-					+ "  ],\r\n"
-					+ "  \"candidateLogo\": \"\",\r\n"
-					+ "  \"softSkills\": [],\r\n"
-					+ "  \"coreCompentencies\": [],\r\n"
-					+ "  \"score\": \"\",\r\n"
-					+ "  \"matches\": \"\",\r\n"
-					+ "  \"collegeProject\": [\r\n"
-					+ "    {\r\n"
-					+ "      \"id\": \"\",\r\n"
-					+ "      \"collegeProjectName\": \"\",\r\n"
-					+ "      \"collegeProjectSkills\": [],\r\n"
-					+ "      \"collegeProjectDescription\": \"\",\r\n"
-					+ "      \"isDeleted\": \"\"\r\n"
-					+ "    }\r\n"
-					+ "  ]\r\n"
-					+ "}\r\n"
-					+ "";
 
-			String query = "\r\n this is my Dto i will paste  the content of this Dto below can you enhance and set that in this Dto and  give me the suitable summary and  Career Objective for this resume and return it , \r\n"+"\r\n";
+			String dto = " { \r\n" + "  id: \"\", \r\n" + "  name: \"\", \r\n" + "  mobileNumber: \"\", \r\n"
+					+ "  email: \"\", \r\n" + "  nationality: \"\", \r\n" + "  gender: \"\", \r\n"
+					+ "  languagesKnown: [], \r\n" + "  isFresher: \"\", \r\n" + "  skills: [], \r\n"
+					+ "  linkedIn: \"\", \r\n" + "  dob: \"\", \r\n" + "  address: \"\", \r\n"
+					+ "  maritalStatus: \"\", \r\n" + "  summary:\"\", \r\n" + "  careerObjective:\"\"; \r\n"
+					+ "  experiences: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n" + "	  companyName: \"\", \r\n"
+					+ "	  role: \"\", \r\n" + "	  experienceYearStartDate: \"\", \r\n"
+					+ "	  experienceYearEndDate: \"\", \r\n" + "	  currentlyWorking: false, \r\n"
+					+ "	  isDeleted: false, \r\n" + "	  Responsibilities: [], \r\n" + "	  projects: [ \r\n"
+					+ "		{ \r\n" + "			projectName: \"\",\r\n" + "			projectSkills: [],\r\n"
+					+ "			projectRole \"\",\r\n" + "			projectDescription:\"\";\r\n"
+					+ "			isProjectDeleted: false\r\n" + "		} \r\n" + "	  ] \r\n" + "	} \r\n"
+					+ "  ], \r\n" + "  qualification: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"
+					+ "	  instutionName: \"\", \r\n" + "	  department: \"\", \r\n"
+					+ "	  qualificationStartYear: \"\", \r\n" + "	  qualificationEndYear: \"\", \r\n"
+					+ "	  percentage: \"\", \r\n" + "	  isDeleted: false, \r\n" + "	  fieldOfStudy: \"\" \r\n"
+					+ "	} \r\n" + "  ], \r\n" + "  certificates: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"
+					+ "	  courseName: \"\", \r\n" + "	  courseStartDate: \"\", \r\n" + "	  courseEndDate: \"\", \r\n"
+					+ "	  isDeleted: \"\" \r\n" + "	} \r\n" + "  ], \r\n" + "  achievements: [ \r\n" + "	{ \r\n"
+					+ "	  id: \"\", \r\n" + "	  achievementsName: \"\", \r\n" + "	  achievementsDate: \"\", \r\n"
+					+ "	  isDeleted: false \r\n" + "	} \r\n" + "  ], \r\n" + "  candidateLogo: \"\", \r\n"
+					+ "  softSkills: [], \r\n" + "  coreCompentencies: [], \r\n" + "  score: \"\", \r\n"
+					+ "  matches: false, \r\n" + "  collegeProject: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"
+					+ "	  collegeProjectName: \"\", \r\n" + "	  collegeProjectSkills: [], \r\n"
+					+ "	  collegeProjectDescription: \"\", \r\n" + "	  isDeleted: false \r\n" + "	} \r\n"
+					+ "  ] \r\n" + "} ";
 
-			ChatCompletionRequest chatRequest = new ChatCompletionRequest("gpt-4o-mini",  dto+ query + content);
+			String query = "\r\n this is my Dto i will paste  the content of this Dto below can you enhance and set that in this Dto and  give me the suitable summary and  Career Objective for this resume and return it , \r\n"
+					+ "\r\n";
+
+			ChatCompletionRequest chatRequest = new ChatCompletionRequest("gpt-4o-mini", dto + query + content);
 
 			ChatCompleitonResponse response = restTemplate.postForObject("https://api.openai.com/v1/chat/completions",
 					chatRequest, ChatCompleitonResponse.class);
 
-			  convertSummaryResponseString = convertSummaryResponseString(
+			convertSummaryResponseString = convertSummaryResponseString(
 					response.getChoices().get(0).getMessage().getContent(), content);
 
 		} catch (Exception e) {
@@ -234,7 +184,7 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 				jsonObject = jsonElement.getAsJsonObject();
 				System.out.println("JSON Object: " + jsonObject.toString());
 			}
-			responseCandidateDto = convertJsonToCandidateDtoServiceImpl.jsonToString(jsonObject);
+			responseCandidateDto = convertJsonIntoCandidateDtoService.jsonToString(jsonObject);
 		} catch (Exception e) {
 			if (count > 0) {
 				count--;

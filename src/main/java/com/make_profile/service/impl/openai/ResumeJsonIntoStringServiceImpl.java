@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,21 +26,21 @@ import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.dto.candidates.CandidateExperienceDto;
 import com.make_profile.dto.candidates.CandidateProjectDetailsDto;
 import com.make_profile.dto.candidates.CandidateQualificationDto;
-import com.make_profile.service.openai.ConvertJsonIntoCandidateDtoService;
+import com.make_profile.service.openai.ResumeJsonIntoStringService;
 
 @Service
-public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCandidateDtoService {
+public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringService {
 
-	private static final Logger logger = LoggerFactory.getLogger(ConvertJsonToCandidateDtoServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(ResumeJsonIntoStringServiceImpl.class);
 
 	@Autowired
 	ModelMapper modelmapper;
 
 	@Override
-	public CandidateDto jsonToString(JsonObject jsonObject) {
-
+	public CandidateDto resumeJsonToString(JsonObject jsonObject) {
 		logger.debug("Service :: jsonToString :: Entered ");
 		CandidateDto candidateDto = new CandidateDto();
+
 		try {
 
 			candidateDto.setIsFresher(false);
@@ -49,13 +50,23 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 				jSONObject = (JSONObject) getValueFromJson(jSONObject, keyFromJson(jSONObject, "resume"));
 			}
 
-			String mobile = getValue("mobileNumber", jSONObject);
-			mobile = mobile != "" ? mobile : getValue("phone", jSONObject);
+			String mobile = getValue("mobileNumber", jSONObject) != "" ? getValue("mobileNumber", jSONObject)
+					: getValue("phone", jSONObject) != "" ? getValue("phone", jSONObject)
+							: getValue("contact", jSONObject) != "" ? getValue("contact", jSONObject)
+									: getValue("mobile", jSONObject);
+
+			if (mobile != null) {
+				mobile.trim();
+				mobile = new StringBuilder(mobile).reverse().toString();
+				mobile = mobile.substring(0, 10);
+				mobile = new StringBuilder(mobile).reverse().toString();
+			}
+
 			String name = getValue("name", jSONObject);
 			String email = getValue("email", jSONObject);
 			String nationality = getValue("nationality", jSONObject);
 			String date_of_birth = getValue("dob", jSONObject);
-			date_of_birth = date_of_birth != "" ? date_of_birth : getValue("date_of_birth", jSONObject);
+			date_of_birth = date_of_birth != "" ? date_of_birth : getValue("date of birth", jSONObject);
 			String address = getValue("address", jSONObject);
 			String Language = getValue("language", jSONObject);
 			String gender = getValue("gender", jSONObject);
@@ -138,12 +149,15 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 						}
 
 						if (Objects.nonNull(percentage) && !percentage.isEmpty()) {
-							candidateQualificationDto.setPercentage(Double.valueOf(percentage));
+
+							candidateQualificationDto
+									.setPercentage(Double.valueOf(percentage.replaceAll("[^\\d.]", "")));
 						}
 
 						if (Objects.nonNull(fieldOfStudy) && !fieldOfStudy.isEmpty()) {
 							candidateQualificationDto.setFieldOfStudy(fieldOfStudy);
 						}
+						candidateQualificationDto.setIsDeleted(false);
 
 						qualificationList.add(candidateQualificationDto);
 
@@ -195,10 +209,11 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 						if (Objects.nonNull(currentlyWorking) && !currentlyWorking.isEmpty()) {
 							candidateExperienceDto.setCurrentlyWorking(Boolean.parseBoolean(currentlyWorking));
 						}
-						
+
 						if (Objects.nonNull(responsibilities) && !responsibilities.isEmpty()) {
-						candidateExperienceDto.setResponsibilities(responsibilities);
+							candidateExperienceDto.setResponsibilities(responsibilities);
 						}
+						candidateExperienceDto.setIsDeleted(false);
 
 						// Parse nested projects
 						if (experience.has("projects")) {
@@ -213,19 +228,20 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 								String projectRole = getValue("projectRole", project);
 								String projectDescription = getValue("projectDescription", project);
 								List<String> projectSkills = getListFromString(project.get("projectSkills").toString());
-                                
+
 								if (Objects.nonNull(projectName) && !projectName.isEmpty()) {
-								projectDto.setProjectName(projectName);
+									projectDto.setProjectName(projectName);
 								}
 								if (Objects.nonNull(projectRole) && !projectRole.isEmpty()) {
-								projectDto.setProjectRole(projectRole);
+									projectDto.setProjectRole(projectRole);
 								}
 								if (Objects.nonNull(projectDescription) && !projectDescription.isEmpty()) {
-								projectDto.setProjectDescription(projectDescription);
+									projectDto.setProjectDescription(projectDescription);
 								}
 								if (Objects.nonNull(projectSkills) && !projectSkills.isEmpty()) {
-								projectDto.setProjectSkills(projectSkills);
+									projectDto.setProjectSkills(projectSkills);
 								}
+								projectDto.setProjectDeleted(false);
 
 								projectList.add(projectDto);
 
@@ -262,14 +278,15 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 						String courseEndDate = getValue("courseEndDate", cert);
 
 						if (Objects.nonNull(courseName) && !courseName.isEmpty()) {
-						certificateDto.setCourseName(courseName);
+							certificateDto.setCourseName(courseName);
 						}
 						if (Objects.nonNull(courseStartDate) && !courseStartDate.isEmpty()) {
-						certificateDto.setCourseStartDate(LocalDate.parse(courseStartDate));
+							certificateDto.setCourseStartDate(LocalDate.parse(courseStartDate));
 						}
 						if (Objects.nonNull(courseEndDate) && !courseEndDate.isEmpty()) {
-						certificateDto.setCourseEndDate(LocalDate.parse(courseEndDate));
+							certificateDto.setCourseEndDate(LocalDate.parse(courseEndDate));
 						}
+						certificateDto.setIsDeleted(false);
 
 						certificateList.add(certificateDto);
 
@@ -297,11 +314,12 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 						String achievementsDate = getValue("achievementsDate", ach);
 
 						if (Objects.nonNull(achievementsName) && !achievementsName.isEmpty()) {
-						achievementDto.setAchievementsName(achievementsName);
+							achievementDto.setAchievementsName(achievementsName);
 						}
 						if (Objects.nonNull(achievementsDate) && !achievementsDate.isEmpty()) {
-						achievementDto.setAchievementsDate(LocalDate.parse(achievementsDate));
+							achievementDto.setAchievementsDate(LocalDate.parse(achievementsDate));
 						}
+						achievementDto.setIsDeleted(false);
 
 						achievementList.add(achievementDto);
 
@@ -332,17 +350,18 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 
 						// Set values
 						if (Objects.nonNull(collegeProjectName) && !collegeProjectName.isEmpty()) {
-						collegeProjectDto.setCollegeProjectName(collegeProjectName);
+							collegeProjectDto.setCollegeProjectName(collegeProjectName);
 						}
 						if (Objects.nonNull(collegeProjectDescription) && !collegeProjectDescription.isEmpty()) {
-						collegeProjectDto.setCollegeProjectDescription(collegeProjectDescription);
+							collegeProjectDto.setCollegeProjectDescription(collegeProjectDescription);
 						}
 						if (Objects.nonNull(isDeleted) && !isDeleted.isEmpty()) {
-						collegeProjectDto.setIsDeleted(Boolean.parseBoolean(isDeleted));
+							collegeProjectDto.setIsDeleted(Boolean.parseBoolean(isDeleted));
 						}
 						if (Objects.nonNull(collegeProjectSkills) && !collegeProjectSkills.isEmpty()) {
-						collegeProjectDto.setCollegeProjectSkills(getListFromString(collegeProjectSkills));
+							collegeProjectDto.setCollegeProjectSkills(getListFromString(collegeProjectSkills));
 						}
+						collegeProjectDto.setIsDeleted(false);
 
 						collegeProjectList.add(collegeProjectDto);
 						collegeProjectDto = null;
@@ -356,47 +375,47 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 			// Personal
 			candidateDto.setName(name);
 			candidateDto.setMobileNumber(mobile);
-			
+
 			if (Objects.nonNull(email) && !email.isEmpty()) {
-			candidateDto.setEmail(email);
+				candidateDto.setEmail(email);
 			}
-			
+
 			if (Objects.nonNull(nationality) && !nationality.isEmpty()) {
-			candidateDto.setNationality(nationality);
+				candidateDto.setNationality(nationality);
 			}
-			
+
 			if (Objects.nonNull(date_of_birth) && !date_of_birth.isEmpty()) {
-			candidateDto.setDob(LocalDate.parse(date_of_birth));
+				candidateDto.setDob(LocalDate.parse(date_of_birth));
 			}
-			
+
 			if (Objects.nonNull(address) && !address.isEmpty()) {
-			candidateDto.setAddress(address);
+				candidateDto.setAddress(address);
 			}
-			
+
 			if (Objects.nonNull(Language) && !Language.isEmpty()) {
-			candidateDto.setLanguagesKnown(getListFromString(Language));
+				candidateDto.setLanguagesKnown(getListFromString(Language));
 			}
 
 			if (Objects.nonNull(gender) && !gender.isEmpty()) {
-			candidateDto.setGender(gender);
+				candidateDto.setGender(gender);
 			}
-			
+
 			if (Objects.nonNull(maritalStatus) && !maritalStatus.isEmpty()) {
-			candidateDto.setMaritalStatus(maritalStatus);
+				candidateDto.setMaritalStatus(maritalStatus);
 			}
-			
+
 			candidateDto.setSummary(summary);
 			candidateDto.setCareerObjective(careerObjective);
 
 			if (Objects.nonNull(skills) && !skills.isEmpty()) {
-			candidateDto.setSkills(getListFromString(skills));
+				candidateDto.setSkills(getListFromString(skills));
 			}
-			
+
 			if (Objects.nonNull(softSkills) && !softSkills.isEmpty()) {
-			candidateDto.setSoftSkills(getListFromString(softSkills));
+				candidateDto.setSoftSkills(getListFromString(softSkills));
 			}
 			if (Objects.nonNull(coreCompentencies) && !coreCompentencies.isEmpty()) {
-			candidateDto.setCoreCompentencies(getListFromString(coreCompentencies));
+				candidateDto.setCoreCompentencies(getListFromString(coreCompentencies));
 			}
 
 		} catch (Exception e) {
@@ -553,5 +572,4 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 		return num;
 
 	}
-
 }

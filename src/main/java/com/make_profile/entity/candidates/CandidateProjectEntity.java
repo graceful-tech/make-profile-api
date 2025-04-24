@@ -17,13 +17,13 @@ public class CandidateProjectEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = true, length = 50)
+	@Column(nullable = true, length = 150)
 	private String projectName;
 
 	@Column(nullable = true, length = 1500)
 	private String projectSkills;
 
-	@Column(nullable = true, length = 50)
+	@Column(nullable = true, length = 100)
 	private String projectRole;
 
 	@Column(nullable = true, length = 2000)

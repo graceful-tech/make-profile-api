@@ -37,20 +37,6 @@ public class CreateResumeTemplateController {
 
     }
     
-    @PostMapping(value = "/upload")
-	public ResponseEntity<?> uploadResume(@RequestParam MultipartFile resume) {
-		logger.debug("Controller :: uploadResume :: Entered");
-
-		//boolean status = candidateResumeService.uploadResume(resume, candidateId, userName);
-
-		logger.debug("Controller :: uploadResume :: Exited");
-		return null;
-
-//		if (!status) {
-//			return new ResponseEntity<>(buildResponse(CommonConstants.HM_0048), HttpStatus.BAD_REQUEST);
-//		}
-		//return new ResponseEntity<>(buildResponse(CommonConstants.HM_0047), HttpStatus.OK);
-	}
-
+ 
 
 }

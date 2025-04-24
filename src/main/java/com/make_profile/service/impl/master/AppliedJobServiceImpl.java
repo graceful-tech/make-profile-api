@@ -54,7 +54,7 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 		logger.debug("Service :: saveAppplication :: Entered");
 
 		boolean status = false;
-		
+
 		String hurecomEndPoint = "http://localhost:8080/candidates/create";
 		String hurecomResponseEndPoint = "http://localhost:8080/applied-jobs/save";
 
@@ -114,7 +114,7 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 				appliedJobsEntity.setSource("Hurecom");
 				appliedJobsEntity.setSkills(candidateEntity.getSkills());
 				appliedJobRepository.save(appliedJobsEntity);
-				
+
 				status = true;
 			}
 
@@ -158,6 +158,23 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 		}
 		logger.debug("Service :: getJobDescription :: Exited");
 		return userName;
+	}
+
+	@Override
+	public AppliedJobDto getAppliedJobs(Long candidateId) {
+		logger.debug("Service :: getAppliedJobs :: Entered");
+		AppliedJobDto appliedJobDto = null;
+		try {
+
+			AppliedJobsEntity appliedJobsEntity = appliedJobRepository.findByCandidateId(candidateId);
+
+			appliedJobDto = modelMapper.map(appliedJobsEntity, AppliedJobDto.class);
+
+		} catch (Exception e) {
+			logger.debug("Service :: getAppliedJobs :: Exception" + e.getMessage());
+		}
+		logger.debug("Service :: getAppliedJobs :: Exited");
+		return appliedJobDto;
 	}
 
 }

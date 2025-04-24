@@ -191,11 +191,29 @@
 			version -->
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
-			<version>2.0.27</version>  <!-- Compatible with openhtmltopdf-pdfbox -->
+			<version>2.0.27</version>   Compatible with openhtmltopdf-pdfbox 
+		</dependency>-->
+		
+			<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>3.0.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+
 
 	</dependencies>
 

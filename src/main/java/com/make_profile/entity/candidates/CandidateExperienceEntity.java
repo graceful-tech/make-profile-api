@@ -22,10 +22,10 @@ public class CandidateExperienceEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = true, length = 100)
+	@Column(nullable = true, length = 200)
 	private String companyName;
 
-	@Column(nullable = true, length = 50)
+	@Column(nullable = true, length = 100)
 	private String role;
 
 	@Column(nullable = true)

@@ -19,19 +19,19 @@ public class CandidateQualificationEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = true, length = 50)
+	@Column(nullable = true, length = 100)
 	private String instutionName;
 
-	@Column(nullable = true, length = 50)
+	@Column(nullable = true, length = 100)
 	private String department;
 
-	@Column
+	@Column(nullable = true)
 	private LocalDate qualificationStartYear;
 
-	@Column
+	@Column(nullable = true)
 	private LocalDate qualificationEndYear;
 
-	@Column
+	@Column(nullable = true)
 	private Double percentage;
 
 	@Column(nullable = true)

@@ -20,5 +20,8 @@ public interface CandidatesRepository extends JpaRepository<CandidateEntity, Lon
 
 	@Query(value = "select tenant from hurecom_v2.datasource_configuration where customer_id in (select id from hurecom_v2.customers where is_active ='Y') ", nativeQuery = true)
 	List<String> getAllTenant();
- 
+
+	@Query(value = "select * from candidates where created_username = :createdUserName ", nativeQuery = true)
+	CandidateEntity getCandidateByUserName(@Param("createdUserName") String createdUserName);
+
 }

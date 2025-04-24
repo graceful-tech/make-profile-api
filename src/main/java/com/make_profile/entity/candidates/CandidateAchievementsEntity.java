@@ -19,7 +19,7 @@ public class CandidateAchievementsEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = true, length = 50)
+	@Column(nullable = true, length = 200)
 	private String achievementsName;
 
 	@Column(nullable = true)

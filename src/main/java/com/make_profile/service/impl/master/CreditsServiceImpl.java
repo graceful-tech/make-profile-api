@@ -55,7 +55,7 @@ public class CreditsServiceImpl implements CreditsService {
 		CreditsEntity responceEntity = null;
 		try {
 
-			findByCandidate_Id = creditsRepository.findByCandidateId(creditsDto.getCandidateId());
+			findByCandidate_Id = creditsRepository.findCreditsByCandidateId(creditsDto.getCandidateId());
 
 			if (Objects.nonNull(findByCandidate_Id)) {
 				findByCandidate_Id.setCandidateId(creditsDto.getCandidateId());
@@ -101,7 +101,7 @@ public class CreditsServiceImpl implements CreditsService {
 		CreditsEntity responceEntity = null;
 		try {
 
-			findByCandidate_Id = creditsRepository.findByCandidateId(creditsDto.getCandidateId());
+			findByCandidate_Id = creditsRepository.findCreditsByCandidateId(creditsDto.getCandidateId());
 
 			if (Objects.nonNull(findByCandidate_Id)) {
 				if (findByCandidate_Id.getCreditAvailable() > 2.0) {
