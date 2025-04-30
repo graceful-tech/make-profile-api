@@ -8,7 +8,7 @@ public class CandidateCollegeProjectDto {
 
 	private String collegeProjectName;
 
-	private List<String> collegeProjectSkills;
+	private String collegeProjectSkills;
 
 	private String collegeProjectDescription;
 
@@ -30,14 +30,6 @@ public class CandidateCollegeProjectDto {
 		this.collegeProjectName = collegeProjectName;
 	}
 
-	public List<String> getCollegeProjectSkills() {
-		return collegeProjectSkills;
-	}
-
-	public void setCollegeProjectSkills(List<String> collegeProjectSkills) {
-		this.collegeProjectSkills = collegeProjectSkills;
-	}
-
 	public String getCollegeProjectDescription() {
 		return collegeProjectDescription;
 	}
@@ -52,6 +44,14 @@ public class CandidateCollegeProjectDto {
 
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public String getCollegeProjectSkills() {
+		return collegeProjectSkills;
+	}
+
+	public void setCollegeProjectSkills(String collegeProjectSkills) {
+		this.collegeProjectSkills = collegeProjectSkills;
 	}
 
 }

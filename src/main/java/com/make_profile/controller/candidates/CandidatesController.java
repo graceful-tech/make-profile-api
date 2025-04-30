@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.make_profile.dto.candidates.CandidateDto;
@@ -81,10 +82,10 @@ public class CandidatesController {
 	}
 
 	@PostMapping("/get-image")
-	public ResponseEntity<?> getCandidateImage(@ModelAttribute CandidateImageDto candidateImageDto) {
+	public ResponseEntity<?> getCandidateImage(@RequestParam("candidateId") Long candidateId) {
 		logger.debug("Controller :: uploadCandidateImage :: Entered");
 
-		byte[] uploadCandidateImagId = candidateService.uploadCandidateImage(candidateImageDto);
+		byte[] uploadCandidateImagId = candidateService.getCandidateImage(candidateId);
 
 		logger.debug("Controller :: uploadCandidateImage :: Exited");
 

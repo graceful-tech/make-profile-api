@@ -1,5 +1,7 @@
 package com.make_profile.dto.master;
 
+import java.time.LocalDate;
+
 public class CreditsDto {
 
 	private Long id;
@@ -9,6 +11,10 @@ public class CreditsDto {
 	private Double creditAvailable;
 
 	private Long candidateId;
+
+	private Long userId;
+
+	private LocalDate PaymentDate;
 
 	public Long getId() {
 		return id;
@@ -40,6 +46,22 @@ public class CreditsDto {
 
 	public Long getCandidateId() {
 		return candidateId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public LocalDate getPaymentDate() {
+		return PaymentDate;
+	}
+
+	public void setPaymentDate(LocalDate paymentDate) {
+		PaymentDate = paymentDate;
 	}
 
 }

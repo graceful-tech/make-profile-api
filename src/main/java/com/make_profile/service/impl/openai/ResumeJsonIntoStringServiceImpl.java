@@ -227,7 +227,7 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 								String projectName = getValue("projectName", project);
 								String projectRole = getValue("projectRole", project);
 								String projectDescription = getValue("projectDescription", project);
-								List<String> projectSkills = getListFromString(project.get("projectSkills").toString());
+								String projectSkills = getValue("projectSkills", project);
 
 								if (Objects.nonNull(projectName) && !projectName.isEmpty()) {
 									projectDto.setProjectName(projectName);
@@ -359,7 +359,7 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 							collegeProjectDto.setIsDeleted(Boolean.parseBoolean(isDeleted));
 						}
 						if (Objects.nonNull(collegeProjectSkills) && !collegeProjectSkills.isEmpty()) {
-							collegeProjectDto.setCollegeProjectSkills(getListFromString(collegeProjectSkills));
+							collegeProjectDto.setCollegeProjectSkills(collegeProjectSkills);
 						}
 						collegeProjectDto.setIsDeleted(false);
 
@@ -392,8 +392,9 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 				candidateDto.setAddress(address);
 			}
 
+			// convert to string
 			if (Objects.nonNull(Language) && !Language.isEmpty()) {
-				candidateDto.setLanguagesKnown(getListFromString(Language));
+				candidateDto.setLanguagesKnown(Language);
 			}
 
 			if (Objects.nonNull(gender) && !gender.isEmpty()) {
@@ -407,15 +408,18 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 			candidateDto.setSummary(summary);
 			candidateDto.setCareerObjective(careerObjective);
 
+			// convert to string
 			if (Objects.nonNull(skills) && !skills.isEmpty()) {
-				candidateDto.setSkills(getListFromString(skills));
+				candidateDto.setSkills(skills);
 			}
 
+			// convert to string
 			if (Objects.nonNull(softSkills) && !softSkills.isEmpty()) {
-				candidateDto.setSoftSkills(getListFromString(softSkills));
+				candidateDto.setSoftSkills(softSkills);
 			}
+			// convert to string
 			if (Objects.nonNull(coreCompentencies) && !coreCompentencies.isEmpty()) {
-				candidateDto.setCoreCompentencies(getListFromString(coreCompentencies));
+				candidateDto.setCoreCompentencies(coreCompentencies);
 			}
 
 		} catch (Exception e) {

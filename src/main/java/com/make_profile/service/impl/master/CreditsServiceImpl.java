@@ -1,5 +1,6 @@
 package com.make_profile.service.impl.master;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
@@ -26,17 +27,16 @@ public class CreditsServiceImpl implements CreditsService {
 
 	// TODO candidate comes from login
 	@Override
-	public CreditsDto getCredits(Long candidateId) {
+	public CreditsDto getCredits(Long userId) {
 		logger.debug("Service :: getCredits :: Entered");
 
 		CreditsDto creditsDto = null;
 		try {
-			CreditsEntity creditsEntity = creditsRepository.findById(candidateId).get();
+			CreditsEntity creditsEntity = creditsRepository.findCreditsByUserId(userId);
 
 			if (Objects.nonNull(creditsEntity)) {
 				creditsDto = modelMapper.map(creditsEntity, CreditsDto.class);
 			}
-
 		} catch (Exception e) {
 			logger.debug("Service :: getCredits :: Exception" + e.getMessage());
 		}
@@ -46,94 +46,93 @@ public class CreditsServiceImpl implements CreditsService {
 
 	// TODO candidate comes from login
 	@Override
-	public CreditsDto addCredits(CreditsDto creditsDto) {
+	public boolean addCredits(CreditsDto creditsDto) {
 
 		logger.debug("Service :: addCredits :: Entered");
 
-		CreditsDto credits = null;
-		CreditsEntity findByCandidate_Id = null;
-		CreditsEntity responceEntity = null;
+		boolean status = false;
+		CreditsEntity findCreditesByUserId = null;
 		try {
+			findCreditesByUserId = creditsRepository.findCreditsByUserId(creditsDto.getUserId());
 
-			findByCandidate_Id = creditsRepository.findCreditsByCandidateId(creditsDto.getCandidateId());
+			if (Objects.nonNull(findCreditesByUserId)) {
+				
+				findCreditesByUserId.setUserId(creditsDto.getUserId());
+				Double CreditAvailable = findCreditesByUserId.getCreditAvailable() == null ? 0.0: findCreditesByUserId.getCreditAvailable();
+				findCreditesByUserId.setCreditAvailable(CreditAvailable + Double.valueOf(creditsDto.getCreditAvailable()));
+				findCreditesByUserId.setId(findCreditesByUserId.getId());
+				findCreditesByUserId.setPaymentDate(LocalDate.now());
 
-			if (Objects.nonNull(findByCandidate_Id)) {
-				findByCandidate_Id.setCandidateId(creditsDto.getCandidateId());
-				findByCandidate_Id.setCreditAvailable(
-						findByCandidate_Id.getCreditAvailable() + Double.valueOf(creditsDto.getCreditAvailable()));
-				findByCandidate_Id.setId(findByCandidate_Id.getId());
+				creditsRepository.save(findCreditesByUserId);
 
-				responceEntity = creditsRepository.save(findByCandidate_Id);
-
-				findByCandidate_Id = null;
-			}
-
-			else {
+				findCreditesByUserId = null;
+				status = true;
+			} else {
 				CreditsEntity candidateEntity = new CreditsEntity();
 
 				candidateEntity.setCandidateId(creditsDto.getCandidateId());
 				candidateEntity.setCreditAvailable(Double.valueOf(creditsDto.getCreditAvailable()));
-				responceEntity = creditsRepository.save(candidateEntity);
+				candidateEntity.setPaymentDate(LocalDate.now());
+				creditsRepository.save(candidateEntity);
 
 				candidateEntity = null;
+				status = true;
 			}
-
-			credits.setCandidateId(responceEntity.getCandidateId());
-			credits.setCreditAvailable(creditsDto.getCreditAvailable());
-
-			responceEntity = null;
+			findCreditesByUserId = null;
 
 		} catch (Exception e) {
 			logger.debug("Service :: addCredits :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: addCredits :: Exited");
-		return credits;
-
+		return status;
 	}
 
 	// TODO candidate comes from login
 	@Override
-	public CreditsDto useCredit(CreditsDto creditsDto) {
+	public boolean useCredit(CreditsDto creditsDto) {
 		logger.debug("Service :: useCredit :: Entered");
 
-		CreditsDto credits = null;
-		CreditsEntity findByCandidate_Id = null;
-		CreditsEntity responceEntity = null;
+		CreditsEntity findCreditesByUserId = null;
+		boolean status = false;
 		try {
 
-			findByCandidate_Id = creditsRepository.findCreditsByCandidateId(creditsDto.getCandidateId());
+			findCreditesByUserId = creditsRepository.findCreditsByUserId(creditsDto.getCandidateId());
 
-			if (Objects.nonNull(findByCandidate_Id)) {
-				if (findByCandidate_Id.getCreditAvailable() > 2.0) {
+			if (Objects.nonNull(findCreditesByUserId)) {
+				if (findCreditesByUserId.getCreditAvailable() >= 2.0) {
+					
+					findCreditesByUserId.setUserId(creditsDto.getUserId());
+					findCreditesByUserId.setCreditAvailable(findCreditesByUserId.getCreditAvailable() - Double.valueOf(2));
+					Double creditUsed = findCreditesByUserId.getCreditUsed() == null ? 0.0: findCreditesByUserId.getCreditUsed();
+					findCreditesByUserId.setCreditUsed(creditUsed + Double.valueOf(2));
+					findCreditesByUserId.setId(findCreditesByUserId.getId());
 
-					findByCandidate_Id.setCreditAvailable(findByCandidate_Id.getCreditAvailable() - Double.valueOf(2));
-					findByCandidate_Id.setCandidateId(findByCandidate_Id.getCandidateId());
-					findByCandidate_Id.setCreditUsed(findByCandidate_Id.getCreditUsed() + Double.valueOf(2));
-					findByCandidate_Id.setId(findByCandidate_Id.getId());
+					creditsRepository.save(findCreditesByUserId);
 
-					responceEntity = creditsRepository.save(findByCandidate_Id);
+					status = true;
 				}
-			} else {
-				CreditsEntity creditsEntity = new CreditsEntity();
-
-				creditsEntity.setCreditAvailable(creditsDto.getCreditAvailable() - Double.valueOf(2));
-				creditsEntity.setCandidateId(creditsDto.getCandidateId());
-				creditsEntity.setCreditUsed(Double.valueOf(2));
-
-				responceEntity = creditsRepository.save(creditsEntity);
-
-				creditsEntity = null;
 			}
-			credits.setCandidateId(responceEntity.getCandidateId());
-			credits.setCreditAvailable(responceEntity.getCreditAvailable());
 
-			responceEntity = null;
+//				else {
+//				CreditsEntity creditsEntity = new CreditsEntity();
+//
+//				creditsEntity.setUserId(creditsDto.getUserId());
+//				creditsEntity.setCreditAvailable(creditsDto.getCreditAvailable() - Double.valueOf(2));
+//				creditsEntity.setCreditUsed(Double.valueOf(2));
+//
+//				responceEntity = creditsRepository.save(creditsEntity);
+//
+//				creditsEntity = null;
+//
+//				status = true;
+//			}
+
+			findCreditesByUserId = null;
 		} catch (Exception e) {
 			logger.debug("Service :: useCredit :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: useCredit :: Exited");
-		return credits;
-
+		return status;
 	}
 
 }

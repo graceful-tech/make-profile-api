@@ -35,8 +35,11 @@ public class PaymentOrderEntity {
 	@Column(nullable = false, length = 30)
 	private LocalDateTime createdDate;
 
+//	@Column(nullable = false, length = 10)
+//	private Long candidateId;
+	
 	@Column(nullable = false, length = 10)
-	private Long candidateId;
+	private Long userId;
 
 	public Long getId() {
 		return id;
@@ -94,12 +97,22 @@ public class PaymentOrderEntity {
 		this.createdDate = createdDate;
 	}
 
-	public Long getCandidateId() {
-		return candidateId;
+//	public Long getCandidateId() {
+//		return candidateId;
+//	}
+//
+//	public void setCandidateId(Long candidateId) {
+//		this.candidateId = candidateId;
+//	}
+
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setCandidateId(Long candidateId) {
-		this.candidateId = candidateId;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
+	
+	
 
 }

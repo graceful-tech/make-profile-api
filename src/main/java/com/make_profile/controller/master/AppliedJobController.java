@@ -1,5 +1,7 @@
 package com.make_profile.controller.master;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +43,11 @@ public class AppliedJobController extends BaseController {
 
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping
 	public ResponseEntity<?> getAppliedJobs(@RequestParam("id") Long candidateId) {
-		logger.debug("Controller :: create :: Entered");
+		logger.debug("Controller :: getAppliedJobs :: Entered");
 
-		AppliedJobDto appliedJobs = appliedJobService.getAppliedJobs(candidateId);
+		List<AppliedJobDto> appliedJobs = appliedJobService.getAppliedJobs(candidateId);
 
 		logger.debug("Controller :: create :: Exited");
 

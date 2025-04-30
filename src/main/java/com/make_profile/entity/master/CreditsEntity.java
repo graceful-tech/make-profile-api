@@ -1,5 +1,9 @@
 package com.make_profile.entity.master;
 
+import java.time.LocalDate;
+
+import com.make_profile.entity.common.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +27,12 @@ public class CreditsEntity {
 
 	@Column(nullable = true)
 	private Long candidateId;
+
+	@Column(nullable = true)
+	private Long userId;
+
+	@Column(nullable = true)
+	private LocalDate PaymentDate;
 
 	public Long getId() {
 		return id;
@@ -54,6 +64,22 @@ public class CreditsEntity {
 
 	public void setCreditUsed(Double creditUsed) {
 		this.creditUsed = creditUsed;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public LocalDate getPaymentDate() {
+		return PaymentDate;
+	}
+
+	public void setPaymentDate(LocalDate paymentDate) {
+		PaymentDate = paymentDate;
 	}
 
 }

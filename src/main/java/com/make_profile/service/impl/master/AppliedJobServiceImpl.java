@@ -1,8 +1,11 @@
 package com.make_profile.service.impl.master;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.persistence.internal.sessions.AggregateObjectChangeSet;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ import com.make_profile.repository.candidates.CandidatesRepository;
 import com.make_profile.repository.master.AppliedJobRepository;
 import com.make_profile.service.master.AppliedJobService;
 
+import io.jsonwebtoken.lang.Collections;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -161,20 +165,36 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 	}
 
 	@Override
-	public AppliedJobDto getAppliedJobs(Long candidateId) {
+	public List<AppliedJobDto> getAppliedJobs(Long candidateId) {
 		logger.debug("Service :: getAppliedJobs :: Entered");
-		AppliedJobDto appliedJobDto = null;
+
+		List<AppliedJobsEntity> appliedJobsEntity = null;
+
+		List<AppliedJobDto> appliedJobDtoList = new ArrayList<>();
+
 		try {
+			appliedJobsEntity = appliedJobRepository.findByCandidateId(candidateId);
 
-			AppliedJobsEntity appliedJobsEntity = appliedJobRepository.findByCandidateId(candidateId);
+			if (Objects.nonNull(appliedJobsEntity) && !Collections.isEmpty(appliedJobsEntity)) {
 
-			appliedJobDto = modelMapper.map(appliedJobsEntity, AppliedJobDto.class);
+				appliedJobsEntity.forEach(jobs -> {
+					AppliedJobDto appliedJobDto = new AppliedJobDto();
+
+					AppliedJobDto appliedJob = modelMapper.map(jobs, AppliedJobDto.class);
+					appliedJobDtoList.add(appliedJob);
+
+					appliedJobDto = null;
+				});
+
+			}
+
+			appliedJobsEntity = null;
 
 		} catch (Exception e) {
 			logger.debug("Service :: getAppliedJobs :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: getAppliedJobs :: Exited");
-		return appliedJobDto;
+		return appliedJobDtoList;
 	}
 
 }

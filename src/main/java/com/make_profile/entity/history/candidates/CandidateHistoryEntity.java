@@ -1,4 +1,4 @@
-package com.make_profile.entity.candidates;
+package com.make_profile.entity.history.candidates;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,8 +15,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "candidates")
-public class CandidateEntity extends BaseEntity {
+@Table(name = "candidates_history")
+public class CandidateHistoryEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,25 +59,28 @@ public class CandidateEntity extends BaseEntity {
 	private String maritalStatus;
 
 	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
-	private List<CandidateExperienceEntity> experiences;
+	private List<CandidateExperienceHistoryEntity> experiences;
 
 	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
-	private List<CandidateAchievementsEntity> achievements;
+	private List<CandidateAchievementsHistoryEntity> achievements;
 
 	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
-	private List<CandidateQualificationEntity> qualification;
+	private List<CandidateQualificationHistoryEntity> qualification;
 
 	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
-	private List<CandidateCertificateEntity> certificates;
+	private List<CandidateCertificatesHistoryEntity> certificates;
 
 	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
-	private List<CandidateCollegeProjectEntity> collegeProject;
+	private List<CandidateCollegeProjectHistoryEntity> collegeProject;
 
 	@Column(nullable = true, length = 1000)
 	private String softSkills;
 
 	@Column(nullable = true, length = 1000)
 	private String coreCompentencies;
+
+	@Column(nullable = true)
+	private Long candidateId;
 
 	public Long getId() {
 		return id;
@@ -183,38 +186,6 @@ public class CandidateEntity extends BaseEntity {
 		this.maritalStatus = maritalStatus;
 	}
 
-	public List<CandidateExperienceEntity> getExperiences() {
-		return experiences;
-	}
-
-	public void setExperiences(List<CandidateExperienceEntity> experiences) {
-		this.experiences = experiences;
-	}
-
-	public List<CandidateAchievementsEntity> getAchievements() {
-		return achievements;
-	}
-
-	public void setAchievements(List<CandidateAchievementsEntity> achievements) {
-		this.achievements = achievements;
-	}
-
-	public List<CandidateQualificationEntity> getQualification() {
-		return qualification;
-	}
-
-	public void setQualification(List<CandidateQualificationEntity> qualification) {
-		this.qualification = qualification;
-	}
-
-	public List<CandidateCertificateEntity> getCertificates() {
-		return certificates;
-	}
-
-	public void setCertificates(List<CandidateCertificateEntity> certificates) {
-		this.certificates = certificates;
-	}
-
 	public String getSoftSkills() {
 		return softSkills;
 	}
@@ -231,12 +202,52 @@ public class CandidateEntity extends BaseEntity {
 		this.coreCompentencies = coreCompentencies;
 	}
 
-	public List<CandidateCollegeProjectEntity> getCollegeProject() {
+	public List<CandidateExperienceHistoryEntity> getExperiences() {
+		return experiences;
+	}
+
+	public void setExperiences(List<CandidateExperienceHistoryEntity> experiences) {
+		this.experiences = experiences;
+	}
+
+	public List<CandidateAchievementsHistoryEntity> getAchievements() {
+		return achievements;
+	}
+
+	public void setAchievements(List<CandidateAchievementsHistoryEntity> achievements) {
+		this.achievements = achievements;
+	}
+
+	public List<CandidateQualificationHistoryEntity> getQualification() {
+		return qualification;
+	}
+
+	public void setQualification(List<CandidateQualificationHistoryEntity> qualification) {
+		this.qualification = qualification;
+	}
+
+	public List<CandidateCertificatesHistoryEntity> getCertificates() {
+		return certificates;
+	}
+
+	public void setCertificates(List<CandidateCertificatesHistoryEntity> certificates) {
+		this.certificates = certificates;
+	}
+
+	public List<CandidateCollegeProjectHistoryEntity> getCollegeProject() {
 		return collegeProject;
 	}
 
-	public void setCollegeProject(List<CandidateCollegeProjectEntity> collegeProject) {
+	public void setCollegeProject(List<CandidateCollegeProjectHistoryEntity> collegeProject) {
 		this.collegeProject = collegeProject;
+	}
+
+	public Long getCandidateId() {
+		return candidateId;
+	}
+
+	public void setCandidateId(Long candidateId) {
+		this.candidateId = candidateId;
 	}
 
 }

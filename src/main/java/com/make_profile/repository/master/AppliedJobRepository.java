@@ -1,5 +1,7 @@
 package com.make_profile.repository.master;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,6 +16,6 @@ import jakarta.transaction.Transactional;
 public interface AppliedJobRepository extends JpaRepository<AppliedJobsEntity, Long> {
 
 	@Query(value = "select * from applied_jobs where candidate_id = :candidateId", nativeQuery = true)
-	AppliedJobsEntity findByCandidateId(@Param("candidateId") Long candidateId);
+	List<AppliedJobsEntity> findByCandidateId(@Param("candidateId") Long candidateId);
 
 }

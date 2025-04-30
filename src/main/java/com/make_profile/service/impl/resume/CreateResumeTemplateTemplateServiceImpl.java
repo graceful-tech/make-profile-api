@@ -162,10 +162,10 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 				variables.put("education", educationList);
 			}
 
-			if (Objects.nonNull(candidateDto.getSoftSkills())
-					&& !CollectionUtils.isEmpty(candidateDto.getSoftSkills())) {
-				variables.put("softSkills", candidateDto.getSoftSkills());
-			}
+//			if (Objects.nonNull(candidateDto.getSoftSkills())
+//					&& !CollectionUtils.isEmpty(candidateDto.getSoftSkills())) {
+//				variables.put("softSkills", candidateDto.getSoftSkills());
+//			}
 
 			if (Objects.nonNull(candidateDto.getAchievements())
 					&& !CollectionUtils.isEmpty(candidateDto.getAchievements())) {
@@ -184,10 +184,10 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 				variables.put("achievements", achievementsList);
 			}
 
-			if (Objects.nonNull(candidateDto.getCoreCompentencies())
-					&& !CollectionUtils.isEmpty(candidateDto.getCoreCompentencies())) {
-				variables.put("competencies", candidateDto.getCoreCompentencies());
-			}
+//			if (Objects.nonNull(candidateDto.getCoreCompentencies())
+//					&& !CollectionUtils.isEmpty(candidateDto.getCoreCompentencies())) {
+//				variables.put("competencies", candidateDto.getCoreCompentencies());
+//			}
 
 			if (Objects.nonNull(candidateDto.getCollegeProject())
 					&& !CollectionUtils.isEmpty(candidateDto.getCollegeProject())) {

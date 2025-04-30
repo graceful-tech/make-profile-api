@@ -16,6 +16,8 @@ public class PaymentOrderDto {
 
 	private Long candidateId;
 
+	private Long userId;
+
 	private LocalDateTime createdDate;
 
 	private String tenant;
@@ -82,6 +84,14 @@ public class PaymentOrderDto {
 
 	public void setCandidateId(Long candidateId) {
 		this.candidateId = candidateId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

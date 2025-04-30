@@ -1,14 +1,12 @@
 package com.make_profile.dto.candidates;
 
-import java.util.List;
-
 public class CandidateProjectDetailsDto {
 
 	private Long id;
 
 	private String projectName;
 
-	private List<String> projectSkills;
+	private String projectSkills;
 
 	private String projectRole;
 
@@ -30,14 +28,6 @@ public class CandidateProjectDetailsDto {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
-	}
-
-	public List<String> getProjectSkills() {
-		return projectSkills;
-	}
-
-	public void setProjectSkills(List<String> projectSkills) {
-		this.projectSkills = projectSkills;
 	}
 
 	public String getProjectRole() {
@@ -62,6 +52,14 @@ public class CandidateProjectDetailsDto {
 
 	public void setProjectDeleted(boolean isProjectDeleted) {
 		this.isProjectDeleted = isProjectDeleted;
+	}
+
+	public String getProjectSkills() {
+		return projectSkills;
+	}
+
+	public void setProjectSkills(String projectSkills) {
+		this.projectSkills = projectSkills;
 	}
 
 	@Override

@@ -24,6 +24,8 @@ public class PaymentDto extends PageDto {
 
 	private String paymentStatus;
 
+	private Long userId;
+
 	public String getPaymentType() {
 		return paymentType;
 	}
@@ -94,6 +96,14 @@ public class PaymentDto extends PageDto {
 
 	public void setCandidateId(Long candidateId) {
 		this.candidateId = candidateId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

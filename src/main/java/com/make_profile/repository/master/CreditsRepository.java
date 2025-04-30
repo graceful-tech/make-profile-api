@@ -16,5 +16,8 @@ public interface CreditsRepository extends JpaRepository<CreditsEntity, Long> {
 
 	@Query(value = "select * from credits where candidate_id = :candidateId", nativeQuery = true)
 	CreditsEntity findCreditsByCandidateId(@Param("candidateId") Long candidateId);
+	
+	@Query(value = "select * from credits where user_id = :userId", nativeQuery = true)
+	CreditsEntity findCreditsByUserId(@Param("userId") Long userId);
 
 }

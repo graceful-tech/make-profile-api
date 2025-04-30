@@ -6,6 +6,6 @@ import com.make_profile.dto.candidates.CandidateDto;
 
 public interface ResumeDetailsAiService {
 
-	CandidateDto getUploadResumeDetialsFromAi(MultipartFile resume);
+	CandidateDto getUploadResumeDetialsFromAi(MultipartFile resume, String userName);
 
 }

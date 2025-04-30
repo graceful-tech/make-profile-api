@@ -4,10 +4,10 @@ import com.make_profile.dto.master.CreditsDto;
 
 public interface CreditsService {
 
-	CreditsDto getCredits(Long candidateId);
+	CreditsDto getCredits(Long userId);
 
-	CreditsDto addCredits(CreditsDto creditsDto);
+	boolean addCredits(CreditsDto creditsDto);
 
-	CreditsDto useCredit(CreditsDto creditsDto);
+	boolean useCredit(CreditsDto creditsDto);
 
 }

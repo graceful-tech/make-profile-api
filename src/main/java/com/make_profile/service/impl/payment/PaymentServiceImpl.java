@@ -12,12 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.make_profile.dto.master.CreditsDto;
 import com.make_profile.dto.payment.PaymentDto;
 import com.make_profile.dto.payment.PaymentOrderDto;
 import com.make_profile.entity.common.EnvironmentEntity;
 import com.make_profile.entity.common.payment.PaymentOrderEntity;
 import com.make_profile.repository.common.EnvironmentRepository;
 import com.make_profile.repository.common.payment.PaymentOrderRepository;
+import com.make_profile.service.master.CreditsService;
 import com.make_profile.service.payment.PaymentService;
 import com.make_profile.utility.CommonConstants;
 import com.razorpay.Order;
@@ -38,6 +40,9 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Autowired
 	ModelMapper modelMapper;
+
+	@Autowired
+	CreditsService creditsService;
 
 	private String razorPayKey;
 
@@ -84,7 +89,9 @@ public class PaymentServiceImpl implements PaymentService {
 			paymentOrderEntity.setStatus(order.get("status"));
 			paymentOrderEntity.setCreatedDate(LocalDateTime.now());
 			paymentOrderEntity.setTransactionId(generateTransactionId());
-			paymentOrderEntity.setCandidateId(paymentOrderDto.getCandidateId());
+			// paymentOrderEntity.setCandidateId(paymentOrderDto.getCandidateId());
+			paymentOrderEntity.setUserId(paymentOrderDto.getUserId());
+
 			PaymentOrderEntity savedEntity = paymentOrderRepository.save(paymentOrderEntity);
 			paymentOrder = modelMapper.map(savedEntity, PaymentOrderDto.class);
 
@@ -112,20 +119,45 @@ public class PaymentServiceImpl implements PaymentService {
 
 				paymentOrderEntity.setStatus("completed");
 				paymentOrderRepository.save(paymentOrderEntity);
-				
-				
+
+				addPaymentCredits(paymentDto);
+
+				status = true;
 
 			} else if (paymentDto.getPaymentStatus().equalsIgnoreCase("Failed")) {
 				PaymentOrderEntity paymentOrderEntity = paymentOrderRepository.getPaymentOrder(paymentDto.getOrderId());
 				paymentOrderEntity.setStatus("failed");
 				paymentOrderRepository.save(paymentOrderEntity);
+				status = false;
 			}
-			status = true;
+
 		} catch (Exception e) {
 			logger.debug("Service :: savePayment :: Exception :: " + e);
 		}
 		logger.debug("Service :: savePayment :: Exited");
 		return status;
+	}
+
+	public boolean addPaymentCredits(PaymentDto paymentDto) {
+		logger.debug("Service :: addPaymentCredits :: Entered");
+
+		boolean status = false;
+		CreditsDto creditsDto = new CreditsDto();
+		try {
+
+			creditsDto.setUserId(paymentDto.getUserId());
+			creditsDto.setCreditAvailable(10.00);
+			creditsDto.setPaymentDate(LocalDate.now());
+			
+			boolean addCredits = creditsService.addCredits(creditsDto);
+		}
+
+		catch (Exception e) {
+			logger.debug("Service :: addPaymentCredits :: Exception :: " + e);
+		}
+		logger.debug("Service :: addPaymentCredits :: Exited");
+		return status;
+
 	}
 
 }

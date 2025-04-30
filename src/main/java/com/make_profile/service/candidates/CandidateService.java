@@ -11,6 +11,6 @@ public interface CandidateService {
 
 	byte[] uploadCandidateImage(CandidateImageDto candidateImageDto);
 
-	byte[] getCandidateImage(CandidateImageDto candidateImageDto);
+	byte[] getCandidateImage(Long candidateId);
 
 }

@@ -23,11 +23,11 @@ public class CandidateDto extends BaseDto {
 
 	private String gender;
 
-	private List<String> languagesKnown;
+	private String languagesKnown;
 
 	private Boolean isFresher;
 
-	private List<String> skills;
+	private String skills;
 
 	private String linkedIn;
 
@@ -47,9 +47,9 @@ public class CandidateDto extends BaseDto {
 
 	private MultipartFile candidateLogo;
 
-	private List<String> softSkills;
+	private String softSkills;
 
-	private List<String> coreCompentencies;
+	private String coreCompentencies;
 
 	private String score;
 
@@ -117,28 +117,12 @@ public class CandidateDto extends BaseDto {
 		this.gender = gender;
 	}
 
-	public List<String> getLanguagesKnown() {
-		return languagesKnown;
-	}
-
-	public void setLanguagesKnown(List<String> languagesKnown) {
-		this.languagesKnown = languagesKnown;
-	}
-
 	public Boolean getFresher() {
 		return isFresher;
 	}
 
 	public void setFresher(Boolean fresher) {
 		isFresher = fresher;
-	}
-
-	public List<String> getSkills() {
-		return skills;
-	}
-
-	public void setSkills(List<String> skills) {
-		this.skills = skills;
 	}
 
 	public List<CandidateExperienceDto> getExperiences() {
@@ -237,22 +221,6 @@ public class CandidateDto extends BaseDto {
 		this.matches = matches;
 	}
 
-	public List<String> getSoftSkills() {
-		return softSkills;
-	}
-
-	public void setSoftSkills(List<String> softSkills) {
-		this.softSkills = softSkills;
-	}
-
-	public List<String> getCoreCompentencies() {
-		return coreCompentencies;
-	}
-
-	public void setCoreCompentencies(List<String> coreCompentencies) {
-		this.coreCompentencies = coreCompentencies;
-	}
-
 	public List<CandidateCollegeProjectDto> getCollegeProject() {
 		return collegeProject;
 	}
@@ -275,6 +243,38 @@ public class CandidateDto extends BaseDto {
 
 	public void setCareerObjective(String careerObjective) {
 		this.careerObjective = careerObjective;
+	}
+
+	public String getLanguagesKnown() {
+		return languagesKnown;
+	}
+
+	public void setLanguagesKnown(String languagesKnown) {
+		this.languagesKnown = languagesKnown;
+	}
+
+	public String getSkills() {
+		return skills;
+	}
+
+	public void setSkills(String skills) {
+		this.skills = skills;
+	}
+
+	public String getSoftSkills() {
+		return softSkills;
+	}
+
+	public void setSoftSkills(String softSkills) {
+		this.softSkills = softSkills;
+	}
+
+	public String getCoreCompentencies() {
+		return coreCompentencies;
+	}
+
+	public void setCoreCompentencies(String coreCompentencies) {
+		this.coreCompentencies = coreCompentencies;
 	}
 
 }
