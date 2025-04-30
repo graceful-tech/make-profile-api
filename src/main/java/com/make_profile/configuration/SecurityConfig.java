@@ -1,5 +1,6 @@
 package com.make_profile.configuration;
 
+import java.beans.Customizer;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,20 @@ import com.make_profile.service.impl.user.CustomUserDetailsService;
 public class SecurityConfig {
 
 	@Autowired
-	private JwtFilter jwtFilter;
+	JwtFilter jwtFilter;
+
+	@Autowired
+	CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.cors().and().csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth
-				.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/google-login", "/user/create", "/public/**")
-				.permitAll().anyRequest().authenticated())
+		http.cors().and().csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests(
+						auth -> auth
+								.requestMatchers(HttpMethod.POST, "/auth/login", "/login/oauth2/**",
+										"/auth/google-login", "/user/create", "/public/**")
+								.permitAll().anyRequest().authenticated())
+				.oauth2Login(oauth -> oauth.successHandler(customOAuth2AuthenticationSuccessHandler))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

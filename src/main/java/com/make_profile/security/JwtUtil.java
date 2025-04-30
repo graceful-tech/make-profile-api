@@ -21,6 +21,12 @@ public class JwtUtil {
 				.signWith(SECRET_KEY, Jwts.SIG.HS256).compact();
 	}
 
+	public String generateTokenGoogle(String userName) {
+		return Jwts.builder().subject(userName).issuedAt(new Date())
+				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+				.signWith(SECRET_KEY, Jwts.SIG.HS256).compact();
+	}
+
 	public boolean validateToken(String token, UserDetails userDetails) {
 		return extractUsername(token).equals(userDetails.getUsername());
 	}

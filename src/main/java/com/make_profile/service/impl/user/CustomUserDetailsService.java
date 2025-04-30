@@ -13,20 +13,24 @@ import org.springframework.stereotype.Component;
 import com.make_profile.entity.user.MakeProfileUserEntity;
 import com.make_profile.repository.user.MakeProfileUserRepository;
 
-
 @Component
-public class CustomUserDetailsService implements  UserDetailsService{
-	
+public class CustomUserDetailsService implements UserDetailsService {
+
 	@Autowired
-	MakeProfileUserRepository makeProfileUserRepository; 
+	MakeProfileUserRepository makeProfileUserRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String number) throws UsernameNotFoundException {
-		MakeProfileUserEntity user = makeProfileUserRepository.findByMobileNumber(number);
-		if(user==null) {
-			throw new UsernameNotFoundException("user not found with mobilenumber"+user);
+		MakeProfileUserEntity user = null;
+		user = makeProfileUserRepository.findByMobileNumber(number);
+		if (user != null) {
+			return new User(user.getMobileNumber(), user.getPassword(),
+					Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
+		} else {
+			user = makeProfileUserRepository.findByUserName(number);
+			return new User(user.getName(), user.getPassword(),
+					Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
 		}
-		return new User(user.getMobileNumber(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
 	}
 
 }

@@ -55,8 +55,37 @@ public class MakeProfileUserServiceImpl implements MakeProfileUserService {
 		return status;
 	}
 
+//	@Override
+//	public MakeProfileUserDto createGoogleUser(MakeProfileUserDto makeProfileUserDto) {
+//		logger.debug("Service :: createGoogleUser :: Entered");
+//
+//		MakeProfileUserDto userDto = null;
+//		MakeProfileUserEntity makeProfileUserEntity = null;
+//		MakeProfileUserEntity findByEmail = null;
+//		MakeProfileUserEntity userEntity = new MakeProfileUserEntity();
+//		try {
+//			findByEmail = makeProfileUserRepository.findByEmail(makeProfileUserDto.getEmail());
+//			if (Objects.isNull(findByEmail)) {
+//				userEntity.setName(makeProfileUserDto.getName());
+//				userEntity.setEmail(makeProfileUserDto.getEmail());
+//				userEntity.setSignInAccess(makeProfileUserDto.getSignInAccess());
+//				makeProfileUserEntity = makeProfileUserRepository.save(userEntity);
+//				userDto = modelMapper.map(makeProfileUserEntity, MakeProfileUserDto.class);
+//			} else {
+//				makeProfileUserEntity = makeProfileUserRepository.findByEmail(makeProfileUserDto.getEmail());
+//				userDto = modelMapper.map(makeProfileUserEntity, MakeProfileUserDto.class);
+//			}
+//			userEntity = null;
+//			makeProfileUserEntity = null;
+//			findByEmail = null;
+//		} catch (Exception e) {
+//			logger.debug("Service :: createGoogleUser :: Error" + e.getMessage());
+//		}
+//		logger.debug("Service :: createGoogleUser :: Exited");
+//		return userDto;
+//	}
 	@Override
-	public MakeProfileUserDto createGoogleUser(MakeProfileUserDto makeProfileUserDto) {
+	public MakeProfileUserDto createGoogleUser(String userName,String email) {
 		logger.debug("Service :: createGoogleUser :: Entered");
 
 		MakeProfileUserDto userDto = null;
@@ -64,15 +93,16 @@ public class MakeProfileUserServiceImpl implements MakeProfileUserService {
 		MakeProfileUserEntity findByEmail = null;
 		MakeProfileUserEntity userEntity = new MakeProfileUserEntity();
 		try {
-			findByEmail = makeProfileUserRepository.findByEmail(makeProfileUserDto.getEmail());
+			findByEmail = makeProfileUserRepository.findByEmail(email);
 			if (Objects.isNull(findByEmail)) {
-				userEntity.setName(makeProfileUserDto.getName());
-				userEntity.setEmail(makeProfileUserDto.getEmail());
-				userEntity.setSignInAccess(makeProfileUserDto.getSignInAccess());
+				userEntity.setName(userName);
+				userEntity.setEmail(email);
+				userEntity.setSignInAccess("google");
+				userEntity.setPassword((passwordEncoder.encode(userName)));
 				makeProfileUserEntity = makeProfileUserRepository.save(userEntity);
 				userDto = modelMapper.map(makeProfileUserEntity, MakeProfileUserDto.class);
 			} else {
-				makeProfileUserEntity = makeProfileUserRepository.findByEmail(makeProfileUserDto.getEmail());
+				makeProfileUserEntity = makeProfileUserRepository.findByEmail(email);
 				userDto = modelMapper.map(makeProfileUserEntity, MakeProfileUserDto.class);
 			}
 			userEntity = null;

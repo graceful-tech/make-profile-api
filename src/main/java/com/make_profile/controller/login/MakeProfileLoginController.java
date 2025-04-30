@@ -59,17 +59,17 @@ public class MakeProfileLoginController extends BaseController {
 		return new ResponseEntity<>(buildResponse(CommonConstants.PM_0005), HttpStatus.BAD_REQUEST);
 	}
 
-	@PostMapping("/google-login")
-	public ResponseEntity<?> googleuserCreate(@RequestBody MakeProfileUserDto makeProfileUserDto) {
-		logger.debug("MakeProfileLoginController :: googleuserCreate :: Entered");
-		try {
-			MakeProfileUserDto createGoogleUser = makeProfileUserService.createGoogleUser(makeProfileUserDto);
-			logger.debug("MakeProfileLoginController :: googleuserCreate :: Exited");
-			return new ResponseEntity<>(createGoogleUser, HttpStatus.OK);
-		} catch (Exception e) {
-			logger.debug("MakeProfileLoginController :: googleuserCreate :: Error");
-		}
-		return new ResponseEntity<>("Login Failed", HttpStatus.NOT_FOUND);
-	}
+//	@PostMapping("/google-login")
+//	public ResponseEntity<?> googleuserCreate(@RequestBody MakeProfileUserDto makeProfileUserDto) {
+//		logger.debug("MakeProfileLoginController :: googleuserCreate :: Entered");
+//		try {
+//			MakeProfileUserDto createGoogleUser = makeProfileUserService.createGoogleUser(makeProfileUserDto);
+//			logger.debug("MakeProfileLoginController :: googleuserCreate :: Exited");
+//			return new ResponseEntity<>(createGoogleUser, HttpStatus.OK);
+//		} catch (Exception e) {
+//			logger.debug("MakeProfileLoginController :: googleuserCreate :: Error");
+//		}
+//		return new ResponseEntity<>("Login Failed", HttpStatus.NOT_FOUND);
+//	}
 
 }

@@ -9,11 +9,14 @@ import com.make_profile.entity.user.MakeProfileUserEntity;
 @Repository
 public interface MakeProfileUserRepository extends JpaRepository<MakeProfileUserEntity, Long> {
 
-	@Query(value = "select * from user where email = :email", nativeQuery = true)
+	@Query(value = "select * from make_profile.user where email = :email", nativeQuery = true)
 	MakeProfileUserEntity findByEmail(@Param("email") String email);
 	
 	MakeProfileUserEntity findByMobileNumber(String number);
 
 	MakeProfileUserEntity findByMobileNumberAndEmail(String mobileNumber, String email);
+
+	@Query(value="select * from make_profile.user where name = :name",nativeQuery=true)
+	MakeProfileUserEntity findByUserName(String name);
 
 }

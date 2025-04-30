@@ -6,7 +6,9 @@ public interface MakeProfileUserService {
 
 	boolean createUser(MakeProfileUserDto makeProfileUserDto);
 
-	MakeProfileUserDto createGoogleUser(MakeProfileUserDto makeProfileUserDto);
+//	MakeProfileUserDto createGoogleUser(MakeProfileUserDto makeProfileUserDto);
+	
+	MakeProfileUserDto createGoogleUser(String username,String email);
 
 	
 
