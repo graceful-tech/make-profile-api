@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -41,7 +42,7 @@ public class CandidateHistoryEntity extends BaseEntity {
 	private String languagesKnown;
 
 	@Column(nullable = true)
-	private Boolean isFresher;
+	private boolean isFresher;
 
 	@Column(nullable = true, length = 1000)
 	private String skills;
@@ -58,19 +59,24 @@ public class CandidateHistoryEntity extends BaseEntity {
 	@Column(nullable = true, length = 20)
 	private String maritalStatus;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateExperienceHistoryEntity> experiences;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateAchievementsHistoryEntity> achievements;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateQualificationHistoryEntity> qualification;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateCertificatesHistoryEntity> certificates;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateCollegeProjectHistoryEntity> collegeProject;
 
 	@Column(nullable = true, length = 1000)
@@ -138,11 +144,11 @@ public class CandidateHistoryEntity extends BaseEntity {
 		this.languagesKnown = languagesKnown;
 	}
 
-	public Boolean getIsFresher() {
+	public boolean isFresher() {
 		return isFresher;
 	}
 
-	public void setIsFresher(Boolean isFresher) {
+	public void setFresher(boolean isFresher) {
 		this.isFresher = isFresher;
 	}
 

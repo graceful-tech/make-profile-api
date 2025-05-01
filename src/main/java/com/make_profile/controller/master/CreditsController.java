@@ -1,5 +1,7 @@
 package com.make_profile.controller.master;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class CreditsController {
 	public ResponseEntity<?> getcredits(@RequestParam Long userId) {
 		logger.debug("Controller :: getcredits :: Entered");
 
-		CreditsDto credits = creditsService.getCredits(userId);
+		List<CreditsDto> credits = creditsService.getCredits(userId);
 
 		logger.debug("Controller :: getcredits :: Exited");
 

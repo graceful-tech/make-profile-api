@@ -1,6 +1,8 @@
 package com.make_profile.service.impl.master;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
@@ -27,15 +29,18 @@ public class CreditsServiceImpl implements CreditsService {
 
 	// TODO candidate comes from login
 	@Override
-	public CreditsDto getCredits(Long userId) {
+	public List<CreditsDto> getCredits(Long userId) {
 		logger.debug("Service :: getCredits :: Entered");
 
-		CreditsDto creditsDto = null;
+		List<CreditsDto> creditsDto = new ArrayList<>();
 		try {
 			CreditsEntity creditsEntity = creditsRepository.findCreditsByUserId(userId);
 
 			if (Objects.nonNull(creditsEntity)) {
-				creditsDto = modelMapper.map(creditsEntity, CreditsDto.class);
+				CreditsDto credits = new CreditsDto();
+				credits = modelMapper.map(creditsEntity, CreditsDto.class);
+				creditsDto.add(credits);
+				credits = null;
 			}
 		} catch (Exception e) {
 			logger.debug("Service :: getCredits :: Exception" + e.getMessage());
@@ -56,10 +61,12 @@ public class CreditsServiceImpl implements CreditsService {
 			findCreditesByUserId = creditsRepository.findCreditsByUserId(creditsDto.getUserId());
 
 			if (Objects.nonNull(findCreditesByUserId)) {
-				
+
 				findCreditesByUserId.setUserId(creditsDto.getUserId());
-				Double CreditAvailable = findCreditesByUserId.getCreditAvailable() == null ? 0.0: findCreditesByUserId.getCreditAvailable();
-				findCreditesByUserId.setCreditAvailable(CreditAvailable + Double.valueOf(creditsDto.getCreditAvailable()));
+				Double CreditAvailable = findCreditesByUserId.getCreditAvailable() == null ? 0.0
+						: findCreditesByUserId.getCreditAvailable();
+				findCreditesByUserId
+						.setCreditAvailable(CreditAvailable + Double.valueOf(creditsDto.getCreditAvailable()));
 				findCreditesByUserId.setId(findCreditesByUserId.getId());
 				findCreditesByUserId.setPaymentDate(LocalDate.now());
 
@@ -100,10 +107,12 @@ public class CreditsServiceImpl implements CreditsService {
 
 			if (Objects.nonNull(findCreditesByUserId)) {
 				if (findCreditesByUserId.getCreditAvailable() >= 2.0) {
-					
+
 					findCreditesByUserId.setUserId(creditsDto.getUserId());
-					findCreditesByUserId.setCreditAvailable(findCreditesByUserId.getCreditAvailable() - Double.valueOf(2));
-					Double creditUsed = findCreditesByUserId.getCreditUsed() == null ? 0.0: findCreditesByUserId.getCreditUsed();
+					findCreditesByUserId
+							.setCreditAvailable(findCreditesByUserId.getCreditAvailable() - Double.valueOf(2));
+					Double creditUsed = findCreditesByUserId.getCreditUsed() == null ? 0.0
+							: findCreditesByUserId.getCreditUsed();
 					findCreditesByUserId.setCreditUsed(creditUsed + Double.valueOf(2));
 					findCreditesByUserId.setId(findCreditesByUserId.getId());
 

@@ -76,7 +76,8 @@ public class PaymentServiceImpl implements PaymentService {
 
 		try {
 
-			RazorpayClient razorPay = new RazorpayClient(razorPayKey, razorPaySecret);
+//			RazorpayClient razorPay = new RazorpayClient(razorPayKey, razorPaySecret);
+			RazorpayClient razorPay = new RazorpayClient("rzp_test_RIGcQeTSoyI0qg", "6Vz8hOrk4xDdXwlF1iWsxHXd");
 			JSONObject orderRequest = new JSONObject();
 			orderRequest.put("amount", paymentOrderDto.getAmount());
 			orderRequest.put("currency", "INR");
@@ -148,7 +149,7 @@ public class PaymentServiceImpl implements PaymentService {
 			creditsDto.setUserId(paymentDto.getUserId());
 			creditsDto.setCreditAvailable(10.00);
 			creditsDto.setPaymentDate(LocalDate.now());
-			
+
 			boolean addCredits = creditsService.addCredits(creditsDto);
 		}
 

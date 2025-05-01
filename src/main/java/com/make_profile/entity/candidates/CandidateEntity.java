@@ -42,7 +42,7 @@ public class CandidateEntity extends BaseEntity {
 	private String languagesKnown;
 
 	@Column(nullable = true)
-	private Boolean isFresher;
+	private boolean isFresher;
 
 	@Column(nullable = true, length = 1000)
 	private String skills;
@@ -141,11 +141,11 @@ public class CandidateEntity extends BaseEntity {
 		this.languagesKnown = languagesKnown;
 	}
 
-	public Boolean getIsFresher() {
+	public boolean isFresher() {
 		return isFresher;
 	}
 
-	public void setIsFresher(Boolean isFresher) {
+	public void setFresher(boolean isFresher) {
 		this.isFresher = isFresher;
 	}
 

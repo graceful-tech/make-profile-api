@@ -35,16 +35,13 @@ public class CandidateExperienceHistoryEntity {
 	private LocalDate experienceYearEndDate;
 
 	@Column(nullable = true)
-	private Boolean currentlyWorking;
+	private boolean currentlyWorking;
 
 	@Column(nullable = true, length = 1500)
 	private String responsibilities;
 
-	@ManyToOne
-	@JoinColumn(name = "candidate_id")
-	private CandidateHistoryEntity candidateId;
-
-	@OneToMany(mappedBy = "candidateExperienceHistory", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "experience_id")
 	private List<CandidateProjectHistoryEntity> projects;
 
 	public Long getId() {
@@ -87,20 +84,12 @@ public class CandidateExperienceHistoryEntity {
 		this.experienceYearEndDate = experienceYearEndDate;
 	}
 
-	public Boolean getCurrentlyWorking() {
+	public boolean isCurrentlyWorking() {
 		return currentlyWorking;
 	}
 
-	public void setCurrentlyWorking(Boolean currentlyWorking) {
+	public void setCurrentlyWorking(boolean currentlyWorking) {
 		this.currentlyWorking = currentlyWorking;
-	}
-
-	public CandidateHistoryEntity getCandidateId() {
-		return candidateId;
-	}
-
-	public void setCandidateId(CandidateHistoryEntity candidateId) {
-		this.candidateId = candidateId;
 	}
 
 	public String getResponsibilities() {

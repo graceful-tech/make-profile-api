@@ -35,11 +35,11 @@ public class CandidateExperienceEntity {
 	private LocalDate experienceYearEndDate;
 
 	@Column(nullable = true)
-	private Boolean currentlyWorking;
+	private boolean currentlyWorking;
 
 	@Column(nullable = true, length = 1500)
 	private String responsibilities;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "experience_id")
 	private List<CandidateProjectEntity> projects;
@@ -84,11 +84,11 @@ public class CandidateExperienceEntity {
 		this.experienceYearEndDate = experienceYearEndDate;
 	}
 
-	public Boolean getCurrentlyWorking() {
+	public boolean isCurrentlyWorking() {
 		return currentlyWorking;
 	}
 
-	public void setCurrentlyWorking(Boolean currentlyWorking) {
+	public void setCurrentlyWorking(boolean currentlyWorking) {
 		this.currentlyWorking = currentlyWorking;
 	}
 

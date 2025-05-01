@@ -30,32 +30,32 @@ public class MultiTenantDataSourceLookup extends MapDataSourceLookup {
 //		});
 	}
 
-	public DataSource getDataSourceFromLookup(String tenant) {
-		DataSource dataSource = null;
-		try {
-			dataSource = getDataSource(tenant);
-		} catch (DataSourceLookupFailureException dataSourceLookupFailureException) {
+//	public DataSource getDataSourceFromLookup(String tenant) {
+//		DataSource dataSource = null;
+//		try {
+//			dataSource = getDataSource(tenant);
+//		} catch (DataSourceLookupFailureException dataSourceLookupFailureException) {
+//
+//		}
+//		return dataSource;
+//	}
 
-		}
-		return dataSource;
-	}
-
-	public DataSource createDataSource() {
-		logger.debug("Service :: createDataSource :: Entered");
-		try {
-			 
-				DataSource datasource = DataSourceBuilder.create()
-						.driverClassName("com.mysql.cj.jdbc.Driver")
-						.username("root").password("root")
-						.url("jdbc:mysql://localhost:3306/hurecom_v2").build();
-				addDataSource("00000", datasource);
-				return datasource;
-			 
-		} catch (Exception e) {
-			logger.error("Service :: createDataSource :: Exception :: " + e.getMessage());
-		}
-		logger.debug("Service :: createDataSource :: Exited");
-		return null;
-	}
+//	public DataSource createDataSource() {
+//		logger.debug("Service :: createDataSource :: Entered");
+//		try {
+//			 
+//				DataSource datasource = DataSourceBuilder.create()
+//						.driverClassName("com.mysql.cj.jdbc.Driver")
+//						.username("root").password("root")
+//						.url("jdbc:mysql://localhost:3306/hurecom_v2").build();
+//				addDataSource("00000", datasource);
+//				return datasource;
+//			 
+//		} catch (Exception e) {
+//			logger.error("Service :: createDataSource :: Exception :: " + e.getMessage());
+//		}
+//		logger.debug("Service :: createDataSource :: Exited");
+//		return null;
+//	}
 
 }

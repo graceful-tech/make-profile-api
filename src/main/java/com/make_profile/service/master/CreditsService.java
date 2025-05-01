@@ -1,10 +1,12 @@
 package com.make_profile.service.master;
 
+import java.util.List;
+
 import com.make_profile.dto.master.CreditsDto;
 
 public interface CreditsService {
 
-	CreditsDto getCredits(Long userId);
+	List<CreditsDto> getCredits(Long userId);
 
 	boolean addCredits(CreditsDto creditsDto);
 
