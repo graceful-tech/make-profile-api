@@ -39,12 +39,9 @@ public class CandidateExperienceEntity {
 
 	@Column(nullable = true, length = 1500)
 	private String responsibilities;
-
-	@ManyToOne
-	@JoinColumn(name = "candidate_id")
-	private CandidateEntity candidateId;
-
-	@OneToMany(mappedBy = "candidateExperience", cascade = CascadeType.ALL)
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "experience_id")
 	private List<CandidateProjectEntity> projects;
 
 	public Long getId() {
@@ -93,14 +90,6 @@ public class CandidateExperienceEntity {
 
 	public void setCurrentlyWorking(Boolean currentlyWorking) {
 		this.currentlyWorking = currentlyWorking;
-	}
-
-	public CandidateEntity getCandidateId() {
-		return candidateId;
-	}
-
-	public void setCandidateId(CandidateEntity candidateId) {
-		this.candidateId = candidateId;
 	}
 
 	public List<CandidateProjectEntity> getProjects() {

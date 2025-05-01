@@ -29,10 +29,6 @@ public class CandidateProjectEntity {
 	@Column(nullable = true, length = 2000)
 	private String projectDescription;
 
-	@ManyToOne
-	@JoinColumn(name = "experience_id")
-	private CandidateExperienceEntity candidateExperience;
-
 	public Long getId() {
 		return id;
 	}
@@ -71,14 +67,6 @@ public class CandidateProjectEntity {
 
 	public void setProjectDescription(String projectDescription) {
 		this.projectDescription = projectDescription;
-	}
-
-	public CandidateExperienceEntity getCandidateExperience() {
-		return candidateExperience;
-	}
-
-	public void setCandidateExperience(CandidateExperienceEntity candidateExperience) {
-		this.candidateExperience = candidateExperience;
 	}
 
 }

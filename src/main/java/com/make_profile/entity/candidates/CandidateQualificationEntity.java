@@ -37,9 +37,6 @@ public class CandidateQualificationEntity {
 	@Column(nullable = true)
 	private String fieldOfStudy;
 
-	@ManyToOne
-	@JoinColumn(name = "candidate_id")
-	private CandidateEntity candidateId;
 
 	public Long getId() {
 		return id;
@@ -79,14 +76,6 @@ public class CandidateQualificationEntity {
 
 	public void setQualificationEndYear(LocalDate qualificationEndYear) {
 		this.qualificationEndYear = qualificationEndYear;
-	}
-
-	public CandidateEntity getCandidateId() {
-		return candidateId;
-	}
-
-	public void setCandidateId(CandidateEntity candidateId) {
-		this.candidateId = candidateId;
 	}
 
 	public Double getPercentage() {

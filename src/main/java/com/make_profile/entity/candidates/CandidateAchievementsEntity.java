@@ -25,10 +25,6 @@ public class CandidateAchievementsEntity {
 	@Column(nullable = true)
 	private LocalDate achievementsDate;
 
-	@ManyToOne
-	@JoinColumn(name = "candidate_id")
-	private CandidateEntity candidateId;
-
 	public Long getId() {
 		return id;
 	}
@@ -43,14 +39,6 @@ public class CandidateAchievementsEntity {
 
 	public void setAchievementsName(String achievementsName) {
 		this.achievementsName = achievementsName;
-	}
-
-	public CandidateEntity getCandidateId() {
-		return candidateId;
-	}
-
-	public void setCandidateId(CandidateEntity candidateId) {
-		this.candidateId = candidateId;
 	}
 
 	public LocalDate getAchievementsDate() {

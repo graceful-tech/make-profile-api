@@ -28,9 +28,6 @@ public class CandidateCollegeProjectEntity {
 	@Column(nullable = true, length=2000)
 	private String collegeProjectDescription;
 
-	@ManyToOne
-	@JoinColumn(name = "candidate_id")
-	private CandidateEntity candidateId;
 
 	public Long getId() {
 		return id;
@@ -62,14 +59,6 @@ public class CandidateCollegeProjectEntity {
 
 	public void setCollegeProjectDescription(String collegeProjectDescription) {
 		this.collegeProjectDescription = collegeProjectDescription;
-	}
-
-	public CandidateEntity getCandidateId() {
-		return candidateId;
-	}
-
-	public void setCandidateId(CandidateEntity candidateId) {
-		this.candidateId = candidateId;
 	}
 
 }

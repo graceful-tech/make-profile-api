@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -58,19 +59,24 @@ public class CandidateEntity extends BaseEntity {
 	@Column(nullable = true, length = 20)
 	private String maritalStatus;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateExperienceEntity> experiences;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateAchievementsEntity> achievements;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateQualificationEntity> qualification;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateCertificateEntity> certificates;
 
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "candidate_id")
 	private List<CandidateCollegeProjectEntity> collegeProject;
 
 	@Column(nullable = true, length = 1000)

@@ -28,9 +28,6 @@ public class CandidateCertificateEntity {
 	@Column
 	private LocalDate courseEndDate;
 
-	@ManyToOne
-	@JoinColumn(name = "candidate_id")
-	private CandidateEntity candidateId;
 
 	public Long getId() {
 		return id;
@@ -54,14 +51,6 @@ public class CandidateCertificateEntity {
 
 	public void setCourseEndDate(LocalDate courseEndDate) {
 		this.courseEndDate = courseEndDate;
-	}
-
-	public CandidateEntity getCandidateId() {
-		return candidateId;
-	}
-
-	public void setCandidateId(CandidateEntity candidateId) {
-		this.candidateId = candidateId;
 	}
 
 	public LocalDate getCourseStartDate() {
