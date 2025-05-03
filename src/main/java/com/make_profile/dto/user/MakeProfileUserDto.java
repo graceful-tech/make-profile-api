@@ -17,6 +17,8 @@ public class MakeProfileUserDto {
 	private String password;
 
 	private String token;
+	
+	private String userName;
 
 	public Long getId() {
 		return id;
@@ -74,4 +76,13 @@ public class MakeProfileUserDto {
 		this.token = token;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 }
+

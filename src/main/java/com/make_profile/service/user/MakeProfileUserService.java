@@ -10,6 +10,8 @@ public interface MakeProfileUserService {
 	
 	MakeProfileUserDto createGoogleUser(String username,String email);
 
+	MakeProfileUserDto getUserByUserName(String userName);
+
 	
 
 }

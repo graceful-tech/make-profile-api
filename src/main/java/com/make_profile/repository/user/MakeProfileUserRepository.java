@@ -16,7 +16,8 @@ public interface MakeProfileUserRepository extends JpaRepository<MakeProfileUser
 
 	MakeProfileUserEntity findByMobileNumberAndEmail(String mobileNumber, String email);
 
-	@Query(value="select * from make_profile.user where name = :name",nativeQuery=true)
+	@Query(value=" ",nativeQuery=true)
 	MakeProfileUserEntity findByUserName(String name);
+
 
 }

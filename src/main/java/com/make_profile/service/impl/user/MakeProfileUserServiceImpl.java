@@ -48,7 +48,9 @@ public class MakeProfileUserServiceImpl implements MakeProfileUserService {
 			makeProfileUserEntity = null;
 			user = null;
 		} catch (Exception e) {
+			status=false;
 			logger.debug("Service :: createUser :: Error" + e.getMessage());
+			
 		}
 		logger.debug("Service :: createUser :: Exited");
 
@@ -85,7 +87,22 @@ public class MakeProfileUserServiceImpl implements MakeProfileUserService {
 //		return userDto;
 //	}
 	@Override
-	public MakeProfileUserDto createGoogleUser(String userName,String email) {
+	public MakeProfileUserDto getUserByUserName(String userName) {
+
+		MakeProfileUserDto makeProfileUserDto = new MakeProfileUserDto();
+
+		try {
+			makeProfileUserRepository.findByUserName(userName);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return makeProfileUserDto;
+
+	}
+
+	@Override
+	public MakeProfileUserDto createGoogleUser(String userName, String email) {
 		logger.debug("Service :: createGoogleUser :: Entered");
 
 		MakeProfileUserDto userDto = null;

@@ -3,7 +3,10 @@ package com.make_profile.entity.user;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user" ,
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email"),@UniqueConstraint(columnNames = "userName"), @UniqueConstraint(columnNames = "mobileNumber")
+    })
 public class MakeProfileUserEntity {
 
 	@Id
@@ -13,10 +16,13 @@ public class MakeProfileUserEntity {
 	@Column
 	private String name;
 
-	@Column
+	@Column(nullable = false, unique = true)
+	private String userName;
+
+	@Column(nullable = false, unique = true)
 	private String mobileNumber;
 
-	@Column
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Column
@@ -71,6 +77,14 @@ public class MakeProfileUserEntity {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }
