@@ -2,6 +2,8 @@ package com.make_profile.dto.candidates;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.Column;
+
 public class CandidateImageDto {
 
 	private Long id;
@@ -9,6 +11,10 @@ public class CandidateImageDto {
 	private Long candidateId;
 
 	private MultipartFile attachment;
+
+	private String fileName;
+
+	private String fileLocation;
 
 	public Long getId() {
 		return id;
@@ -33,7 +39,21 @@ public class CandidateImageDto {
 	public void setAttachment(MultipartFile attachment) {
 		this.attachment = attachment;
 	}
-	
-	
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getFileLocation() {
+		return fileLocation;
+	}
+
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
+	}
 
 }

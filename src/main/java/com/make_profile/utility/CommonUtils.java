@@ -87,4 +87,30 @@ public class CommonUtils {
 	public static String renameString(String input) {
 		return Arrays.asList(input.split(" ")).stream().collect(Collectors.joining("_")).toLowerCase();
 	}
+
+	public static String moveImageFileToServer(MultipartFile file, Path targetLocation) {
+		logger.debug("Service :: moveFileToServer :: Entered");
+		String path = null;
+
+		try {
+
+			File dir = new File(targetLocation.toString());
+			if (!dir.exists()) {
+				dir.mkdirs(); 
+			}
+
+			// Create destination file path
+			String originalFilename = file.getOriginalFilename();
+			File destinationFile = new File(targetLocation.toString() + File.separator + originalFilename);
+
+			// Save the file
+			file.transferTo(destinationFile);
+
+			path = targetLocation.toString() + "\\" + originalFilename;
+		} catch (Exception e) {
+			logger.error("Service :: moveFileToServer :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: moveFileToServer :: Exited");
+		return path;
+	}
 }

@@ -77,6 +77,7 @@ public class CreditsServiceImpl implements CreditsService {
 			} else {
 				CreditsEntity candidateEntity = new CreditsEntity();
 
+				candidateEntity.setUserId(creditsDto.getUserId());
 				candidateEntity.setCandidateId(creditsDto.getCandidateId());
 				candidateEntity.setCreditAvailable(Double.valueOf(creditsDto.getCreditAvailable()));
 				candidateEntity.setPaymentDate(LocalDate.now());
@@ -103,7 +104,7 @@ public class CreditsServiceImpl implements CreditsService {
 		boolean status = false;
 		try {
 
-			findCreditesByUserId = creditsRepository.findCreditsByUserId(creditsDto.getCandidateId());
+			findCreditesByUserId = creditsRepository.findCreditsByUserId(creditsDto.getUserId());
 
 			if (Objects.nonNull(findCreditesByUserId)) {
 				if (findCreditesByUserId.getCreditAvailable() >= 2.0) {

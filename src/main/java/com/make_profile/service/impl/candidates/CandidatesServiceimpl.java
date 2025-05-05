@@ -1,8 +1,9 @@
 package com.make_profile.service.impl.candidates;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -15,15 +16,16 @@ import com.make_profile.dto.candidates.CandidateImageDto;
 import com.make_profile.entity.candidates.CandidateEntity;
 import com.make_profile.entity.candidates.CandidateImageEntity;
 import com.make_profile.entity.history.candidates.CandidateHistoryEntity;
-import com.make_profile.entity.history.candidates.CandidateImageHistoryEntity;
 import com.make_profile.repository.candidates.CandidateImageRepository;
 import com.make_profile.repository.candidates.CandidatesRepository;
+import com.make_profile.repository.common.EnvironmentRepository;
 import com.make_profile.repository.history.candidates.CandidateHistoryRepository;
-import com.make_profile.repository.history.candidates.CandidateImageHistoryRepository;
 import com.make_profile.repository.templates.TemplateAppliedRepository;
 import com.make_profile.repository.templates.UsedTemplateRepository;
 import com.make_profile.service.candidates.CandidateService;
 import com.make_profile.service.candidates.TemplateService;
+import com.make_profile.utility.CommonConstants;
+import com.make_profile.utility.CommonUtils;
 
 @Service
 public class CandidatesServiceimpl implements CandidateService {
@@ -52,7 +54,7 @@ public class CandidatesServiceimpl implements CandidateService {
 	CandidateHistoryRepository candidateHistoryRepository;
 
 	@Autowired
-	CandidateImageHistoryRepository candidateImageHistoryRepository;
+	EnvironmentRepository environmentRepository;
 
 	@Override
 	public CandidateDto createCandidate(CandidateDto candidateDto) {
@@ -126,61 +128,64 @@ public class CandidatesServiceimpl implements CandidateService {
 	@Override
 	public byte[] uploadCandidateImage(CandidateImageDto candidateImageDto) {
 		logger.debug("Service :: uploadCandidateImage :: Entered");
-
-		CandidateImageEntity candidateImageEntity = null;
-		CandidateImageEntity candidateImage = new CandidateImageEntity();
-		CandidateImageEntity candidateId = null;
-
-		CandidateImageHistoryEntity candidateImageHistoryEntity = new CandidateImageHistoryEntity();
-
+		byte[] candidateImage = null;
 		try {
-			Optional<CandidateImageEntity> findById = candidateImageRepository
-					.findById(candidateImageDto.getCandidateId());
 
-			boolean present = findById.isPresent();
+			String environmentValueByKey = environmentRepository
+					.getEnvironmentValueByKey(CommonConstants.IMAGE_LOCATION);
 
-			if (present) {
-				candidateImageEntity = findById.get();
-				candidateImageEntity.setImage(candidateImageDto.getAttachment().getBytes());
-				candidateId = candidateImageRepository.save(candidateImageEntity);
-			} else {
-				candidateImage.setCandidateId(candidateImageDto.getCandidateId());
-				candidateImage.setImage(candidateImageDto.getAttachment().getBytes());
-				candidateId = candidateImageRepository.save(candidateImage);
+			CandidateImageEntity candidateImageEntity = candidateImageRepository
+					.getImageByCandidateId(candidateImageDto.getCandidateId());
+
+			if (Objects.nonNull(candidateImageEntity)) {
+				Path targetLocation = Paths.get(candidateImageEntity.getFileLocation());
+				CommonUtils.deleteFileFromServer(targetLocation);
 			}
 
-			// TODO
-			candidateImageHistoryEntity.setImage(candidateImageDto.getAttachment().getBytes());
-			candidateImageHistoryEntity.setCandidateId(candidateId.getId());
-			candidateImageHistoryRepository.save(candidateImageHistoryEntity);
+			Path targetLocation = Paths.get(environmentValueByKey)
+					.resolve(candidateImageDto.getCandidateId().toString());
+
+			// copy the image to target location.
+			String path = CommonUtils.moveImageFileToServer(candidateImageDto.getAttachment(), targetLocation);
+
+			if (Objects.isNull(candidateImageEntity)) {
+				candidateImageEntity = new CandidateImageEntity();
+			}
+
+			candidateImageEntity.setFileName(candidateImageDto.getAttachment().getOriginalFilename());
+			candidateImageEntity.setFileLocation(path);
+			candidateImageEntity.setCandidateId(candidateImageDto.getCandidateId());
+
+			candidateImageRepository.save(candidateImageEntity);
 
 			candidateImageEntity = null;
-			candidateImage = null;
-			candidateImageHistoryEntity = null;
+
+			candidateImage = getCandidateImage(candidateImageDto.getCandidateId());
 		} catch (Exception e) {
 			logger.error("Service :: uploadCandidateImage :: Exception :: " + e.getMessage());
+			return null;
 		}
 		logger.debug("Service :: uploadCandidateImage :: Exited");
-		return candidateId.getImage();
+		return candidateImage;
 	}
 
 	@Override
 	public byte[] getCandidateImage(Long candidateId) {
 		logger.debug("Service :: getCandidateImage :: Entered");
-
 		CandidateImageEntity imageByCandidateId = null;
+		byte[] byteArray = null;
 		try {
 			imageByCandidateId = candidateImageRepository.getImageByCandidateId(candidateId);
 
 			if (Objects.nonNull(imageByCandidateId)) {
-				return imageByCandidateId.getImage();
-			} else {
-				return null;
+				Path targetLocation = Paths.get(imageByCandidateId.getFileLocation());
+				byteArray = CommonUtils.downloadFileFromServer(targetLocation);
 			}
+
 		} catch (Exception e) {
 			logger.error("Service :: getCandidateImage :: Exception :: " + e.getMessage());
-			return null;
 		}
+		return byteArray;
 
 	}
 

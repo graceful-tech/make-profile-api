@@ -16,12 +16,14 @@ public class CandidateImageEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private Long candidateId;
 
-	@Lob
-	@Column(columnDefinition = "LONGBLOB", updatable = false)
-	private byte[] image;
+	@Column(nullable = false)
+	private String fileName;
+
+	@Column(nullable = false)
+	private String fileLocation;
 
 	public Long getId() {
 		return id;
@@ -39,12 +41,20 @@ public class CandidateImageEntity {
 		this.candidateId = candidateId;
 	}
 
-	public byte[] getImage() {
-		return image;
+	public String getFileName() {
+		return fileName;
 	}
 
-	public void setImage(byte[] image) {
-		this.image = image;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getFileLocation() {
+		return fileLocation;
+	}
+
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
 	}
 
 }
