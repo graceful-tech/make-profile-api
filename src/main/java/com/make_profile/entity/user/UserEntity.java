@@ -1,14 +1,17 @@
 package com.make_profile.entity.user;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "user" ,
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email"),@UniqueConstraint(columnNames = "userName"), @UniqueConstraint(columnNames = "mobileNumber")
-    })
-public class MakeProfileUserEntity {
-
+@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = "email"),
+		@UniqueConstraint(columnNames = "userName") })
+public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -19,7 +22,7 @@ public class MakeProfileUserEntity {
 	@Column(nullable = false, unique = true)
 	private String userName;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = true)
 	private String mobileNumber;
 
 	@Column(nullable = false, unique = true)

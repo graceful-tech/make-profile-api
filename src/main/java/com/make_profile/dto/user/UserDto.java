@@ -1,8 +1,6 @@
 package com.make_profile.dto.user;
 
-
-
-public class MakeProfileUserDto {
+public class UserDto {
 
 	private Long id;
 
@@ -85,4 +83,3 @@ public class MakeProfileUserDto {
 	}
 
 }
-

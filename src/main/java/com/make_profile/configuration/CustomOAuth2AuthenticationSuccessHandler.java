@@ -10,9 +10,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import jakarta.servlet.http.Cookie;
 
-import com.make_profile.dto.user.MakeProfileUserDto;
+import com.make_profile.dto.user.UserDto;
 import com.make_profile.security.JwtUtil;
-import com.make_profile.service.user.MakeProfileUserService;
+import com.make_profile.service.user.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,7 +25,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 
 	@Autowired
 	@Lazy
-	MakeProfileUserService makeProfileUserService;
+	UserService userService;
 
 //	private final OAuth2AuthorizedClientService authorizedClientService;
 //
@@ -49,11 +49,11 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 		String email = (String) oauth2Token.getPrincipal().getAttributes().get("email");
 
 		if (email == null) {
-			email = "Email not available"; 
+			email = "Email not available";
 		}
 
-		MakeProfileUserDto GoogleUser = makeProfileUserService.createGoogleUser(username, email);
-	
+		UserDto GoogleUser = userService.createGoogleUser(username, email);
+
 //		String redirectUrl = "http://localhost:4200/#/candidate?token=" + token + "&username=" + username + "&email="
 //				+ email + "&id=" + String.valueOf(GoogleUser.getId());
 

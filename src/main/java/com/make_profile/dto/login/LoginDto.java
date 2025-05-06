@@ -1,6 +1,6 @@
 package com.make_profile.dto.login;
 
-public class MakeProfileLoginDto {
+public class LoginDto {
 	
 	private String mobileNumber;
 	
@@ -21,7 +21,4 @@ public class MakeProfileLoginDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
-
 }

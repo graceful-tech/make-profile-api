@@ -10,24 +10,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.make_profile.entity.user.MakeProfileUserEntity;
-import com.make_profile.repository.user.MakeProfileUserRepository;
+import com.make_profile.entity.user.UserEntity;
+import com.make_profile.repository.user.UserRepository;
 
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	MakeProfileUserRepository makeProfileUserRepository;
+	UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String number) throws UsernameNotFoundException {
-		MakeProfileUserEntity user = null;
-		user = makeProfileUserRepository.findByMobileNumber(number);
+		UserEntity user = null;
+		user = userRepository.findByMobileNumber(number);
 		if (user != null) {
 			return new User(user.getMobileNumber(), user.getPassword(),
 					Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
 		} else {
-			user = makeProfileUserRepository.findByUserName(number);
+			user = userRepository.findByUserName(number);
 			return new User(user.getName(), user.getPassword(),
 					Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
 		}
