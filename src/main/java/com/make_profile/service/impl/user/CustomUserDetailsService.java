@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 			return new User(user.getMobileNumber(), user.getPassword(),
 					Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
 		} else {
-			user = userRepository.findByUserName(number);
+			user = userRepository.findByName(number);
 			return new User(user.getName(), user.getPassword(),
 					Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
 		}

@@ -2,7 +2,6 @@ package com.make_profile.service.impl.user;
 
 import java.util.Objects;
 
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,6 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private ModelMapper modelMapper;
-
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
@@ -32,20 +28,18 @@ public class UserServiceImpl implements UserService {
 		logger.debug("UserServiceImpl :: createUser :: Entered");
 		boolean status = false;
 		UserEntity makeProfileUserEntity = null;
-		UserEntity user = null;
 		try {
-			user = userRepository.findByMobileNumberAndEmail(userDto.getMobileNumber(), userDto.getEmail());
-			if (user == null) {
+			userRepository.findByMobileNumberAndEmail(userDto.getMobileNumber(), userDto.getEmail());
+			if (userRepository.findByMobileNumberAndEmail(userDto.getMobileNumber(), userDto.getEmail()) == 0) {
 				status = true;
 				if (userDto.getSignInAccess() == null) {
 					userDto.setSignInAccess("LoginUser");
 				}
 				userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-				makeProfileUserEntity = modelMapper.map(userDto, UserEntity.class);
+				makeProfileUserEntity = convertUserDtoToUserEntity(userDto);
 				userRepository.save(makeProfileUserEntity);
 			}
 			makeProfileUserEntity = null;
-			user = null;
 		} catch (Exception e) {
 			status = false;
 			logger.debug("UserServiceImpl :: createUser :: Error" + e.getMessage());
@@ -87,17 +81,16 @@ public class UserServiceImpl implements UserService {
 //	}
 	@Override
 	public UserDto getUserByUserName(String userName) {
-
-		UserDto makeProfileUserDto = new UserDto();
-
+		
 		try {
-			userRepository.findByUserName(userName);
+			
+			UserEntity userEntity =	userRepository.findByUserName(userName);
+			
+			return convertUserEntityToUserDto(userEntity);
+			
 		} catch (Exception e) {
-			// TODO: handle exception
+			return null;
 		}
-
-		return makeProfileUserDto;
-
 	}
 
 	@Override
@@ -116,10 +109,10 @@ public class UserServiceImpl implements UserService {
 				userEntity.setSignInAccess("google");
 				userEntity.setPassword((passwordEncoder.encode(userName)));
 				makeProfileUserEntity = userRepository.save(userEntity);
-				userDto = modelMapper.map(makeProfileUserEntity, UserDto.class);
+				userDto = convertUserEntityToUserDto(makeProfileUserEntity);
 			} else {
 				makeProfileUserEntity = userRepository.findByEmail(email);
-				userDto = modelMapper.map(makeProfileUserEntity, UserDto.class);
+				userDto = convertUserEntityToUserDto(makeProfileUserEntity);
 			}
 			userEntity = null;
 			makeProfileUserEntity = null;
@@ -130,5 +123,31 @@ public class UserServiceImpl implements UserService {
 		logger.debug("UserServiceImpl :: createGoogleUser :: Exited");
 		return userDto;
 	}
+	
+	public UserDto convertUserEntityToUserDto(UserEntity userEntity) {
+		UserDto userDetails= new UserDto();
+		userDetails.setEmail(userEntity.getEmail());
+		userDetails.setName(userEntity.getName());
+		userDetails.setMobileNumber(userEntity.getMobileNumber());
+		userDetails.setId(userEntity.getId());
+		userDetails.setUserName(userEntity.getUserName());
+		userDetails.setPassword(userEntity.getPassword());
+		userDetails.setSignInAccess(userEntity.getSignInAccess());
+		return userDetails;
+	}
+	
+	public UserEntity convertUserDtoToUserEntity(UserDto userDto) {
+		UserEntity userDetails= new UserEntity();
+		userDetails.setEmail(userDto.getEmail());
+		userDetails.setName(userDto.getName());
+		userDetails.setMobileNumber(userDto.getMobileNumber());
+		userDetails.setId(userDto.getId());
+		userDetails.setUserName(userDto.getUserName());
+		userDetails.setPassword(userDto.getPassword());
+		userDetails.setSignInAccess(userDto.getSignInAccess());
+		return userDetails;
+	}
+
 
 }
+

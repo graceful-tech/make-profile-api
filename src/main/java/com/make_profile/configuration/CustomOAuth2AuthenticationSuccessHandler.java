@@ -69,7 +69,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 		}
 
 		if (redirectUri != null && !redirectUri.isEmpty()) {
-			response.sendRedirect(redirectUri + "?token=" + token + "&username=" + username + "&email=" + email + "&id="
+			response.sendRedirect(redirectUri + "?token=" + token + "&username=" + String.valueOf(GoogleUser.getUserName()) + "&email=" + email + "&id="
 					+ String.valueOf(GoogleUser.getId()));
 		} else {
 			response.sendRedirect("http://localhost:4200/#/candidate");
