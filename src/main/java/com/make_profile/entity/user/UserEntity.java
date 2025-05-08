@@ -10,7 +10,7 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = "email"),
-		@UniqueConstraint(columnNames = "userName") })
+		@UniqueConstraint(columnNames = "userName")})
 public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
