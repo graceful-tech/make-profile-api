@@ -126,14 +126,14 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 
 			String dto = " { \r\n" + "  id: \"\", \r\n" + "  name: \"\", \r\n" + "  mobileNumber: \"\", \r\n"
 					+ "  email: \"\", \r\n" + "  nationality: \"\", \r\n" + "  gender: \"\", \r\n"
-					+ "  languagesKnown: [], \r\n" + "  isFresher: \"\", \r\n" + "  skills: [], \r\n"
+					+ "  languagesKnown: \"\", \r\n" + "  isFresher: \"\", \r\n" + "  skills: \"\", \r\n"
 					+ "  linkedIn: \"\", \r\n" + "  dob: \"\", \r\n" + "  address: \"\", \r\n"
 					+ "  maritalStatus: \"\", \r\n" + "  summary:\"\", \r\n" + "  careerObjective:\"\"; \r\n"
 					+ "  experiences: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n" + "	  companyName: \"\", \r\n"
 					+ "	  role: \"\", \r\n" + "	  experienceYearStartDate: \"\", \r\n"
 					+ "	  experienceYearEndDate: \"\", \r\n" + "	  currentlyWorking: false, \r\n"
-					+ "	  isDeleted: false, \r\n" + "	  Responsibilities: [], \r\n" + "	  projects: [ \r\n"
-					+ "		{ \r\n" + "			projectName: \"\",\r\n" + "			projectSkills: [],\r\n"
+					+ "	  isDeleted: false, \r\n" + "	  Responsibilities: \"\", \r\n" + "	  projects: [ \r\n"
+					+ "		{ \r\n" + "			projectName: \"\",\r\n" + "			projectSkills: \"\",\r\n"
 					+ "			projectRole \"\",\r\n" + "			projectDescription:\"\";\r\n"
 					+ "			isProjectDeleted: false\r\n" + "		} \r\n" + "	  ] \r\n" + "	} \r\n"
 					+ "  ], \r\n" + "  qualification: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"
@@ -145,13 +145,13 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 					+ "	  isDeleted: \"\" \r\n" + "	} \r\n" + "  ], \r\n" + "  achievements: [ \r\n" + "	{ \r\n"
 					+ "	  id: \"\", \r\n" + "	  achievementsName: \"\", \r\n" + "	  achievementsDate: \"\", \r\n"
 					+ "	  isDeleted: false \r\n" + "	} \r\n" + "  ], \r\n" + "  candidateLogo: \"\", \r\n"
-					+ "  softSkills: [], \r\n" + "  coreCompentencies: [], \r\n" + "  score: \"\", \r\n"
+					+ "  softSkills: \"\", \r\n" + "  coreCompentencies: \"\", \r\n" + "  score: \"\", \r\n"
 					+ "  matches: false, \r\n" + "  collegeProject: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"
-					+ "	  collegeProjectName: \"\", \r\n" + "	  collegeProjectSkills: [], \r\n"
+					+ "	  collegeProjectName: \"\", \r\n" + "	  collegeProjectSkills: \"\", \r\n"
 					+ "	  collegeProjectDescription: \"\", \r\n" + "	  isDeleted: false \r\n" + "	} \r\n"
 					+ "  ] \r\n" + "} ";
 
-			String query = "\r\n this is my Dto i will paste  the content of this Dto below can you enhance and set that in this Dto and  give me the suitable summary and  Career Objective for this resume and return it , \r\n"
+			String query = "\r\n this is my Dto i will paste  the content of this Dto below can you enhance that and set that in this Dto and  give me the suitable summary and  Career Objective for this resume and return it , \r\n"
 					+ "\r\n";
 
 			ChatCompletionRequest chatRequest = new ChatCompletionRequest("gpt-4o-mini", dto + query + content);

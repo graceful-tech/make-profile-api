@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
@@ -170,7 +169,9 @@ public class ResumeDetailsAiServiceImpl implements ResumeDetailsAiService {
 			String fileName = FilenameUtils.getExtension(file.getOriginalFilename());
 
 			if (fileName.equalsIgnoreCase("pdf")) {
-				PDDocument pdfDocument = Loader.loadPDF(file.getInputStream().readAllBytes());
+				//PDDocument pdfDocument = Loader.loadPDF(file.getInputStream().readAllBytes());
+				PDDocument pdfDocument = PDDocument.load(file.getInputStream().readAllBytes());
+
 				PDFTextStripper pdfTextStripper = new PDFTextStripper();
 				text = pdfTextStripper.getText(pdfDocument);
 			} else if (fileName.equalsIgnoreCase("doc") || fileName.equalsIgnoreCase("docx")) {

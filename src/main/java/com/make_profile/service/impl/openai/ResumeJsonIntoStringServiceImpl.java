@@ -187,8 +187,7 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 						String experienceYearStartDate = getValue("experienceYearStartDate", experience);
 						String experienceYearEndDate = getValue("experienceYearEndDate", experience);
 						String currentlyWorking = getValue("currentlyWorking", experience);
-						List<String> responsibilities = getListFromString(
-								experience.get("Responsibilities").toString());
+						String responsibilities = getValue("Responsibilities", experience);
 
 						if (Objects.nonNull(companyName) && !companyName.isEmpty()) {
 							candidateExperienceDto.setCompanyName(companyName);

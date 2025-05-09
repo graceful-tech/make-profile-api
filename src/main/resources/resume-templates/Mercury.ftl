@@ -114,9 +114,10 @@
         </div>
      </#if> 
      
-     <#if summary?has_content>
+     
         <div class="content-wrapper">
             <div class="left-column">
+       <#if summary?has_content>
                 <div class="section">
                     <h2>Professional Summary</h2>
                     <p>${summary}</p>
@@ -132,10 +133,10 @@
                      <#if experience.experienceYearEndDate?has_content> ${experience.experienceYearEndDate}
                      <#else> Present </#if>)
                       </p>
-                      <#if  experience?? && experience.responsibilities?? && experience.responsibilities?size gt 0>
+                      <#if  experience?? && experience.responsibilities?? && experience.responsibilities?trim?length gt 0>
                         <ul>
-                            <#list experience.responsibilities as item>
-                                <li>${item}</li>
+                            <#list experience.responsibilities?split(",") as item>
+                                <li>${item?trim}</li>
                             </#list>
                         </ul>
                        </#if>  
@@ -145,32 +146,35 @@
             
       </div>  
             <div class="right-column">
+            
+            <#if skills?? && skills?trim?length gt 0>
                 <div class="section">
                     <h2>Technical Skills</h2>
                     <ul>
-                        <#list skills as skill>
-                            <li>${skill}</li>
+                        <#list skills?split(",") as skill>
+                            <li>${skill?trim}</li>
                         </#list>
                     </ul>
                 </div>
+            </#if>   
             
-         <#if softSkills?? && softSkills?size gt 0>
+         <#if softSkills?? && softSkills?trim?length gt 0>
                 <div class="section">
                     <h2>Soft Skills</h2>
                     <ul>
-                        <#list softSkills as skill>
-                            <li>${skill}</li>
+                        <#list softSkills?split(",") as skill>
+                            <li>${skill?trim}</li>
                         </#list>
                     </ul>
                 </div>
            </#if>
            
-          <#if competencies?? && competencies?size gt 0>
+          <#if competencies?? && competencies?trim?length gt 0>
                 <div class="section">
                     <h2>Core Competencies</h2>
                     <ul>
-                        <#list competencies as comp>
-                            <li>${comp}</li>
+                        <#list competencies?split(",") as comp>
+                            <li>${comp?trim}</li>
                         </#list>
                     </ul>
                 </div>
@@ -193,9 +197,19 @@
                 </div>
           </#if>
           
-         <#if experiences?? && experiences?size gt 0>
+          <#assign hasProjects = false>
+					<#if experiences?? && experiences?size gt 0>
+					    <#list experiences as exp>
+					       <#if exp.projects?? && exp.projects?size gt 0>
+					          <#assign hasProjects = true>
+					        <#break>
+					    </#if>
+					  </#list>
+					</#if>
+          
+         <#if hasProjects>
              <div class="section">
-            <h2>Projects</h2>
+                 <h2>Projects</h2>
          <#list experiences as exp>
             <#if exp.projects?? && exp.projects?size gt 0>
                 <#list exp.projects as proj>

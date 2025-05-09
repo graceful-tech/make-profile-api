@@ -19,7 +19,7 @@ public class CandidateExperienceDto {
 
 	private Boolean isDeleted;
 
-	private List<String> Responsibilities;
+	private String Responsibilities;
 
 	private List<CandidateProjectDetailsDto> projects;
 
@@ -87,11 +87,11 @@ public class CandidateExperienceDto {
 		this.isDeleted = isDeleted;
 	}
 
-	public List<String> getResponsibilities() {
+	public String getResponsibilities() {
 		return Responsibilities;
 	}
 
-	public void setResponsibilities(List<String> responsibilities) {
+	public void setResponsibilities(String responsibilities) {
 		Responsibilities = responsibilities;
 	}
 

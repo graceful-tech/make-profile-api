@@ -25,7 +25,7 @@ public class CandidateDto extends BaseDto {
 
 	private String languagesKnown;
 
-	private Boolean isFresher;
+	private boolean isFresher;
 
 	private String skills;
 
@@ -60,6 +60,8 @@ public class CandidateDto extends BaseDto {
 	private String summary;
 
 	private String careerObjective;
+
+	private String resumeFormatName;
 
 	public Long getId() {
 		return id;
@@ -117,12 +119,8 @@ public class CandidateDto extends BaseDto {
 		this.gender = gender;
 	}
 
-	public Boolean getFresher() {
-		return isFresher;
-	}
-
-	public void setFresher(Boolean fresher) {
-		isFresher = fresher;
+	public void setFresher(boolean isFresher) {
+		this.isFresher = isFresher;
 	}
 
 	public List<CandidateExperienceDto> getExperiences() {
@@ -275,6 +273,14 @@ public class CandidateDto extends BaseDto {
 
 	public void setCoreCompentencies(String coreCompentencies) {
 		this.coreCompentencies = coreCompentencies;
+	}
+
+	public String getResumeFormatName() {
+		return resumeFormatName;
+	}
+
+	public void setResumeFormatName(String resumeFormatName) {
+		this.resumeFormatName = resumeFormatName;
 	}
 
 }

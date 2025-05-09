@@ -173,8 +173,7 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 						String experienceYearStartDate = getValue("experienceYearStartDate", experience);
 						String experienceYearEndDate = getValue("experienceYearEndDate", experience);
 						String currentlyWorking = getValue("currentlyWorking", experience);
-						List<String> responsibilities = getListFromString(
-								experience.get("Responsibilities").toString());
+						String responsibilities = getValue("Responsibilities", experience);
 
 						if (Objects.nonNull(companyName) && !companyName.isEmpty()) {
 							candidateExperienceDto.setCompanyName(companyName);
@@ -372,10 +371,10 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 			if (Objects.nonNull(address) && !address.isEmpty()) {
 				candidateDto.setAddress(address);
 			}
-//			
-//			if (Objects.nonNull(Language) && !Language.isEmpty()) {
-//			candidateDto.setLanguagesKnown(getListFromString(Language));
-//			}
+
+			if (Objects.nonNull(Language) && !Language.isEmpty()) {
+				candidateDto.setLanguagesKnown(Language);
+			}
 
 			if (Objects.nonNull(gender) && !gender.isEmpty()) {
 				candidateDto.setGender(gender);
@@ -388,16 +387,16 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 			candidateDto.setSummary(summary);
 			candidateDto.setCareerObjective(careerObjective);
 
-//			if (Objects.nonNull(skills) && !skills.isEmpty()) {
-//			candidateDto.setSkills(getListFromString(skills));
-//			}
+			if (Objects.nonNull(skills) && !skills.isEmpty()) {
+				candidateDto.setSkills(skills);
+			}
 
-//			if (Objects.nonNull(softSkills) && !softSkills.isEmpty()) {
-//			candidateDto.setSoftSkills(getListFromString(softSkills));
-//			}
-//			if (Objects.nonNull(coreCompentencies) && !coreCompentencies.isEmpty()) {
-//			candidateDto.setCoreCompentencies(getListFromString(coreCompentencies));
-//			}
+			if (Objects.nonNull(softSkills) && !softSkills.isEmpty()) {
+				candidateDto.setSoftSkills(softSkills);
+			}
+			if (Objects.nonNull(coreCompentencies) && !coreCompentencies.isEmpty()) {
+				candidateDto.setCoreCompentencies(coreCompentencies);
+			}
 
 		} catch (Exception e) {
 			logger.debug("Service :: jsonToString :: Exception " + e.getMessage());
