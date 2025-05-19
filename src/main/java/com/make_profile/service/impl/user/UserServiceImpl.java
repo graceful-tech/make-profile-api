@@ -24,9 +24,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	PasswordEncryptor passwordEncoder;
 
-	@Autowired
-	LoginController loginController;
-
 	@Override
 	public boolean createUser(UserDto userDto) {
 		logger.debug("UserServiceImpl :: createUser :: Entered");
