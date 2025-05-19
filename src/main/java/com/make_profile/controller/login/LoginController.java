@@ -41,11 +41,8 @@ public class LoginController extends BaseController {
 		logger.debug("LoginController :: login :: Entered");
 		UserDto userDto = null;
 		try {
-			Authentication authentication = authManager.authenticate(
-					new UsernamePasswordAuthenticationToken(loginDto.getMobileNumber(), loginDto.getPassword()));
-			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-			String token = jwtUtil.generateToken(userDetails);
 			userDto = loginService.findByMobileNumber(loginDto);
+			String token = jwtUtil.generateToken(userDto.getUserName());
 			userDto.setToken(token);
 
 			logger.debug("LoginController :: userLogin :: Exited");
@@ -55,6 +52,24 @@ public class LoginController extends BaseController {
 		}
 		return new ResponseEntity<>(buildResponse(CommonConstants.PM_0005), HttpStatus.BAD_REQUEST);
 	}
+
+//	public String refreshToken(UserDto loginDto) {
+//		logger.debug("LoginController :: login :: Entered");
+//		UserDto userDto = null;
+//		try {
+//			Authentication authentication = authManager.authenticate(
+//					new UsernamePasswordAuthenticationToken(loginDto.getMobileNumber(), loginDto.getPassword()));
+//			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//			String token = jwtUtil.generateToken(userDetails);
+//			logger.debug("LoginController :: userLogin :: Exited");
+//			return token;
+//
+//		} catch (Exception e) {
+//
+//			logger.debug("LoginController :: userLogin :: Error");
+//		}
+//		return null;
+//	}
 
 //	@PostMapping("/google-login")
 //	public ResponseEntity<?> googleuserCreate(@RequestBody MakeProfileUserDto makeProfileUserDto) {

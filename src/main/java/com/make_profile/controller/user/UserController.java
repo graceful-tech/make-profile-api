@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,4 +51,24 @@ public class UserController extends BaseController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 
 	}
+	@PutMapping("/update_user/{userName}")
+	public ResponseEntity<?> updateUser(@RequestBody UserDto userDto, @RequestHeader("username") String userName)
+			throws Exception {
+		boolean status=false;
+		logger.debug("Controller :: updateUser :: Entered");
+		userDto.setUserName(userName);
+		status = userService.updateUser(userDto, userName);
+
+		logger.debug("Controller :: updateUser :: Exited");
+		
+		if (!status) {
+			logger.debug("Controller :: updateUser :: Error");
+			return new ResponseEntity<>(buildResponse(CommonConstants.PM_0003), HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(buildResponse(CommonConstants.PM_0004), HttpStatus.OK);
+	
+
+		
+	
+}
 }

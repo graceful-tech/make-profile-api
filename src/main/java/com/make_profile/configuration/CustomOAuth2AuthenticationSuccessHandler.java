@@ -39,8 +39,6 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 
 		OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
 
-//		OAuth2AuthorizedClient authorizedClient = authorizedClientService
-//				.loadAuthorizedClient(oauth2Token.getAuthorizedClientRegistrationId(), oauth2Token.getName());
 
 		String username = (String) oauth2Token.getPrincipal().getAttributes().get("name");
 

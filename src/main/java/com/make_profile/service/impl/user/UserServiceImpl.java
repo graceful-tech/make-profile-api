@@ -5,9 +5,10 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.make_profile.configuration.PasswordEncryptor;
+import com.make_profile.controller.login.LoginController;
 import com.make_profile.dto.user.UserDto;
 import com.make_profile.entity.user.UserEntity;
 import com.make_profile.repository.user.UserRepository;
@@ -18,10 +19,13 @@ public class UserServiceImpl implements UserService {
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
-	private UserRepository userRepository;
+	UserRepository userRepository;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	PasswordEncryptor passwordEncoder;
+
+	@Autowired
+	LoginController loginController;
 
 	@Override
 	public boolean createUser(UserDto userDto) {
@@ -29,13 +33,13 @@ public class UserServiceImpl implements UserService {
 		boolean status = false;
 		UserEntity makeProfileUserEntity = null;
 		try {
-			userRepository.findByMobileNumberAndEmail(userDto.getMobileNumber(), userDto.getEmail());
+//			userRepository.findByMobileNumberAndEmail(userDto.getMobileNumber(), userDto.getEmail());
 			if (userRepository.findByMobileNumberAndEmail(userDto.getMobileNumber(), userDto.getEmail()) == 0) {
 				status = true;
 				if (userDto.getSignInAccess() == null) {
 					userDto.setSignInAccess("LoginUser");
 				}
-				userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+				userDto.setPassword(passwordEncoder.encryptPassword(userDto.getPassword()));
 				makeProfileUserEntity = convertUserDtoToUserEntity(userDto);
 				userRepository.save(makeProfileUserEntity);
 			}
@@ -81,13 +85,15 @@ public class UserServiceImpl implements UserService {
 //	}
 	@Override
 	public UserDto getUserByUserName(String userName) {
-		
+
 		try {
-			
-			UserEntity userEntity =	userRepository.findByUserName(userName);
-			
+
+			UserEntity userEntity = userRepository.findByUserName(userName);
+			String decrypt = passwordEncoder.decryptPassword(userEntity.getPassword());
+			userEntity.setPassword(decrypt);
+
 			return convertUserEntityToUserDto(userEntity);
-			
+
 		} catch (Exception e) {
 			return null;
 		}
@@ -107,7 +113,8 @@ public class UserServiceImpl implements UserService {
 				userEntity.setName(userName);
 				userEntity.setEmail(email);
 				userEntity.setSignInAccess("google");
-				userEntity.setPassword((passwordEncoder.encode(userName)));
+				userEntity.setPassword(passwordEncoder.encryptPassword(userName));
+				userEntity.setUserName(userName);
 				makeProfileUserEntity = userRepository.save(userEntity);
 				userDto = convertUserEntityToUserDto(makeProfileUserEntity);
 			} else {
@@ -123,9 +130,9 @@ public class UserServiceImpl implements UserService {
 		logger.debug("UserServiceImpl :: createGoogleUser :: Exited");
 		return userDto;
 	}
-	
+
 	public UserDto convertUserEntityToUserDto(UserEntity userEntity) {
-		UserDto userDetails= new UserDto();
+		UserDto userDetails = new UserDto();
 		userDetails.setEmail(userEntity.getEmail());
 		userDetails.setName(userEntity.getName());
 		userDetails.setMobileNumber(userEntity.getMobileNumber());
@@ -135,9 +142,9 @@ public class UserServiceImpl implements UserService {
 		userDetails.setSignInAccess(userEntity.getSignInAccess());
 		return userDetails;
 	}
-	
+
 	public UserEntity convertUserDtoToUserEntity(UserDto userDto) {
-		UserEntity userDetails= new UserEntity();
+		UserEntity userDetails = new UserEntity();
 		userDetails.setEmail(userDto.getEmail());
 		userDetails.setName(userDto.getName());
 		userDetails.setMobileNumber(userDto.getMobileNumber());
@@ -148,6 +155,26 @@ public class UserServiceImpl implements UserService {
 		return userDetails;
 	}
 
+	@Override
+	public boolean updateUser(UserDto userDto, String userName) {
+		boolean status = false;
+		UserEntity userEntity = null;
+		try {
+
+			status = true;
+			userEntity = convertUserDtoToUserEntity(userDto);
+			userEntity.setPassword(passwordEncoder.encryptPassword(userEntity.getPassword()));
+
+			userRepository.save(userEntity);
+//				String refreshToken = loginController.refreshToken(userDto);
+
+			userEntity = null;
+			return status;
+		} catch (Exception e) {
+
+			return status;
+		}
+
+	}
 
 }
-

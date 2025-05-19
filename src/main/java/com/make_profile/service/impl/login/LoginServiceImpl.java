@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.make_profile.configuration.PasswordEncryptor;
 import com.make_profile.dto.login.LoginDto;
 import com.make_profile.dto.user.UserDto;
 import com.make_profile.entity.user.UserEntity;
@@ -26,6 +28,9 @@ public class LoginServiceImpl implements LoginService {
 	@Autowired
 	JwtUtil jwtUtil;
 
+	@Autowired
+	PasswordEncryptor passwordEncoder;
+
 	@Override
 	public UserDto findByMobileNumber(LoginDto loginDto) {
 		logger.debug("LoginServiceImpl :: findByMobileNumber :: Exited");
@@ -33,7 +38,10 @@ public class LoginServiceImpl implements LoginService {
 		UserEntity userEntity = null;
 		try {
 			userEntity = userRepository.findByMobileNumber(loginDto.getMobileNumber());
-			userDto = modelMapper.map(userEntity, UserDto.class);
+			if (loginDto.getMobileNumber().equals(userEntity.getMobileNumber())
+					&& loginDto.getPassword().equals(passwordEncoder.decryptPassword(userEntity.getPassword()))) {
+				userDto = modelMapper.map(userEntity, UserDto.class);
+			}
 		} catch (Exception e) {
 			logger.debug("LoginServiceImpl :: userLogin :: findByMobileNumber" + e.getMessage());
 		}

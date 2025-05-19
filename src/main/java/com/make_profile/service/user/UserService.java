@@ -12,4 +12,6 @@ public interface UserService {
 
 	UserDto getUserByUserName(String userName);
 
+	boolean updateUser(UserDto userDto, String userName);
+
 }

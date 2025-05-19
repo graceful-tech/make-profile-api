@@ -22,15 +22,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String number) throws UsernameNotFoundException {
 		UserEntity user = null;
-		user = userRepository.findByMobileNumber(number);
-		if (user != null) {
-			return new User(user.getMobileNumber(), user.getPassword(),
-					Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
-		} else {
-			user = userRepository.findByName(number);
+//		user = userRepository.findByMobileNumber(number);
+//		if (user != null) {
+//			return new User(user.getMobileNumber(), user.getPassword(),
+//					Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
+//		} else {
+		user = userRepository.findByUserName(number);
+		if (user.getSignInAccess().equals("google")) {
 			return new User(user.getName(), user.getPassword(),
 					Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
 		}
+		return new User(user.getMobileNumber(), user.getPassword(),
+				Collections.singleton(new SimpleGrantedAuthority("USER_ROLE")));
+
 	}
 
 }

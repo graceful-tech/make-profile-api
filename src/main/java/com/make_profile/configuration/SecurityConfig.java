@@ -56,13 +56,13 @@ public class SecurityConfig {
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailService());
-		authProvider.setPasswordEncoder(passwordEncoder());
+		authProvider.setPasswordEncoder(passwordEncryptor());
 		return authProvider;
 	}
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+	public PasswordEncryptor passwordEncryptor() {
+		return new PasswordEncryptor(); // Register PasswordEncryptor as a Spring Bean
 	}
 
 	@Bean
