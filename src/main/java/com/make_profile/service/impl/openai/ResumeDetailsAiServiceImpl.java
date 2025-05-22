@@ -3,6 +3,7 @@ package com.make_profile.service.impl.openai;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.apache.commons.io.FilenameUtils;
@@ -10,6 +11,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,9 @@ public class ResumeDetailsAiServiceImpl implements ResumeDetailsAiService {
 	@Autowired
 	CandidatesRepository candidatesRepository;
 
+	@Autowired
+	ModelMapper modelMapper;
+
 	int count = 3;
 
 	@Override
@@ -64,35 +69,32 @@ public class ResumeDetailsAiServiceImpl implements ResumeDetailsAiService {
 				message = convertFileToText(resume);
 			}
 
-			String candidateDto = " {\r\n" + "  \"id\": \"\",\r\n" + "  \"name\": \"\",\r\n"
-					+ "  \"mobileNumber\": \"\",\r\n" + "  \"alternateMobileNumber\": \"\",\r\n"
-					+ "  \"email\": \"\",\r\n" + "  \"nationality\": \"\",\r\n" + "  \"gender\": \"\",\r\n"
-					+ "  \"languagesKnown\": [],\r\n" + "  \"isFresher\": \"\",\r\n" + "  \"skills\": [],\r\n"
-					+ "  \"linkedIn\": \"\",\r\n" + "  \"dob\": \"\",\r\n" + "  \"address\": \"\",\r\n"
-					+ "  \"maritalStatus\": \"\",\r\n" + "  \"summary\":\"\",\r\n" + "  \"careerObjective:\"\";\r\n"
-					+ "  \"experiences\": [\r\n" + "    {\r\n" + "      \"id\": \"\",\r\n"
-					+ "      \"companyName\": \"\",\r\n" + "      \"role\": \"\",\r\n"
-					+ "      \"experienceYearStartDate\": yyyy-MM-dd,\r\n"
-					+ "      \"experienceYearEndDate\": yyyy-MM-dd,\r\n" + "      \"currentlyWorking\": \"\",\r\n"
-					+ "      \"isDeleted\": \"\",\r\n" + "      \"Responsibilities\": [],\r\n"
-					+ "      \"projects\": [\r\n" + "        {\r\n"
-					+ "          // \"CandidateProjectDetailsDto\" placeholder\r\n" + "        }\r\n" + "      ]\r\n"
-					+ "    }\r\n" + "  ],\r\n" + "  \"qualification\": [\r\n" + "    {\r\n" + "      \"id\": \"\",\r\n"
-					+ "      \"instutionName\": \"\",\r\n" + "      \"department\": \"\",\r\n"
-					+ "      \"qualificationStartYear\": yyyy-MM-dd,\r\n"
-					+ "      \"qualificationEndYear\": yyyy-MM-dd,\r\n" + "      \"percentage\": \"\",\r\n"
-					+ "      \"isDeleted\": \"\",\r\n" + "      \"fieldOfStudy\": \"\"\r\n" + "    }\r\n" + "  ],\r\n"
-					+ "  \"certificates\": [\r\n" + "    {\r\n" + "      \"id\": \"\",\r\n"
-					+ "      \"courseName\": \"\",\r\n" + "      \"courseStartDate\": yyyy-MM-dd,\r\n"
-					+ "      \"courseEndDate\": yyyy-MM-dd,\r\n" + "      \"isDeleted\": \"\"\r\n" + "    }\r\n"
-					+ "  ],\r\n" + "  \"achievements\": [\r\n" + "    {\r\n" + "      \"id\": \"\",\r\n"
-					+ "      \"achievementsName\": \"\",\r\n" + "      \"achievementsDate\": yyyy-MM-dd,\r\n"
-					+ "      \"isDeleted\": \"\"\r\n" + "    }\r\n" + "  ],\r\n" + "  \"candidateLogo\": \"\",\r\n"
-					+ "  \"softSkills\": [],\r\n" + "  \"coreCompentencies\": [],\r\n" + "  \"score\": \"\",\r\n"
-					+ "  \"matches\": \"\",\r\n" + "  \"collegeProject\": [\r\n" + "    {\r\n"
-					+ "      \"id\": \"\",\r\n" + "      \"collegeProjectName\": \"\",\r\n"
-					+ "      \"collegeProjectSkills\": [],\r\n" + "      \"collegeProjectDescription\": \"\",\r\n"
-					+ "      \"isDeleted\": \"\"\r\n" + "    }\r\n" + "  ]\r\n" + "}";
+			String candidateDto = " { \r\n" + "  id: \"\", \r\n" + "  name: \"\", \r\n" + "  mobileNumber: \"\", \r\n"
+					+ "  email: \"\", \r\n" + "  nationality: \"\", \r\n" + "  gender: \"\", \r\n"
+					+ "  languagesKnown: \"\", \r\n" + "  isFresher: \"\", \r\n" + "  skills: \"\", \r\n"
+					+ "  linkedIn: \"\", \r\n" + "  dob: \"\", \r\n" + "  address: \"\", \r\n"
+					+ "  maritalStatus: \"\", \r\n" + "  summary:\"\", \r\n" + "  careerObjective:\"\"; \r\n"
+					+ "  experiences: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n" + "	  companyName: \"\", \r\n"
+					+ "	  role: \"\", \r\n" + "	  experienceYearStartDate: \"\", \r\n"
+					+ "	  experienceYearEndDate: \"\", \r\n" + "	  currentlyWorking: false, \r\n"
+					+ "	  isDeleted: false, \r\n" + "	  Responsibilities: \"\", \r\n" + "	  projects: [ \r\n"
+					+ "		{ \r\n" + "			projectName: \"\",\r\n" + "			projectSkills: \"\",\r\n"
+					+ "			projectRole \"\",\r\n" + "			projectDescription:\"\";\r\n"
+					+ "			isProjectDeleted: false\r\n" + "		} \r\n" + "	  ] \r\n" + "	} \r\n"
+					+ "  ], \r\n" + "  qualification: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"
+					+ "	  instutionName: \"\", \r\n" + "	  department: \"\", \r\n"
+					+ "	  qualificationStartYear: \"\", \r\n" + "	  qualificationEndYear: \"\", \r\n"
+					+ "	  percentage: \"\", \r\n" + "	  isDeleted: false, \r\n" + "	  fieldOfStudy: \"\" \r\n"
+					+ "	} \r\n" + "  ], \r\n" + "  certificates: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"
+					+ "	  courseName: \"\", \r\n" + "	  courseStartDate: \"\", \r\n" + "	  courseEndDate: \"\", \r\n"
+					+ "	  isDeleted: \"\" \r\n" + "	} \r\n" + "  ], \r\n" + "  achievements: [ \r\n" + "	{ \r\n"
+					+ "	  id: \"\", \r\n" + "	  achievementsName: \"\", \r\n" + "	  achievementsDate: \"\", \r\n"
+					+ "	  isDeleted: false \r\n" + "	} \r\n" + "  ], \r\n" + "  candidateLogo: \"\", \r\n"
+					+ "  softSkills: \"\", \r\n" + "  coreCompentencies: \"\", \r\n" + "  score: \"\", \r\n"
+					+ "  matches: false, \r\n" + "  collegeProject: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"
+					+ "	  collegeProjectName: \"\", \r\n" + "	  collegeProjectSkills: \"\", \r\n"
+					+ "	  collegeProjectDescription: \"\", \r\n" + "	  isDeleted: false \r\n" + "	} \r\n"
+					+ "  ] \r\n" + "} ";
 
 			String query = " I will provide my resume content below along with an example DTO format above.\r\n"
 					+ "Please:\r\n" + "\r\n"
@@ -137,12 +139,24 @@ public class ResumeDetailsAiServiceImpl implements ResumeDetailsAiService {
 
 			responseCandidateDto.setCreatedUserName(userName);
 
-			CandidateEntity candidateByUserName = candidatesRepository.getCandidateByUserName(userName);
+		//	CandidateEntity candidateByUserName = candidatesRepository.getCandidateByUserName(userName);
 
-			if (Objects.isNull(candidateByUserName)) {
-				createCandidate = candidateService.createCandidate(responseCandidateDto);
-			}
+      		if (Objects.nonNull(responseCandidateDto)) {
+ 			createCandidate = candidateService.createCandidate(responseCandidateDto, userName);
+ 			} 
+			
+	//		else {
+//				responseCandidateDto.setId(candidateByUserName.getId());
+//
+//				if (Objects.isNull(responseCandidateDto.getMobileNumber())
+//						|| responseCandidateDto.getMobileNumber().isEmpty()) {
+//					responseCandidateDto.setMobileNumber(candidateByUserName.getMobileNumber());
+//				}
+//				createCandidate = candidateService.createCandidate(responseCandidateDto);
+//			}
 
+			 
+		//	candidateByUserName = null;
 			responseCandidateDto = null;
 
 		} catch (Exception e) {
@@ -169,7 +183,8 @@ public class ResumeDetailsAiServiceImpl implements ResumeDetailsAiService {
 			String fileName = FilenameUtils.getExtension(file.getOriginalFilename());
 
 			if (fileName.equalsIgnoreCase("pdf")) {
-				//PDDocument pdfDocument = Loader.loadPDF(file.getInputStream().readAllBytes());
+				// PDDocument pdfDocument =
+				// Loader.loadPDF(file.getInputStream().readAllBytes());
 				PDDocument pdfDocument = PDDocument.load(file.getInputStream().readAllBytes());
 
 				PDFTextStripper pdfTextStripper = new PDFTextStripper();
@@ -184,8 +199,12 @@ public class ResumeDetailsAiServiceImpl implements ResumeDetailsAiService {
 		} catch (Exception e) {
 			logger.error("Service :: convertFileToText :: Exception :: " + e.getMessage());
 		}
-		logger.debug("Controller :: convertFileToText :: Exited");
+		logger.debug("Service :: convertFileToText :: Exited");
 		return text;
 	}
 
-}
+	 
+	}
+
+	 
+

@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,47 +58,50 @@ public class CandidatesServiceimpl implements CandidateService {
 	EnvironmentRepository environmentRepository;
 
 	@Override
-	public CandidateDto createCandidate(CandidateDto candidateDto) {
+	public CandidateDto createCandidate(CandidateDto candidateDto, String Username) {
 		logger.debug("Service :: createResumeTemplate :: Entered");
 
 		CandidateDto candidateResponseDto = null;
 		CandidateEntity candidateEntity = new CandidateEntity();
-		CandidateHistoryEntity candidateHistoryEntity = new CandidateHistoryEntity();
+		CandidateEntity candidateByUserName = null;
 
 		try {
-			candidateEntity = modelMapper.map(candidateDto, CandidateEntity.class);
-			candidateEntity.setCreatedUserName(candidateDto.getCreatedUserName());
 
-			if (Objects.nonNull(candidateDto.getId())) {
-				if (Objects.nonNull(candidateDto.getCreatedUser())) {
-					candidateEntity.setCreatedUser(candidateDto.getCreatedUser());
+			candidateByUserName = candidatesRepository.getCandidateByUserName(Username);
+
+			if (Objects.nonNull(candidateByUserName)) {
+
+				if (Objects.isNull(candidateDto.getMobileNumber())) {
+					candidateDto.setMobileNumber(candidateByUserName.getMobileNumber());
 				}
-				candidateEntity.setCreatedDate(LocalDateTime.now());
+				candidateEntity = modelMapper.map(candidateDto, CandidateEntity.class);
+				candidateEntity.setId(candidateByUserName.getId());
+				candidateEntity.setCreatedUserName(Username);
 			} else {
+				candidateEntity = modelMapper.map(candidateDto, CandidateEntity.class);
+				candidateEntity.setCreatedUserName(Username);
+			}
+
+			if (Objects.nonNull(candidateByUserName)) {
+
 				if (Objects.nonNull(candidateDto.getCreatedUser())) {
 					candidateEntity.setModifiedUser(candidateDto.getCreatedUser());
 				}
 				candidateEntity.setModifiedDate(LocalDateTime.now());
+			} else {
+				candidateEntity.setCreatedUser(candidateDto.getCreatedUser());
 			}
 
 			CandidateEntity ResponceCandidateEntity = candidatesRepository.save(candidateEntity);
 
-			// To save the candidate in history
-			candidateHistoryEntity = modelMapper.map(candidateDto, CandidateHistoryEntity.class);
-			candidateHistoryEntity.setCandidateId(ResponceCandidateEntity.getId());
-			candidateHistoryRepository.save(candidateHistoryEntity);
-
-//			UsedTemplateEntity usedTemplate = new UsedTemplateEntity();
-//			usedTemplate.setCandidateId(candidateEntity.getId());
-//			UsedTemplateEntity usedTemplateEntity = usedTemplateRepository.save(usedTemplate);
-//			templateService.saveCandidateDataInTemplate(usedTemplateEntity, candidateDto);
+			// save candidate in history
+			saveCandidateInHistory(candidateDto, Username, ResponceCandidateEntity.getId());
 
 			candidateResponseDto = modelMapper.map(ResponceCandidateEntity, CandidateDto.class);
 
-//			usedTemplate = null;
 			ResponceCandidateEntity = null;
 			candidateEntity = null;
-			candidateHistoryEntity = null;
+			candidateByUserName = null;
 
 		} catch (Exception e) {
 			logger.debug("Service :: createResumeTemplate :: Exception" + e.getMessage());
@@ -185,7 +189,70 @@ public class CandidatesServiceimpl implements CandidateService {
 		} catch (Exception e) {
 			logger.error("Service :: getCandidateImage :: Exception :: " + e.getMessage());
 		}
+		logger.debug("Service :: getCandidateImage :: Exited");
 		return byteArray;
+
+	}
+
+	public void saveCandidateInHistory(CandidateDto candidateDto, String Username, Long responseId) {
+		logger.debug("Service :: saveCandidateInHistory :: Entered");
+
+		CandidateHistoryEntity candidateHistoryEntity = new CandidateHistoryEntity();
+		try {
+			if (Objects.nonNull(candidateDto.getExperiences())
+					&& !CollectionUtils.isEmpty(candidateDto.getExperiences())) {
+				candidateDto.getExperiences().forEach(exp -> {
+					exp.setId(null);
+					if (Objects.nonNull(exp.getProjects()) && !CollectionUtils.isEmpty(exp.getProjects())) {
+						exp.getProjects().forEach(pro -> {
+							pro.setId(null);
+						});
+					}
+				});
+			}
+
+			if (Objects.nonNull(candidateDto.getCollegeProject())
+					&& !CollectionUtils.isEmpty(candidateDto.getCollegeProject())) {
+				candidateDto.getCollegeProject().forEach(collegeProject -> {
+					collegeProject.setId(null);
+				});
+			}
+
+			if (Objects.nonNull(candidateDto.getCertificates())
+					&& !CollectionUtils.isEmpty(candidateDto.getCertificates())) {
+				candidateDto.getCertificates().forEach(cer -> {
+					cer.setId(null);
+				});
+			}
+
+			if (Objects.nonNull(candidateDto.getQualification())
+					&& !CollectionUtils.isEmpty(candidateDto.getQualification())) {
+				candidateDto.getQualification().forEach(qua -> {
+					qua.setId(null);
+				});
+			}
+
+			if (Objects.nonNull(candidateDto.getAchievements())
+					&& !CollectionUtils.isEmpty(candidateDto.getAchievements())) {
+				candidateDto.getAchievements().forEach(ach -> {
+					ach.setId(null);
+				});
+			}
+
+			// To save the candidate in history
+			candidateHistoryEntity = modelMapper.map(candidateDto, CandidateHistoryEntity.class);
+
+			candidateHistoryEntity.setCreatedUserName(Username);
+			candidateHistoryEntity.setCreatedUser(candidateDto.getCreatedUser());
+			candidateHistoryEntity.setCandidateId(responseId);
+			candidateHistoryEntity.setId(null);
+
+			candidateHistoryRepository.save(candidateHistoryEntity);
+
+		} catch (Exception e) {
+			logger.error("Service :: saveCandidateInHistory :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: saveCandidateInHistory :: Exited");
 
 	}
 

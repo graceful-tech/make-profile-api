@@ -43,7 +43,7 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 
 		try {
 
-			candidateDto.setIsFresher(false);
+			candidateDto.setFresher(false);
 
 			JSONObject jSONObject = new JSONObject(jsonObject.toString());
 			if (jSONObject.has("resume")) {
@@ -140,12 +140,11 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 						}
 
 						if (Objects.nonNull(qualificationStartYear) && !qualificationStartYear.isEmpty()) {
-							candidateQualificationDto
-									.setQualificationStartYear(LocalDate.parse(qualificationStartYear));
+							//candidateQualificationDto.setQualificationStartYear(LocalDate.parse(qualificationStartYear));
 						}
 
 						if (Objects.nonNull(qualificationEndYear) && !qualificationEndYear.isEmpty()) {
-							candidateQualificationDto.setQualificationEndYear(LocalDate.parse(qualificationEndYear));
+							//candidateQualificationDto.setQualificationEndYear(LocalDate.parse(qualificationEndYear));
 						}
 
 						if (Objects.nonNull(percentage) && !percentage.isEmpty()) {
@@ -198,11 +197,11 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 						}
 
 						if (Objects.nonNull(experienceYearStartDate) && !experienceYearStartDate.isEmpty()) {
-							candidateExperienceDto.setExperienceYearStartDate(LocalDate.parse(experienceYearStartDate));
+							//candidateExperienceDto.setExperienceYearStartDate(LocalDate.parse(experienceYearStartDate));
 						}
 
 						if (Objects.nonNull(experienceYearEndDate) && !experienceYearEndDate.isEmpty()) {
-							candidateExperienceDto.setExperienceYearEndDate(LocalDate.parse(experienceYearEndDate));
+							//candidateExperienceDto.setExperienceYearEndDate(LocalDate.parse(experienceYearEndDate));
 						}
 
 						if (Objects.nonNull(currentlyWorking) && !currentlyWorking.isEmpty()) {
@@ -256,7 +255,7 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 				}
 				candidateDto.setExperiences(experienceList);
 			} else {
-				candidateDto.setIsFresher(true);
+				candidateDto.setFresher(true);
 			}
 
 			if (keyFromJson(jSONObject, "certificates") != ""
@@ -280,10 +279,10 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 							certificateDto.setCourseName(courseName);
 						}
 						if (Objects.nonNull(courseStartDate) && !courseStartDate.isEmpty()) {
-							certificateDto.setCourseStartDate(LocalDate.parse(courseStartDate));
+							//certificateDto.setCourseStartDate(LocalDate.parse(courseStartDate));
 						}
 						if (Objects.nonNull(courseEndDate) && !courseEndDate.isEmpty()) {
-							certificateDto.setCourseEndDate(LocalDate.parse(courseEndDate));
+							//certificateDto.setCourseEndDate(LocalDate.parse(courseEndDate));
 						}
 						certificateDto.setIsDeleted(false);
 
@@ -316,7 +315,7 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 							achievementDto.setAchievementsName(achievementsName);
 						}
 						if (Objects.nonNull(achievementsDate) && !achievementsDate.isEmpty()) {
-							achievementDto.setAchievementsDate(LocalDate.parse(achievementsDate));
+							//achievementDto.setAchievementsDate(LocalDate.parse(achievementsDate));
 						}
 						achievementDto.setIsDeleted(false);
 

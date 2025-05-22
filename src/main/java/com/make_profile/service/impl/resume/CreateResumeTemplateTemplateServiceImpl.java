@@ -83,8 +83,8 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 				variables.put("maritalStatus", candidateDto.getMaritalStatus());
 			}
 
-			if (candidateDto.getIsFresher()) {
-				variables.put("isFresher", candidateDto.getIsFresher());
+			if (candidateDto.isFresher()) {
+				variables.put("isFresher", candidateDto.isFresher());
 			} else {
 
 				if (Objects.nonNull(candidateDto.getExperiences()) && !candidateDto.getExperiences().isEmpty()) {
@@ -284,7 +284,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 			dtoString.append("nationality=").append(candidateDto.getNationality()).append(", ");
 			dtoString.append("gender=").append(candidateDto.getGender()).append(", ");
 			dtoString.append("languagesKnown=").append(candidateDto.getLanguagesKnown()).append(", ");
-			dtoString.append("isFresher=").append(candidateDto.getIsFresher()).append(", ");
+			dtoString.append("isFresher=").append(candidateDto.isFresher()).append(", ");
 			dtoString.append("skills=").append(candidateDto.getSkills()).append(", ");
 			dtoString.append("linkedIn=").append(candidateDto.getLinkedIn()).append(", ");
 			dtoString.append("dob=").append(candidateDto.getDob()).append(", ");

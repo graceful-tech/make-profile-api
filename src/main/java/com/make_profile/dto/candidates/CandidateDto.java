@@ -119,10 +119,6 @@ public class CandidateDto extends BaseDto {
 		this.gender = gender;
 	}
 
-	public void setFresher(boolean isFresher) {
-		this.isFresher = isFresher;
-	}
-
 	public List<CandidateExperienceDto> getExperiences() {
 		return experiences;
 	}
@@ -161,14 +157,6 @@ public class CandidateDto extends BaseDto {
 
 	public void setLinkedIn(String linkedIn) {
 		this.linkedIn = linkedIn;
-	}
-
-	public Boolean getIsFresher() {
-		return isFresher;
-	}
-
-	public void setIsFresher(Boolean isFresher) {
-		this.isFresher = isFresher;
 	}
 
 	public LocalDate getDob() {
@@ -281,6 +269,14 @@ public class CandidateDto extends BaseDto {
 
 	public void setResumeFormatName(String resumeFormatName) {
 		this.resumeFormatName = resumeFormatName;
+	}
+
+	public boolean isFresher() {
+		return isFresher;
+	}
+
+	public void setFresher(boolean isFresher) {
+		this.isFresher = isFresher;
 	}
 
 }

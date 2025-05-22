@@ -9,19 +9,18 @@ import com.make_profile.entity.user.UserEntity;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-	@Query(value = "select * from make_profile.user where email = :email ", nativeQuery = true)
-	UserEntity findByEmail(String email);
+	@Query(value = "select * from user where email = :email ", nativeQuery = true)
+	UserEntity findByEmail(@Param("email") String email);
 
-	@Query(value = "select * from make_profile.user where mobile_number = :mobile_number ", nativeQuery = true)
-	UserEntity findByMobileNumber(String mobile_number);
+	UserEntity findByMobileNumber(String number);
 
-	@Query(value = "select count(id) from make_profile.user where email = :email or mobile_number = :mobileNumber ", nativeQuery = true)
-	int findByMobileNumberAndEmail(String mobileNumber, String email);
+	@Query(value = "select count(id) from user where email = :email and mobile_number = :mobileNumber ", nativeQuery = true)
+	int findByMobileNumberAndEmail(@Param("mobileNumber") String mobileNumber, @Param("email") String email);
 
-	@Query(value = "select * from make_profile.user where user_name = :name ", nativeQuery = true)
-	UserEntity findByUserName(String name);
+	@Query(value = "select * from user where user_name = :name ", nativeQuery = true)
+	UserEntity findByUserName(@Param("name") String name);
 
-	@Query(value = "select * from make_profile.user where name = :name ", nativeQuery = true)
-	UserEntity findByName(String name);
+	@Query(value = "select * from user where name = :name ", nativeQuery = true)
+	UserEntity findByName(@Param("name") String name);
 
 }

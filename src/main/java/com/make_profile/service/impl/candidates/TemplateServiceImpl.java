@@ -11,11 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.make_profile.dto.candidates.CandidateDto;
+import com.make_profile.entity.common.FieldCheckerDto;
 import com.make_profile.entity.templates.TemplateAppliedEntity;
+import com.make_profile.entity.templates.TemplateEntity;
 import com.make_profile.entity.templates.UsedTemplateEntity;
 import com.make_profile.repository.templates.TemplateAppliedRepository;
 import com.make_profile.repository.templates.TemplateRepository;
 import com.make_profile.service.candidates.TemplateService;
+
+import io.jsonwebtoken.lang.Arrays;
 
 @Service
 public class TemplateServiceImpl implements TemplateService {
@@ -139,6 +143,144 @@ public class TemplateServiceImpl implements TemplateService {
 			logger.error("Service :: saveCandidateDataInTemplate :: Exception :: " + e.getMessage());
 		}
 		logger.debug("Service :: saveCandidateDataInTemplate :: Exited");
+	}
+
+	@Override
+	public FieldCheckerDto checkResumeTemplateFields(CandidateDto candidateDto) {
+		logger.debug("Service :: checkResumeTemplateFields :: Entered");
+
+		TemplateEntity templateByName = null;
+
+		Long minSectionCount = 0L;
+
+		Long count = 0L;
+
+		Long remaningCount = 0L;
+
+		// StringBuilder sectionNames = new StringBuilder();
+		// String substring = new String();
+
+		FieldCheckerDto fieldChecker = new FieldCheckerDto();
+
+		List<String> fields = new ArrayList<>();
+
+		try {
+
+			templateByName = templateRepository.getTemplateByName(candidateDto.getResumeFormatName());
+
+			if (Objects.nonNull(templateByName)) {
+				minSectionCount = templateByName.getMinSectionCount();
+
+				if (Objects.nonNull(candidateDto.getQualification())
+						&& !CollectionUtils.isEmpty(candidateDto.getQualification())) {
+					count++;
+				}
+
+				if (Objects.nonNull(candidateDto.getSkills()) && !candidateDto.getSkills().isEmpty()) {
+					count++;
+				}
+
+				if (Objects.nonNull(candidateDto.getExperiences())
+						&& !CollectionUtils.isEmpty(candidateDto.getExperiences())) {
+					count++;
+				}
+
+				if ((Objects.nonNull(candidateDto.getSoftSkills()) && !candidateDto.getSoftSkills().isEmpty())
+						|| (Objects.nonNull(candidateDto.getCoreCompentencies())
+								&& !candidateDto.getCoreCompentencies().isEmpty())) {
+					count++;
+				}
+
+				if (Objects.nonNull(candidateDto.getCertificates())
+						&& !CollectionUtils.isEmpty(candidateDto.getCertificates())) {
+					count++;
+				}
+
+				if (Objects.nonNull(candidateDto.getAchievements())
+						&& !CollectionUtils.isEmpty(candidateDto.getAchievements())) {
+					count++;
+				}
+
+				remaningCount = minSectionCount - count;
+
+				if (remaningCount > 0) {
+					fieldChecker.setCount(remaningCount);
+				}
+
+				// for getting the Mandatory Sections
+				List<String> section = Arrays.asList(templateByName.getMandatorySectionName().split(","));
+
+				if (section.contains("experience")) {
+					if ((Objects.isNull(candidateDto.getExperiences())
+							|| CollectionUtils.isEmpty(candidateDto.getExperiences()))
+							&& candidateDto.isFresher() == false) {
+						// sectionNames.append("experience,");
+						fields.add("experience");
+					}
+				}
+
+				if (section.contains("qualification")) {
+					if (Objects.isNull(candidateDto.getQualification())
+							|| CollectionUtils.isEmpty(candidateDto.getQualification())) {
+						// sectionNames.append("qualification,");
+						fields.add("qualification");
+					}
+				}
+
+				if (section.contains("skills")) {
+					if (Objects.isNull(candidateDto.getSkills()) || candidateDto.getSkills().isEmpty()) {
+						// sectionNames.append("skills,");
+						fields.add("skills");
+					}
+				}
+
+				if (section.contains("achievements")) {
+					if (Objects.isNull(candidateDto.getAchievements())
+							|| CollectionUtils.isEmpty(candidateDto.getAchievements())) {
+						// sectionNames.append("achievements,");
+						fields.add("achievements");
+					}
+				}
+
+				if (section.contains("course")) {
+					if (Objects.isNull(candidateDto.getCertificates())
+							|| CollectionUtils.isEmpty(candidateDto.getCertificates())) {
+						// sectionNames.append("course,");
+						fields.add("course");
+					}
+				}
+
+				if (section.contains("extraSkills")) {
+					if ((Objects.isNull(candidateDto.getSoftSkills()) || candidateDto.getSoftSkills().isEmpty())
+							|| (Objects.isNull(candidateDto.getCoreCompentencies())
+									|| candidateDto.getCoreCompentencies().isEmpty())) {
+						// sectionNames.append("extraSkills,");
+						fields.add("extraSkills");
+					}
+				}
+				
+				 
+
+//				if (sectionNames != null && !sectionNames.isEmpty()) {
+//					substring = sectionNames.substring(0, sectionNames.length() - 1);
+//				}
+
+				fieldChecker.setFieldName(fields);
+
+				fields = null;
+
+				// sectionNames = null;
+				minSectionCount = null;
+				count = null;
+			}
+
+		} catch (Exception e) {
+			logger.error("Service :: checkResumeTemplateFields :: Exception :: " + e.getMessage());
+
+		}
+		logger.debug("Service :: checkResumeTemplateFields :: Exited");
+		return fieldChecker;
+
 	}
 
 }

@@ -5,7 +5,7 @@ import com.make_profile.dto.candidates.CandidateImageDto;
 
 public interface CandidateService {
 
-	CandidateDto createCandidate(CandidateDto candidateDto);
+	CandidateDto createCandidate(CandidateDto candidateDto, String username);
 
 	CandidateDto getCandidateById(String id);
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,22 +33,23 @@ public class CandidatesController {
 	HttpServletRequest httpRequest;
 
 	@PostMapping("/create")
-	public ResponseEntity<?> createCandidate(@RequestBody CandidateDto candidateDto) {
+	public ResponseEntity<?> createCandidate(@RequestBody CandidateDto candidateDto,
+			@RequestHeader("username") String username, @RequestHeader("userid") Long userid) {
 		logger.debug("Controller :: createCandidate :: Entered");
 
-		String userName = httpRequest.getHeader("username");
-		String userId = httpRequest.getHeader("userid");
-
-		if (userName != null) {
-			candidateDto.setCreatedUserName(userName);
+//		String userName = httpRequest.getHeader("username");
+//		String userId = httpRequest.getHeader("userid");
+//
+//		if (userName != null) {
+//			candidateDto.setCreatedUserName(userName);
+//		}
+		if (userid != null) {
+			candidateDto.setCreatedUser(Long.valueOf(userid));
 		}
-		if (userId != null) {
-			candidateDto.setCreatedUser(Long.valueOf(userId));
-		}
-		CandidateDto createCandidateDto = candidateService.createCandidate(candidateDto);
+		CandidateDto createCandidateDto = candidateService.createCandidate(candidateDto, username);
 
-		userName = null;
-		userId = null;
+//		userName = null;
+//		userId = null;
 
 		logger.debug("Controller :: createCandidate :: Exited");
 

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.dto.candidates.CandidateImageDto;
+import com.make_profile.dto.candidates.CandidateResumeDto;
 import com.make_profile.service.openai.MakeProfileOpenAiService;
 import com.make_profile.service.openai.ResumeDetailsAiService;
 
@@ -30,12 +31,12 @@ public class ResumeDetailsAiController {
 	ResumeDetailsAiService resumeDetailsAiService;
 
 	@PostMapping("/upload")
-	public ResponseEntity<?> getResumeDetailsFromOpenAi(@RequestParam("resume") MultipartFile resume,
-			@RequestParam("userName") String userName, @RequestHeader("userId") String userId) {
+	public ResponseEntity<?> getResumeDetailsFromOpenAi(@ModelAttribute CandidateResumeDto candidateResumeDto) {
 
 		logger.debug("Controller :: getResumeDetailsFromOpenAi :: Entered");
 
-		CandidateDto uploadResumeDetialsFromAi = resumeDetailsAiService.getUploadResumeDetialsFromAi(resume, userName);
+		CandidateDto uploadResumeDetialsFromAi = resumeDetailsAiService
+				.getUploadResumeDetialsFromAi(candidateResumeDto.getResume(), candidateResumeDto.getUsername());
 
 		logger.debug("Controller :: getResumeDetailsFromOpenAi :: Exited");
 

@@ -18,6 +18,15 @@ public class TemplateEntity {
 	@Column(nullable = true, length = 50)
 	private String templateName;
 
+	@Column(nullable = true, length = 20)
+	private Long minSectionCount;
+
+	@Column(nullable = true, length = 20)
+	private Long maxSectionCount;
+
+	@Column(nullable = true)
+	private String mandatorySectionName;
+
 	public Long getId() {
 		return id;
 	}
@@ -32,6 +41,30 @@ public class TemplateEntity {
 
 	public void setTemplateName(String templateName) {
 		this.templateName = templateName;
+	}
+
+	public Long getMinSectionCount() {
+		return minSectionCount;
+	}
+
+	public void setMinSectionCount(Long minSectionCount) {
+		this.minSectionCount = minSectionCount;
+	}
+
+	public Long getMaxSectionCount() {
+		return maxSectionCount;
+	}
+
+	public void setMaxSectionCount(Long maxSectionCount) {
+		this.maxSectionCount = maxSectionCount;
+	}
+
+	public String getMandatorySectionName() {
+		return mandatorySectionName;
+	}
+
+	public void setMandatorySectionName(String mandatorySectionName) {
+		this.mandatorySectionName = mandatorySectionName;
 	}
 
 }

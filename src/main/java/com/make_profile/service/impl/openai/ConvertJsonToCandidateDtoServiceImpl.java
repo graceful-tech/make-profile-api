@@ -42,7 +42,7 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 		CandidateDto candidateDto = new CandidateDto();
 		try {
 
-			candidateDto.setIsFresher(false);
+			candidateDto.setFresher(false);
 
 			JSONObject jSONObject = new JSONObject(jsonObject.toString());
 			if (jSONObject.has("resume")) {
@@ -240,7 +240,7 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 				}
 				candidateDto.setExperiences(experienceList);
 			} else {
-				candidateDto.setIsFresher(true);
+				candidateDto.setFresher(true);
 			}
 
 			if (keyFromJson(jSONObject, "certificates") != ""
