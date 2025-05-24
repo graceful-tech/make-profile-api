@@ -6,17 +6,15 @@ public class CandidateQualificationDto {
 
 	private Long id;
 
-	private String instutionName;
+	private String institutionName;
 
 	private String department;
 
-	private LocalDate qualificationStartYear;
+	private String qualificationStartYear;
 
-	private LocalDate qualificationEndYear;
+	private String qualificationEndYear;
 
 	private Double percentage;
-
-	private Boolean isDeleted;
 
 	private String fieldOfStudy;
 
@@ -28,12 +26,12 @@ public class CandidateQualificationDto {
 		this.id = id;
 	}
 
-	public String getInstutionName() {
-		return instutionName;
+	public String getInstitutionName() {
+		return institutionName;
 	}
 
-	public void setInstutionName(String instutionName) {
-		this.instutionName = instutionName;
+	public void setInstitutionName(String institutionName) {
+		this.institutionName = institutionName;
 	}
 
 	public String getDepartment() {
@@ -44,19 +42,19 @@ public class CandidateQualificationDto {
 		this.department = department;
 	}
 
-	public LocalDate getQualificationStartYear() {
+	public String getQualificationStartYear() {
 		return qualificationStartYear;
 	}
 
-	public void setQualificationStartYear(LocalDate qualificationStartYear) {
+	public void setQualificationStartYear(String qualificationStartYear) {
 		this.qualificationStartYear = qualificationStartYear;
 	}
 
-	public LocalDate getQualificationEndYear() {
+	public String getQualificationEndYear() {
 		return qualificationEndYear;
 	}
 
-	public void setQualificationEndYear(LocalDate qualificationEndYear) {
+	public void setQualificationEndYear(String qualificationEndYear) {
 		this.qualificationEndYear = qualificationEndYear;
 	}
 
@@ -66,14 +64,6 @@ public class CandidateQualificationDto {
 
 	public void setPercentage(Double percentage) {
 		this.percentage = percentage;
-	}
-
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
 	}
 
 	public String getFieldOfStudy() {
@@ -86,10 +76,9 @@ public class CandidateQualificationDto {
 
 	@Override
 	public String toString() {
-		return "{" + "id=" + id + ", instutionName=" + instutionName + ", department=" + department
+		return "{" + "id=" + id + ", institutionName=" + institutionName + ", department=" + department
 				+ ", qualificationStartYear=" + qualificationStartYear + ", qualificationEndYear="
-				+ qualificationEndYear + ", percentage=" + percentage + ", isDeleted=" + isDeleted + ", fieldOfStudy="
-				+ fieldOfStudy + '}';
+				+ qualificationEndYear + ", percentage=" + percentage + ", fieldOfStudy=" + fieldOfStudy + '}';
 	}
 
 }

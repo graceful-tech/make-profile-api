@@ -14,7 +14,6 @@
             margin: 0;
             padding: 0;
             width: 210mm;
-            height: 297mm;
             font-family:  Arial, sans-serif;
             font-size: 14px;
             box-sizing: border-box;
@@ -124,7 +123,7 @@
             <p class="contact-info">Phone: ${phone} | Mail: ${email} |
            
             <#if linkedin?has_content>
-            LinkedIn: linkedin.com/in/johndoe</p>
+            LinkedIn: ${linkedin}</p>
             </#if> 
                
                </p>
@@ -167,9 +166,17 @@
                    <#list experiences as exp> 
                          <#if exp.projects?? && exp.projects?size gt 0>
                                <#list exp.projects as proj>
-                                    <p><strong>Project Name:</strong>  Smart Inventory System </p>
-                                    <p><strong>Project Role:</strong> Lead Developer</p>
-                                    <p><strong>Project Description:</strong> Designed and implemented an inventory tracking system that supports multiple warehouses, real-time stock updates, and reporting dashboards.</p>
+                                
+                                <#if proj.projectName?has_content>
+                                     <p><strong>Project Name:</strong>${proj.projectName}</p>
+                                </#if>
+                                <#if proj.projectRole?has_content>  
+                                    <p><strong>Project Role:</strong>${proj.projectRole}</p>
+                                </#if>    
+                                <#if proj.projectName?has_content>     
+                                    <p><strong>Project Description:</strong>${proj.projectDescription}</p>
+                                </#if>  
+                                    
                                </#list> 
                           </#if>   
                      </#list>                
@@ -177,11 +184,18 @@
            </#if>  
            
            
-           <#if Certificates?? && Certificates?size gt 0>
+           <#if certificates?? && certificates?size gt 0>
                 <div class="section">
                     <h2>Certificates</h2>
-                        <#list experiences as exp> 
-                            <div class="certificates"><strong><a>${certificate.name}</a></strong>&nbsp;&nbsp;${certificate.year}</div>
+                        <#list certificates as certificate> 
+                            <div class="certificates">
+                            
+                            <strong><a>${certificate.courseName}</a></strong>
+                            &nbsp;&nbsp;
+                       
+                            ${certificate.courseStartDate}</div>
+                            
+                            
                         </#list>    
                  </div>  
            </#if>        
@@ -195,17 +209,29 @@
                       <h2>Work Experience</h2>
                    <#list experiences as experience>
                         <h3>${experience.role}</h3>
-                           <p><strong>${experience.companyName}
-                           
-                            ${experience.experienceYearStartDate} -
-                              <#if experience.experienceYearEndDate?has_content> ${experience.experienceYearEndDate}
-                               <#else> Present </#if>
-                             </strong> </p>
+                        
+                        
+                           <p><strong>
+                           <#if experience.companyName?has_content>
+                               ${experience.companyName}
+                           </#if> 
+                              <#if experience.experienceYearStartDate?has_content> 
+                                  ${experience.experienceYearStartDate} -
+                            
+                                 <#if experience.experienceYearEndDate?has_content> 
+                                      ${experience.experienceYearEndDate}
+                                         <#else> Present </#if>
+                               
+                               </#if>  
+                            </strong> 
+                            </p>
                              
                            <#if  experience?? && experience.responsibilities?? && experience.responsibilities?trim?length gt 0>
                               <ul>
                                   <#list  experience.responsibilities?split(",") as item>
+                                     <#if item?has_content> 
                                         <li>${item?trim}</li>
+                                      </#if>   
                                    </#list>
                               </ul>
                            </#if>  
@@ -218,15 +244,27 @@
 				 <div class="section">
                      <h2>Education</h2>
                           <#list education as edu> 
-                             <p><strong>${edu.department}</strong><br />
-                              ${edu.instutionName} (2012 - 2016)
+                          
+                          <#if edu.department?has_content || edu.instutionName?has_content>
+                             <p>
+                               <#if edu.department?has_content>
+                                   <strong>${edu.department}</strong><br />
+                                </#if> 
+                             
+                             <#if edu.instutionName?has_content>
+                              ${edu.instutionName} 
+                             </#if> 
                               
-                              (${edu.qualificationStartYear} -
-                             <#if edu.qualificationEndYear?has_content>
+                             <#if edu.qualificationStartYear?has_content>  
+                               (${edu.qualificationStartYear} -
+                                  <#if edu.qualificationEndYear?has_content>
                                       ${edu.qualificationEndYear}
-                                   <#else>
-                                 Present </#if>)
+                                       <#else>
+                                        Present </#if>)
+                              </#if>  
                               </p>
+                           </#if>  
+                              
                           </#list>    
                  </div>
             </#if>     

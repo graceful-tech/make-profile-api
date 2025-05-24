@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Resume - John Doe</title>
     <style>
         @page {
             size: A4;
@@ -14,7 +13,7 @@
             margin: 0;
             padding: 0;
             width: 210mm;
-            height: 297mm;
+            
             font-family:  Arial, sans-serif;
             font-size: 10pt;
             box-sizing: border-box;
@@ -166,11 +165,14 @@
 			  <h3>Full Stack Developer</h3>
 			</#if> 
 			
-            <p class="contact-info">Phone: ${phone} | Mail: ${email} |
+            <p class="contact-info">
+               Phone: ${phone} | 
+              Mail: ${email} |
            
-            <#if linkedin?has_content>
-            LinkedIn: linkedin.com/in/johndoe</p>
-            </#if> 
+             <#if linkedin?has_content>
+                LinkedIn: ${linkedin}
+             </#if>
+            </p>
         </div>
 
        
@@ -198,9 +200,11 @@
                   <div class="section">
                      <div class="content-title">Skills</div>
                          <div class="skill-container">
-                    <#list skills?split(",") as skill>
-					     <div class="skill-badge">${skill?trim}</div>
-					 </#list>   
+                            <#list skills?split(",") as skill>
+					             <#if skill?has_content>
+						              <div class="skill-badge">${skill?trim}</div>
+						          </#if> 
+					         </#list>   
 				      </div>
                   </div>
 			  </#if>
@@ -208,10 +212,12 @@
 			 
              <#if softSkills?? && softSkills?trim?length gt 0> 
 					<div class="section">
-						 <div class="section-title">Soft Skills</div>
+						 <div class="content-title">Soft Skills</div>
 						    <div class="skill-container">
 						         <#list softSkills?split(",") as skill>
+						            <#if skill?has_content>
 						            <div class="skill-badge">${skill?trim}</div>
+						             </#if>  
 						         </#list>	
 						  </div>
 				     </div>
@@ -225,15 +231,34 @@
 			     <div class="section">
 			        <div class="content-title">Work Experience</div>
 			        <#list experiences as experience>
+			        
+			        <#if experience.role?has_content>
                          <h3>${experience.role}</h3>
-                              <p><strong>${experience.companyName} ${experience.experienceYearStartDate} -
-                                  <#if experience.experienceYearEndDate?has_content> ${experience.experienceYearEndDate}
-                                   <#else> Present </#if></strong> </p>
+                     </#if>    
+                         
+                           <#if experience.companyName?has_content ||  experience.experienceYearStartDate?has_content>   
+                             
+                              <p>
+                                   <#if experience.companyName?has_content>
+                                     <strong>${experience.companyName} </strong>  <br />
+         						  </#if>
+                               <#if experience.experienceYearStartDate?has_content>
+                                 ${experience.experienceYearStartDate} 
+                                  <#if experience.experienceYearEndDate?has_content> 
+                                 - ${experience.experienceYearEndDate}
+                                   <#else> 
+                                   - Present 
+                                   </#if>
+                               </#if>
+                             </p>
+                           </#if>
                                  
                             <#if  experience?? && experience.responsibilities?? && experience.responsibilities?trim?length gt 0>     
                                  <ul>
                                      <#list experience.responsibilities?split(",") as item>
+                                       <#if item?has_content>
                                             <li>${item?trim}</li>
+                                       </#if>    
                                      </#list>
                                  </ul>
                              </#if>      
@@ -245,18 +270,31 @@
 				          <div class="section">
 				               <div class="content-title">Education</div>
 				               <#list education as edu>
-                                      <p><strong>${edu.department}</strong><br />
-                                      ${edu.instutionName} ${edu.qualificationStartYear} 
+                                      
+                                   <#if edu.department?has_content || edu.institutionName?has_content>  
+                                      <p>
+                                     
+                                     <#if edu.department?has_content> 
+                                        <strong>${edu.department}</strong><br />
+                                     </#if>
+                                     
+                                      <#if edu.institutionName?has_content>
+									    ${edu.institutionName}
+									 </#if> 
+                                     
+                                    <#if edu.qualificationStartYear?has_content> 
+                                     <br />  ${edu.qualificationStartYear} 
                                             <#if edu.qualificationEndYear?has_content>
-                                         ${edu.qualificationEndYear}
+                                           - ${edu.qualificationEndYear}
                                               <#else>
-                                                 Present </#if></p>
+                                               - Present </#if>
+                                     </#if>    
+                                      </p>
+                                   </#if>  
                                 </#list>       
-                                </div>
                            </div>
-                  </#if>         
-                           
-			
+                  </#if>                   
+			</div>
 		<div class="right-column">
 		
 		
@@ -276,9 +314,19 @@
 					         <#list experiences as exp> 
 					           <#if exp.projects?? && exp.projects?size gt 0>
 					              <#list exp.projects as proj>
-					                  <p><strong>Project Name:</strong> ${proj.name}</p>
-					                  <p><strong>Project Role:</strong> ${proj.role}</p>
-					                  <p><strong>Project Description:</strong> ${proj.description}</p>
+					              
+					               <#if proj?? && proj.projectName?has_content>
+					                  <p><strong>Project Name:</strong> ${proj.projectName}</p>
+					               </#if> 
+					               
+					               <#if proj?? && proj.projectRole?has_content>
+					                  <p><strong>Project Role:</strong> ${proj.projectRole}</p>
+					               </#if>   
+					                
+					               <#if proj?? && proj.projectDescription?has_content>   
+					                  <p><strong>Project Description:</strong> ${proj.projectDescription}</p>
+					                </#if>   
+					                  
 					              </#list> 
 					          </#if>   
 					       </#list>                
@@ -288,9 +336,15 @@
 			   
 			  <#if achievements?? && achievements?size gt 0>   
 				  <div class="section">
-                      <div class="content-title">Achievements & Awards</div>
+                      <div class="content-title">Achievements &amp; Awards</div>
                        <#list achievements as achieve>
-                          <div class="achievements"><strong><a>${achieve.name}</a></strong><br />${proj.year}</div>
+                         <#if achieve?? && achieve.achievementsName?has_content>
+                               <p> <strong><a>${achieve.achievementsName}</a></strong>
+                               <#if achieve.achievementsDate?has_content>
+                                <br /> ${achieve.achievementsDate}
+                               </#if>
+                             </p>
+                          </#if>
                         </#list> 
                   </div>
               </#if>   
@@ -299,7 +353,18 @@
 			     <div class="section">
                      <div class="content-title">Certificates</div>
                         <#list certificates as certifi>
-                          <div class="achievements"><strong><a>${certifi.name}</a></strong><br />${certifi.year}</div>
+                        
+                        <#if certifi.courseName?has_content>
+                          <div class="achievements"><strong><a>${certifi.courseName}</a></strong><br />
+                          
+                            <#if certifi.courseStartDate?has_content>
+                               ${certifi.courseStartDate}
+                             </#if>
+                             <#if certifi.courseEndDate?has_content>
+                              - ${certifi.courseEndDate}
+                             </#if>
+                           </div>
+                         </#if>  
                         </#list>
                  </div>
              </#if>      
@@ -307,11 +372,13 @@
              <#if competencies?? && competencies?trim?length gt 0>     
 				 <div class="section">
                      <div class="content-title">Core Compentencies</div>
-                         <ul>
-                         <#list competencies?split(",") as comp>
-							<li>${comp?trim}</li>
-					      </#list>		
-                         </ul>
+                        <ul>
+                           <#list competencies?split(",") as comp>
+                            <#if comp?has_content>
+							   <li>${comp?trim}</li>
+							</#if>   
+					       </#list>		
+                        </ul>
                 </div>
             </#if>     
             </div>

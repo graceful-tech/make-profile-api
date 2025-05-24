@@ -1,14 +1,10 @@
 package com.make_profile.entity.history.candidates;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,16 +16,16 @@ public class CandidateQualificationHistoryEntity {
 	private Long id;
 
 	@Column(nullable = true, length = 100)
-	private String instutionName;
+	private String institutionName;
 
 	@Column(nullable = true, length = 100)
 	private String department;
 
 	@Column(nullable = true)
-	private LocalDate qualificationStartYear;
+	private String qualificationStartYear;
 
 	@Column(nullable = true)
-	private LocalDate qualificationEndYear;
+	private String qualificationEndYear;
 
 	@Column(nullable = true)
 	private Double percentage;
@@ -45,12 +41,12 @@ public class CandidateQualificationHistoryEntity {
 		this.id = id;
 	}
 
-	public String getInstutionName() {
-		return instutionName;
+	public String getInstitutionName() {
+		return institutionName;
 	}
 
-	public void setInstutionName(String instutionName) {
-		this.instutionName = instutionName;
+	public void setInstitutionName(String institutionName) {
+		this.institutionName = institutionName;
 	}
 
 	public String getDepartment() {
@@ -61,19 +57,19 @@ public class CandidateQualificationHistoryEntity {
 		this.department = department;
 	}
 
-	public LocalDate getQualificationStartYear() {
+	public String getQualificationStartYear() {
 		return qualificationStartYear;
 	}
 
-	public void setQualificationStartYear(LocalDate qualificationStartYear) {
+	public void setQualificationStartYear(String qualificationStartYear) {
 		this.qualificationStartYear = qualificationStartYear;
 	}
 
-	public LocalDate getQualificationEndYear() {
+	public String getQualificationEndYear() {
 		return qualificationEndYear;
 	}
 
-	public void setQualificationEndYear(LocalDate qualificationEndYear) {
+	public void setQualificationEndYear(String qualificationEndYear) {
 		this.qualificationEndYear = qualificationEndYear;
 	}
 

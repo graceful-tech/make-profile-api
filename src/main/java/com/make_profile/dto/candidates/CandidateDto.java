@@ -31,7 +31,7 @@ public class CandidateDto extends BaseDto {
 
 	private String linkedIn;
 
-	private LocalDate dob;
+	private String dob;
 
 	private String address;
 
@@ -61,7 +61,7 @@ public class CandidateDto extends BaseDto {
 
 	private String careerObjective;
 
-	private String resumeFormatName;
+	private String templateName;
 
 	public Long getId() {
 		return id;
@@ -159,11 +159,11 @@ public class CandidateDto extends BaseDto {
 		this.linkedIn = linkedIn;
 	}
 
-	public LocalDate getDob() {
+	public String getDob() {
 		return dob;
 	}
 
-	public void setDob(LocalDate dob) {
+	public void setDob(String dob) {
 		this.dob = dob;
 	}
 
@@ -263,12 +263,12 @@ public class CandidateDto extends BaseDto {
 		this.coreCompentencies = coreCompentencies;
 	}
 
-	public String getResumeFormatName() {
-		return resumeFormatName;
+	public String getTemplateName() {
+		return templateName;
 	}
 
-	public void setResumeFormatName(String resumeFormatName) {
-		this.resumeFormatName = resumeFormatName;
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
 	}
 
 	public boolean isFresher() {

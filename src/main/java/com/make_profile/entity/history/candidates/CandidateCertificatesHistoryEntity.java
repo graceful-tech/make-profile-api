@@ -23,10 +23,10 @@ public class CandidateCertificatesHistoryEntity {
 	private String courseName;
 
 	@Column
-	private LocalDate courseStartDate;
+	private String courseStartDate;
 
 	@Column
-	private LocalDate courseEndDate;
+	private String courseEndDate;
 
 	public Long getId() {
 		return id;
@@ -44,20 +44,20 @@ public class CandidateCertificatesHistoryEntity {
 		this.courseName = courseName;
 	}
 
-	public LocalDate getCourseEndDate() {
-		return courseEndDate;
-	}
-
-	public void setCourseEndDate(LocalDate courseEndDate) {
-		this.courseEndDate = courseEndDate;
-	}
-
-	public LocalDate getCourseStartDate() {
+	public String getCourseStartDate() {
 		return courseStartDate;
 	}
 
-	public void setCourseStartDate(LocalDate courseStartDate) {
+	public void setCourseStartDate(String courseStartDate) {
 		this.courseStartDate = courseStartDate;
+	}
+
+	public String getCourseEndDate() {
+		return courseEndDate;
+	}
+
+	public void setCourseEndDate(String courseEndDate) {
+		this.courseEndDate = courseEndDate;
 	}
 
 }

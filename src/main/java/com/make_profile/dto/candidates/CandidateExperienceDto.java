@@ -11,13 +11,11 @@ public class CandidateExperienceDto {
 
 	private String role;
 
-	private LocalDate experienceYearStartDate;
+	private String experienceYearStartDate;
 
-	private LocalDate experienceYearEndDate;
+	private String experienceYearEndDate;
 
 	private Boolean currentlyWorking;
-
-	private Boolean isDeleted;
 
 	private String Responsibilities;
 
@@ -47,19 +45,19 @@ public class CandidateExperienceDto {
 		this.role = role;
 	}
 
-	public LocalDate getExperienceYearStartDate() {
+	public String getExperienceYearStartDate() {
 		return experienceYearStartDate;
 	}
 
-	public void setExperienceYearStartDate(LocalDate experienceYearStartDate) {
+	public void setExperienceYearStartDate(String experienceYearStartDate) {
 		this.experienceYearStartDate = experienceYearStartDate;
 	}
 
-	public LocalDate getExperienceYearEndDate() {
+	public String getExperienceYearEndDate() {
 		return experienceYearEndDate;
 	}
 
-	public void setExperienceYearEndDate(LocalDate experienceYearEndDate) {
+	public void setExperienceYearEndDate(String experienceYearEndDate) {
 		this.experienceYearEndDate = experienceYearEndDate;
 	}
 
@@ -79,14 +77,6 @@ public class CandidateExperienceDto {
 		this.projects = projects;
 	}
 
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-
 	public String getResponsibilities() {
 		return Responsibilities;
 	}
@@ -99,16 +89,7 @@ public class CandidateExperienceDto {
 	public String toString() {
 		return "{" + "id=" + id + ", companyName=" + companyName + ", role=" + role + ", experienceYearStartDate="
 				+ experienceYearStartDate + ", experienceYearEndDate=" + experienceYearEndDate + ", currentlyWorking="
-				+ currentlyWorking + ", isDeleted=" + isDeleted + ", Responsibilities=" + Responsibilities
-				+ ", projects=" + projects + +'}';
+				+ currentlyWorking + ", Responsibilities=" + Responsibilities + ", projects=" + projects + +'}';
 	}
-
-//	@Override
-//	public String toString() {
-//		return "{" + "id=" + id + ", companyName='" + companyName + '\'' + ", role='" + role + '\''
-//				+ ", experienceYearStartDate='" + experienceYearStartDate + '\'' + ", experienceYearEndDate='"
-//				+ experienceYearEndDate + '\'' + ", currentlyWorking=" + currentlyWorking + ", projects=" + projects
-//				+ '}';
-//	}
 
 }

@@ -23,7 +23,7 @@ public class CandidateAchievementsHistoryEntity {
 	private String achievementsName;
 
 	@Column(nullable = true)
-	private LocalDate achievementsDate;
+	private String achievementsDate;
 
 	public Long getId() {
 		return id;
@@ -41,11 +41,7 @@ public class CandidateAchievementsHistoryEntity {
 		this.achievementsName = achievementsName;
 	}
 
-	public LocalDate getAchievementsDate() {
-		return achievementsDate;
-	}
-
-	public void setAchievementsDate(LocalDate achievementsDate) {
+	public void setAchievementsDate(String achievementsDate) {
 		this.achievementsDate = achievementsDate;
 	}
 

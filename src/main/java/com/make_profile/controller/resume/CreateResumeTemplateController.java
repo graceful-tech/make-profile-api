@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,24 +20,23 @@ import com.make_profile.service.resume.CreateResumeTemplateService;
 @RequestMapping("/resume")
 public class CreateResumeTemplateController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CreateResumeTemplateController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CreateResumeTemplateController.class);
 
-    @Autowired
-    CreateResumeTemplateService createResumeTemplateService;
+	@Autowired
+	CreateResumeTemplateService createResumeTemplateService;
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createResumeTemplate(@RequestBody CandidateDto candidateDto) {
+	@PostMapping("/create")
+	public ResponseEntity<?> createResumeTemplate(@RequestBody CandidateDto candidateDto,
+			@RequestHeader("username") String username) {
 
-        logger.debug("Controller :: createResumeTemplate :: Entered");
+		logger.debug("Controller :: createResumeTemplate :: Entered");
 
-        createResumeTemplateService.createResumeTemplate(candidateDto);
+		createResumeTemplateService.createResumeTemplate(candidateDto);
 
-        logger.debug("Controller :: createResumeTemplate :: Exited");
+		logger.debug("Controller :: createResumeTemplate :: Exited");
 
-        return new ResponseEntity<>("Resume Created successfully", HttpStatus.OK);
+		return new ResponseEntity<>("Resume Created successfully", HttpStatus.OK);
 
-    }
-    
- 
+	}
 
 }

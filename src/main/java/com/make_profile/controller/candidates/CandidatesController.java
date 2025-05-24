@@ -37,19 +37,11 @@ public class CandidatesController {
 			@RequestHeader("username") String username, @RequestHeader("userid") Long userid) {
 		logger.debug("Controller :: createCandidate :: Entered");
 
-//		String userName = httpRequest.getHeader("username");
-//		String userId = httpRequest.getHeader("userid");
-//
-//		if (userName != null) {
-//			candidateDto.setCreatedUserName(userName);
-//		}
 		if (userid != null) {
 			candidateDto.setCreatedUser(Long.valueOf(userid));
 		}
-		CandidateDto createCandidateDto = candidateService.createCandidate(candidateDto, username);
 
-//		userName = null;
-//		userId = null;
+		CandidateDto createCandidateDto = candidateService.createCandidate(candidateDto, username);
 
 		logger.debug("Controller :: createCandidate :: Exited");
 

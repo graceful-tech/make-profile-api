@@ -8,9 +8,7 @@ public class CandidateAchievementsDto {
 
 	private String achievementsName;
 
-	private LocalDate achievementsDate;
-
-	private Boolean isDeleted;
+	private String achievementsDate;
 
 	public Long getId() {
 		return id;
@@ -28,21 +26,12 @@ public class CandidateAchievementsDto {
 		this.achievementsName = achievementsName;
 	}
 
-	public LocalDate getAchievementsDate() {
+	public String getAchievementsDate() {
 		return achievementsDate;
 	}
 
-	public void setAchievementsDate(LocalDate achievementsDate) {
+	public void setAchievementsDate(String achievementsDate) {
 		this.achievementsDate = achievementsDate;
-
-	}
-
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
 	}
 
 	@Override

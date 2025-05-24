@@ -95,7 +95,7 @@ public class CandidateJobScoreServiceimpl implements CandidateJobScoreService {
 	}
 
 	public JobScoreEntity convertIntoJsonFormat(String jsonString, String candidateId, String jobId, String tenant) {
-		logger.debug("Service :: getJobDescription :: Entered");
+		logger.debug("Service :: convertIntoJsonFormat :: Entered");
 
 		JsonObject jsonObject = null;
 		JobScoreEntity jobScoreEntity = new JobScoreEntity();
@@ -117,9 +117,9 @@ public class CandidateJobScoreServiceimpl implements CandidateJobScoreService {
 			jobScoreEntity = null;
 			jsonObject = null;
 		} catch (Exception e) {
-			logger.debug("Service :: getJobDescription :: Exception" + e.getMessage());
+			logger.debug("Service :: convertIntoJsonFormat :: Exception" + e.getMessage());
 		}
-		logger.debug("Service :: getJobDescription :: Exited");
+		logger.debug("Service :: convertIntoJsonFormat :: Exited");
 		return jobScore;
 	}
 

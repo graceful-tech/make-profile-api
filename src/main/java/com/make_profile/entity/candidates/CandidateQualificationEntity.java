@@ -20,23 +20,22 @@ public class CandidateQualificationEntity {
 	private Long id;
 
 	@Column(nullable = true, length = 100)
-	private String instutionName;
+	private String institutionName;
 
 	@Column(nullable = true, length = 100)
 	private String department;
 
 	@Column(nullable = true)
-	private LocalDate qualificationStartYear;
+	private String qualificationStartYear;
 
 	@Column(nullable = true)
-	private LocalDate qualificationEndYear;
+	private String qualificationEndYear;
 
 	@Column(nullable = true)
 	private Double percentage;
 
 	@Column(nullable = true)
 	private String fieldOfStudy;
-
 
 	public Long getId() {
 		return id;
@@ -46,12 +45,12 @@ public class CandidateQualificationEntity {
 		this.id = id;
 	}
 
-	public String getInstutionName() {
-		return instutionName;
+	public String getInstitutionName() {
+		return institutionName;
 	}
 
-	public void setInstutionName(String instutionName) {
-		this.instutionName = instutionName;
+	public void setInstitutionName(String institutionName) {
+		this.institutionName = institutionName;
 	}
 
 	public String getDepartment() {
@@ -62,19 +61,19 @@ public class CandidateQualificationEntity {
 		this.department = department;
 	}
 
-	public LocalDate getQualificationStartYear() {
+	public String getQualificationStartYear() {
 		return qualificationStartYear;
 	}
 
-	public void setQualificationStartYear(LocalDate qualificationStartYear) {
+	public void setQualificationStartYear(String qualificationStartYear) {
 		this.qualificationStartYear = qualificationStartYear;
 	}
 
-	public LocalDate getQualificationEndYear() {
+	public String getQualificationEndYear() {
 		return qualificationEndYear;
 	}
 
-	public void setQualificationEndYear(LocalDate qualificationEndYear) {
+	public void setQualificationEndYear(String qualificationEndYear) {
 		this.qualificationEndYear = qualificationEndYear;
 	}
 

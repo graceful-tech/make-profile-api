@@ -51,7 +51,7 @@ public class CandidateEntity extends BaseEntity {
 	private String linkedIn;
 
 	@Column(nullable = true)
-	private LocalDate dob;
+	private String dob;
 
 	@Column(nullable = true, length = 250)
 	private String address;
@@ -165,11 +165,11 @@ public class CandidateEntity extends BaseEntity {
 		this.linkedIn = linkedIn;
 	}
 
-	public LocalDate getDob() {
+	public String getDob() {
 		return dob;
 	}
 
-	public void setDob(LocalDate dob) {
+	public void setDob(String dob) {
 		this.dob = dob;
 	}
 

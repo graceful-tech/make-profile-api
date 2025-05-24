@@ -124,15 +124,15 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 						JSONObject education = qualifications.getJSONObject(i);
 						CandidateQualificationDto candidateQualificationDto = new CandidateQualificationDto();
 
-						String instutionName = getValue("instutionName", education);
+						String institutionName = getValue("institutionName", education);
 						String department = getValue("department", education);
 						String qualificationStartYear = getValue("qualificationStartYear", education);
 						String qualificationEndYear = getValue("qualificationEndYear", education);
 						String percentage = getValue("percentage", education);
 						String fieldOfStudy = getValue("fieldOfStudy", education);
 
-						if (Objects.nonNull(instutionName) && !instutionName.isEmpty()) {
-							candidateQualificationDto.setInstutionName(instutionName);
+						if (Objects.nonNull(institutionName) && !institutionName.isEmpty()) {
+							candidateQualificationDto.setInstitutionName(institutionName);
 						}
 
 						if (Objects.nonNull(department) && !department.isEmpty()) {
@@ -140,11 +140,11 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 						}
 
 						if (Objects.nonNull(qualificationStartYear) && !qualificationStartYear.isEmpty()) {
-							//candidateQualificationDto.setQualificationStartYear(LocalDate.parse(qualificationStartYear));
+							candidateQualificationDto.setQualificationStartYear(qualificationStartYear);
 						}
 
 						if (Objects.nonNull(qualificationEndYear) && !qualificationEndYear.isEmpty()) {
-							//candidateQualificationDto.setQualificationEndYear(LocalDate.parse(qualificationEndYear));
+							candidateQualificationDto.setQualificationEndYear(qualificationEndYear);
 						}
 
 						if (Objects.nonNull(percentage) && !percentage.isEmpty()) {
@@ -156,7 +156,6 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 						if (Objects.nonNull(fieldOfStudy) && !fieldOfStudy.isEmpty()) {
 							candidateQualificationDto.setFieldOfStudy(fieldOfStudy);
 						}
-						candidateQualificationDto.setIsDeleted(false);
 
 						qualificationList.add(candidateQualificationDto);
 
@@ -197,11 +196,11 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 						}
 
 						if (Objects.nonNull(experienceYearStartDate) && !experienceYearStartDate.isEmpty()) {
-							//candidateExperienceDto.setExperienceYearStartDate(LocalDate.parse(experienceYearStartDate));
+							candidateExperienceDto.setExperienceYearStartDate(experienceYearStartDate);
 						}
 
 						if (Objects.nonNull(experienceYearEndDate) && !experienceYearEndDate.isEmpty()) {
-							//candidateExperienceDto.setExperienceYearEndDate(LocalDate.parse(experienceYearEndDate));
+							candidateExperienceDto.setExperienceYearEndDate(experienceYearEndDate);
 						}
 
 						if (Objects.nonNull(currentlyWorking) && !currentlyWorking.isEmpty()) {
@@ -211,7 +210,6 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 						if (Objects.nonNull(responsibilities) && !responsibilities.isEmpty()) {
 							candidateExperienceDto.setResponsibilities(responsibilities);
 						}
-						candidateExperienceDto.setIsDeleted(false);
 
 						// Parse nested projects
 						if (experience.has("projects")) {
@@ -279,12 +277,11 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 							certificateDto.setCourseName(courseName);
 						}
 						if (Objects.nonNull(courseStartDate) && !courseStartDate.isEmpty()) {
-							//certificateDto.setCourseStartDate(LocalDate.parse(courseStartDate));
+							certificateDto.setCourseStartDate(courseStartDate);
 						}
 						if (Objects.nonNull(courseEndDate) && !courseEndDate.isEmpty()) {
-							//certificateDto.setCourseEndDate(LocalDate.parse(courseEndDate));
+							certificateDto.setCourseEndDate(courseEndDate);
 						}
-						certificateDto.setIsDeleted(false);
 
 						certificateList.add(certificateDto);
 
@@ -315,9 +312,8 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 							achievementDto.setAchievementsName(achievementsName);
 						}
 						if (Objects.nonNull(achievementsDate) && !achievementsDate.isEmpty()) {
-							//achievementDto.setAchievementsDate(LocalDate.parse(achievementsDate));
+							// achievementDto.setAchievementsDate(LocalDate.parse(achievementsDate));
 						}
-						achievementDto.setIsDeleted(false);
 
 						achievementList.add(achievementDto);
 
@@ -343,7 +339,7 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 
 						String collegeProjectName = getValue("collegeProjectName", project);
 						String collegeProjectDescription = getValue("collegeProjectDescription", project);
-						String isDeleted = getValue("isDeleted", project);
+
 						String collegeProjectSkills = getValue("collegeProjectSkills", project);
 
 						// Set values
@@ -353,13 +349,10 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 						if (Objects.nonNull(collegeProjectDescription) && !collegeProjectDescription.isEmpty()) {
 							collegeProjectDto.setCollegeProjectDescription(collegeProjectDescription);
 						}
-						if (Objects.nonNull(isDeleted) && !isDeleted.isEmpty()) {
-							collegeProjectDto.setIsDeleted(Boolean.parseBoolean(isDeleted));
-						}
+
 						if (Objects.nonNull(collegeProjectSkills) && !collegeProjectSkills.isEmpty()) {
 							collegeProjectDto.setCollegeProjectSkills(collegeProjectSkills);
 						}
-						collegeProjectDto.setIsDeleted(false);
 
 						collegeProjectList.add(collegeProjectDto);
 						collegeProjectDto = null;
@@ -383,7 +376,7 @@ public class ResumeJsonIntoStringServiceImpl implements ResumeJsonIntoStringServ
 			}
 
 			if (Objects.nonNull(date_of_birth) && !date_of_birth.isEmpty()) {
-				candidateDto.setDob(LocalDate.parse(date_of_birth));
+				candidateDto.setDob(date_of_birth);
 			}
 
 			if (Objects.nonNull(address) && !address.isEmpty()) {

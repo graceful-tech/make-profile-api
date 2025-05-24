@@ -12,8 +12,6 @@ public class CandidateCollegeProjectDto {
 
 	private String collegeProjectDescription;
 
-	private Boolean isDeleted;
-
 	public Long getId() {
 		return id;
 	}
@@ -38,20 +36,18 @@ public class CandidateCollegeProjectDto {
 		this.collegeProjectDescription = collegeProjectDescription;
 	}
 
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-
 	public String getCollegeProjectSkills() {
 		return collegeProjectSkills;
 	}
 
 	public void setCollegeProjectSkills(String collegeProjectSkills) {
 		this.collegeProjectSkills = collegeProjectSkills;
+	}
+
+	@Override
+	public String toString() {
+		return "{" + "id=" + id + ", collegeProjectName=" + collegeProjectName + ", collegeProjectSkills="
+				+ collegeProjectSkills + ", collegeProjectDescription=" + collegeProjectDescription + "]";
 	}
 
 }

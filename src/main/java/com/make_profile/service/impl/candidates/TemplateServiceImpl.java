@@ -43,19 +43,19 @@ public class TemplateServiceImpl implements TemplateService {
 			if (Objects.nonNull(candidateDto.getExperiences())) {
 				candidateDto.getExperiences().forEach(exp -> {
 
-					if (!exp.getIsDeleted()) {
-						Long i = 0L;
-						TemplateAppliedEntity experience = new TemplateAppliedEntity();
-
-						experience.setCandidateId(usedTemplateEntity.getCandidateId());
-						experience.setUsedTemplateId(usedTemplateEntity.getId());
-						experience.setSectionName("EXPERIENCE");
-						experience.setSectionId(i++);
-						// experience.setVisible(true);
-						templateAppliedEnity.add(experience);
-
-						experience = null;
-					}
+//					if (exp.getCompanyName()!=null)
+//						Long i = 0L;
+//						TemplateAppliedEntity experience = new TemplateAppliedEntity();
+//
+//						experience.setCandidateId(usedTemplateEntity.getCandidateId());
+//						experience.setUsedTemplateId(usedTemplateEntity.getId());
+//						experience.setSectionName("EXPERIENCE");
+//						experience.setSectionId(i++);
+//						// experience.setVisible(true);
+//						templateAppliedEnity.add(experience);
+//
+//						experience = null;
+//					}
 				});
 
 			}
@@ -63,57 +63,57 @@ public class TemplateServiceImpl implements TemplateService {
 			if (Objects.nonNull(candidateDto.getQualification())) {
 				candidateDto.getQualification().forEach(qualifi -> {
 
-					if (!qualifi.getIsDeleted()) {
-						Long i = 0L;
-						TemplateAppliedEntity qualification = new TemplateAppliedEntity();
-
-						qualification.setCandidateId(usedTemplateEntity.getCandidateId());
-						qualification.setUsedTemplateId(usedTemplateEntity.getId());
-						qualification.setSectionName("QUALIFICATION");
-						qualification.setSectionId(i++);
-						// experience.setVisible(true);
-						templateAppliedEnity.add(qualification);
-
-						qualification = null;
-					}
+//					if (null) {
+//						Long i = 0L;
+//						TemplateAppliedEntity qualification = new TemplateAppliedEntity();
+//
+//						qualification.setCandidateId(usedTemplateEntity.getCandidateId());
+//						qualification.setUsedTemplateId(usedTemplateEntity.getId());
+//						qualification.setSectionName("QUALIFICATION");
+//						qualification.setSectionId(i++);
+//						// experience.setVisible(true);
+//						templateAppliedEnity.add(qualification);
+//
+//						qualification = null;
+//					}
 				});
 			}
 
 			if (Objects.nonNull(candidateDto.getAchievements())) {
 				candidateDto.getQualification().forEach(achieve -> {
 
-					if (!achieve.getIsDeleted()) {
-						Long i = 0L;
-						TemplateAppliedEntity achievements = new TemplateAppliedEntity();
-
-						achievements.setCandidateId(usedTemplateEntity.getCandidateId());
-						achievements.setUsedTemplateId(usedTemplateEntity.getId());
-						achievements.setSectionName("ACHIEVEMENTS");
-						achievements.setSectionId(i++);
-						// experience.setVisible(true);
-						templateAppliedEnity.add(achievements);
-
-						achievements = null;
-					}
+//					if (null) {
+//						Long i = 0L;
+//						TemplateAppliedEntity achievements = new TemplateAppliedEntity();
+//
+//						achievements.setCandidateId(usedTemplateEntity.getCandidateId());
+//						achievements.setUsedTemplateId(usedTemplateEntity.getId());
+//						achievements.setSectionName("ACHIEVEMENTS");
+//						achievements.setSectionId(i++);
+//						// experience.setVisible(true);
+//						templateAppliedEnity.add(achievements);
+//
+//						achievements = null;
+//					}
 				});
 			}
 
 			if (Objects.nonNull(candidateDto.getCertificates())) {
 				candidateDto.getQualification().forEach(certifi -> {
 
-					if (!certifi.getIsDeleted()) {
-						Long i = 0L;
-						TemplateAppliedEntity ceritificates = new TemplateAppliedEntity();
-
-						ceritificates.setCandidateId(usedTemplateEntity.getCandidateId());
-						ceritificates.setUsedTemplateId(usedTemplateEntity.getId());
-						ceritificates.setSectionName("CERTIFICATES");
-						ceritificates.setSectionId(i++);
-						// experience.setVisible(true);
-						templateAppliedEnity.add(ceritificates);
-
-						ceritificates = null;
-					}
+//					if (null) {
+//						Long i = 0L;
+//						TemplateAppliedEntity ceritificates = new TemplateAppliedEntity();
+//
+//						ceritificates.setCandidateId(usedTemplateEntity.getCandidateId());
+//						ceritificates.setUsedTemplateId(usedTemplateEntity.getId());
+//						ceritificates.setSectionName("CERTIFICATES");
+//						ceritificates.setSectionId(i++);
+//						// experience.setVisible(true);
+//						templateAppliedEnity.add(ceritificates);
+//
+//						ceritificates = null;
+//					}
 				});
 			}
 
@@ -121,28 +121,28 @@ public class TemplateServiceImpl implements TemplateService {
 					&& !CollectionUtils.isEmpty(candidateDto.getCollegeProject())) {
 				candidateDto.getQualification().forEach(certifi -> {
 
-					if (!certifi.getIsDeleted()) {
-						Long i = 0L;
-						TemplateAppliedEntity collegeProject = new TemplateAppliedEntity();
-
-						collegeProject.setCandidateId(usedTemplateEntity.getCandidateId());
-						collegeProject.setUsedTemplateId(usedTemplateEntity.getId());
-						collegeProject.setSectionName("COLLEGE PROJECT");
-						collegeProject.setSectionId(i++);
-						// experience.setVisible(true);
-						templateAppliedEnity.add(collegeProject);
-
-						collegeProject = null;
-					}
+//					if (null) {
+//						Long i = 0L;
+//						TemplateAppliedEntity collegeProject = new TemplateAppliedEntity();
+//
+//						collegeProject.setCandidateId(usedTemplateEntity.getCandidateId());
+//						collegeProject.setUsedTemplateId(usedTemplateEntity.getId());
+//						collegeProject.setSectionName("COLLEGE PROJECT");
+//						collegeProject.setSectionId(i++);
+//						// experience.setVisible(true);
+//						templateAppliedEnity.add(collegeProject);
+//
+//						collegeProject = null;
+//					}
 				});
 			}
-
 			templateAppliedRepository.saveAll(templateAppliedEnity);
+		}catch(
 
-		} catch (Exception e) {
-			logger.error("Service :: saveCandidateDataInTemplate :: Exception :: " + e.getMessage());
-		}
-		logger.debug("Service :: saveCandidateDataInTemplate :: Exited");
+	Exception e)
+	{
+		logger.error("Service :: saveCandidateDataInTemplate :: Exception :: " + e.getMessage());
+	}logger.debug("Service :: saveCandidateDataInTemplate :: Exited");
 	}
 
 	@Override
@@ -150,23 +150,17 @@ public class TemplateServiceImpl implements TemplateService {
 		logger.debug("Service :: checkResumeTemplateFields :: Entered");
 
 		TemplateEntity templateByName = null;
-
 		Long minSectionCount = 0L;
-
 		Long count = 0L;
-
 		Long remaningCount = 0L;
 
 		// StringBuilder sectionNames = new StringBuilder();
 		// String substring = new String();
-
 		FieldCheckerDto fieldChecker = new FieldCheckerDto();
-
 		List<String> fields = new ArrayList<>();
 
 		try {
-
-			templateByName = templateRepository.getTemplateByName(candidateDto.getResumeFormatName());
+			templateByName = templateRepository.getTemplateByName(candidateDto.getTemplateName());
 
 			if (Objects.nonNull(templateByName)) {
 				minSectionCount = templateByName.getMinSectionCount();
@@ -175,16 +169,13 @@ public class TemplateServiceImpl implements TemplateService {
 						&& !CollectionUtils.isEmpty(candidateDto.getQualification())) {
 					count++;
 				}
-
 				if (Objects.nonNull(candidateDto.getSkills()) && !candidateDto.getSkills().isEmpty()) {
 					count++;
 				}
-
 				if (Objects.nonNull(candidateDto.getExperiences())
 						&& !CollectionUtils.isEmpty(candidateDto.getExperiences())) {
 					count++;
 				}
-
 				if ((Objects.nonNull(candidateDto.getSoftSkills()) && !candidateDto.getSoftSkills().isEmpty())
 						|| (Objects.nonNull(candidateDto.getCoreCompentencies())
 								&& !candidateDto.getCoreCompentencies().isEmpty())) {
@@ -195,7 +186,6 @@ public class TemplateServiceImpl implements TemplateService {
 						&& !CollectionUtils.isEmpty(candidateDto.getCertificates())) {
 					count++;
 				}
-
 				if (Objects.nonNull(candidateDto.getAchievements())
 						&& !CollectionUtils.isEmpty(candidateDto.getAchievements())) {
 					count++;
@@ -226,14 +216,12 @@ public class TemplateServiceImpl implements TemplateService {
 						fields.add("qualification");
 					}
 				}
-
 				if (section.contains("skills")) {
 					if (Objects.isNull(candidateDto.getSkills()) || candidateDto.getSkills().isEmpty()) {
 						// sectionNames.append("skills,");
 						fields.add("skills");
 					}
 				}
-
 				if (section.contains("achievements")) {
 					if (Objects.isNull(candidateDto.getAchievements())
 							|| CollectionUtils.isEmpty(candidateDto.getAchievements())) {
@@ -258,8 +246,6 @@ public class TemplateServiceImpl implements TemplateService {
 						fields.add("extraSkills");
 					}
 				}
-				
-				 
 
 //				if (sectionNames != null && !sectionNames.isEmpty()) {
 //					substring = sectionNames.substring(0, sectionNames.length() - 1);
@@ -268,7 +254,6 @@ public class TemplateServiceImpl implements TemplateService {
 				fieldChecker.setFieldName(fields);
 
 				fields = null;
-
 				// sectionNames = null;
 				minSectionCount = null;
 				count = null;

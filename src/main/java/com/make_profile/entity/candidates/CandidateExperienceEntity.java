@@ -29,10 +29,10 @@ public class CandidateExperienceEntity {
 	private String role;
 
 	@Column(nullable = true)
-	private LocalDate experienceYearStartDate;
+	private String experienceYearStartDate;
 
 	@Column(nullable = true)
-	private LocalDate experienceYearEndDate;
+	private String experienceYearEndDate;
 
 	@Column(nullable = true)
 	private boolean currentlyWorking;
@@ -68,19 +68,19 @@ public class CandidateExperienceEntity {
 		this.role = role;
 	}
 
-	public LocalDate getExperienceYearStartDate() {
+	public String getExperienceYearStartDate() {
 		return experienceYearStartDate;
 	}
 
-	public void setExperienceYearStartDate(LocalDate experienceYearStartDate) {
+	public void setExperienceYearStartDate(String experienceYearStartDate) {
 		this.experienceYearStartDate = experienceYearStartDate;
 	}
 
-	public LocalDate getExperienceYearEndDate() {
+	public String getExperienceYearEndDate() {
 		return experienceYearEndDate;
 	}
 
-	public void setExperienceYearEndDate(LocalDate experienceYearEndDate) {
+	public void setExperienceYearEndDate(String experienceYearEndDate) {
 		this.experienceYearEndDate = experienceYearEndDate;
 	}
 

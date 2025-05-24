@@ -59,7 +59,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 			variables.put("email", candidate.getEmail());
 			// variables.put("summary", candidateDto.getSummary());
 
-			if (Objects.nonNull(candidateDto.getLinkedIn()) && !candidateDto.getLinkedIn().isEmpty()) {
+			if (Objects.nonNull(candidate.getLinkedIn()) && !candidate.getLinkedIn().isEmpty()) {
 				variables.put("linkedin", candidate.getLinkedIn());
 			}
 
@@ -152,7 +152,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 				candidateDto.getQualification().forEach(quali -> {
 					CandidateQualificationDto qulification = new CandidateQualificationDto();
 
-					qulification.setInstutionName(quali.getInstutionName());
+					qulification.setInstitutionName(quali.getInstitutionName());
 					qulification.setDepartment(quali.getDepartment());
 					qulification.setQualificationStartYear(quali.getQualificationStartYear());
 					qulification.setQualificationEndYear(quali.getQualificationEndYear());
@@ -215,7 +215,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 				variables.put("summary", candidateDto.getSummary());
 			}
 
-			template = configuration.getTemplate(candidate.getResumeFormatName() + ".ftl");
+			template = configuration.getTemplate(candidate.getTemplateName() + ".ftl");
 
 			String processTemplateIntoString = FreeMarkerTemplateUtils.processTemplateIntoString(template, variables);
 

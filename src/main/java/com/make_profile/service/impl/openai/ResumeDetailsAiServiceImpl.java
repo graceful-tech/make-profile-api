@@ -82,7 +82,7 @@ public class ResumeDetailsAiServiceImpl implements ResumeDetailsAiService {
 					+ "			projectRole \"\",\r\n" + "			projectDescription:\"\";\r\n"
 					+ "			isProjectDeleted: false\r\n" + "		} \r\n" + "	  ] \r\n" + "	} \r\n"
 					+ "  ], \r\n" + "  qualification: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"
-					+ "	  instutionName: \"\", \r\n" + "	  department: \"\", \r\n"
+					+ "	  institutionName: \"\", \r\n" + "	  department: \"\", \r\n"
 					+ "	  qualificationStartYear: \"\", \r\n" + "	  qualificationEndYear: \"\", \r\n"
 					+ "	  percentage: \"\", \r\n" + "	  isDeleted: false, \r\n" + "	  fieldOfStudy: \"\" \r\n"
 					+ "	} \r\n" + "  ], \r\n" + "  certificates: [ \r\n" + "	{ \r\n" + "	  id: \"\", \r\n"

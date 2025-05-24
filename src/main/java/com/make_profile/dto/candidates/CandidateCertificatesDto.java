@@ -8,11 +8,9 @@ public class CandidateCertificatesDto {
 
 	private String courseName;
 
-	private LocalDate courseStartDate;
+	private String courseStartDate;
 
-	private LocalDate courseEndDate;
-
-	private Boolean isDeleted;
+	private String courseEndDate;
 
 	public Long getId() {
 		return id;
@@ -30,28 +28,20 @@ public class CandidateCertificatesDto {
 		this.courseName = courseName;
 	}
 
-	public LocalDate getCourseStartDate() {
+	public String getCourseStartDate() {
 		return courseStartDate;
 	}
 
-	public void setCourseStartDate(LocalDate courseStartDate) {
+	public void setCourseStartDate(String courseStartDate) {
 		this.courseStartDate = courseStartDate;
 	}
 
-	public LocalDate getCourseEndDate() {
+	public String getCourseEndDate() {
 		return courseEndDate;
 	}
 
-	public void setCourseEndDate(LocalDate courseEndDate) {
+	public void setCourseEndDate(String courseEndDate) {
 		this.courseEndDate = courseEndDate;
-	}
-
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
 	}
 
 	@Override

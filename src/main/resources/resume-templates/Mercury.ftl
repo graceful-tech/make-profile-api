@@ -13,7 +13,6 @@
             margin: 0;
             padding: 0;
             width: 210mm;
-            height: 297mm;
             font-family: Arial, sans-serif;
             font-size: 14px;
             box-sizing: border-box;
@@ -128,15 +127,36 @@
                 <div class="section">
                     <h2>Work Experience</h2>
                     <#list experiences as experience>
-                        <h3>${experience.role}</h3>
-                        <p>${experience.companyName} (${experience.experienceYearStartDate} -
-                     <#if experience.experienceYearEndDate?has_content> ${experience.experienceYearEndDate}
-                     <#else> Present </#if>)
-                      </p>
+                    
+                     <#if experience.role?has_content>
+                        <h3><strong>Role Name: </strong>${experience.role}</h3>
+                     </#if>
+                      
+                     <#if experience.companyName?has_content ||  experience.experienceYearStartDate?has_content>  
+                       
+                      <p>
+                       <#if experience.companyName?has_content>
+                          ${experience.companyName} 
+                        </#if>   
+                        
+                     <#if experience.experienceYearStartDate?has_content>    
+                        (${experience.experienceYearStartDate} -
+                        <#if experience.experienceYearEndDate?has_content> 
+                         ${experience.experienceYearEndDate}
+                      <#else> 
+                          Present </#if>)
+                      </#if>     
+                     
+                       </p>
+                    </#if>  
+                     
                       <#if  experience?? && experience.responsibilities?? && experience.responsibilities?trim?length gt 0>
+                        <p><strong>Responsibilities: </strong></p>
                         <ul>
                             <#list experience.responsibilities?split(",") as item>
-                                <li>${item?trim}</li>
+                               <#if item?has_content>
+                                  <li>${item?trim}</li>
+                               </#if>  
                             </#list>
                         </ul>
                        </#if>  
@@ -152,7 +172,9 @@
                     <h2>Technical Skills</h2>
                     <ul>
                         <#list skills?split(",") as skill>
-                            <li>${skill?trim}</li>
+                          <#if skill?has_content>
+                             <li>${skill?trim}</li>
+                          </#if>  
                         </#list>
                     </ul>
                 </div>
@@ -163,7 +185,9 @@
                     <h2>Soft Skills</h2>
                     <ul>
                         <#list softSkills?split(",") as skill>
-                            <li>${skill?trim}</li>
+                           <#if skill?has_content>
+                              <li>${skill?trim}</li>
+                           </#if>   
                         </#list>
                     </ul>
                 </div>
@@ -174,7 +198,9 @@
                     <h2>Core Competencies</h2>
                     <ul>
                         <#list competencies?split(",") as comp>
-                            <li>${comp?trim}</li>
+                            <#if comp?has_content>
+                               <li>${comp?trim}</li>
+                            </#if>
                         </#list>
                     </ul>
                 </div>
@@ -187,12 +213,28 @@
                 <div class="section">
                     <h2>Education</h2>
                     <#list education as edu>
-                        <p><strong>${edu.department}</strong><br />${edu.instutionName} (${edu.qualificationStartYear} 
+                    
+                    <#if edu.department?has_content || edu.institutionName?has_content>
+                        <p>
+                        
+                        <#if edu.department?has_content>
+                           <strong>Degree: ${edu.department}</strong><br />
+                        </#if>
+                     
+	                    <#if edu.institutionName?has_content>  
+	                         <strong>Institution Name: </strong>${edu.institutionName} 
+	                     </#if>
+                        
+                        <#if edu.qualificationStartYear?has_content>
+                            (${edu.qualificationStartYear}
                         <#if edu.qualificationEndYear?has_content>
-                                      ${edu.qualificationEndYear}
-                                     
-                             <#else>
-                                 Present </#if>) </p>
+                            - ${edu.qualificationEndYear}
+                            <#else>
+                                - Present
+                        </#if>)
+                           </#if> 
+                         </p>
+                      </#if>		   
                     </#list>
                 </div>
           </#if>
@@ -213,9 +255,18 @@
          <#list experiences as exp>
             <#if exp.projects?? && exp.projects?size gt 0>
                 <#list exp.projects as proj>
+                
+                <#if proj.projectName?has_content>
                     <h3><strong>Project Name:</strong> ${proj.projectName}</h3>
+                 </#if>
+                 
+                 <#if proj.projectRole?has_content>   
                     <h3><strong>Project Role:</strong> ${proj.projectRole}</h3>
+                  </#if> 
+                   
+                  <#if proj.projectDescription?has_content>
                     <p><strong>Project Description:</strong> ${proj.projectDescription}</p>
+                    </#if>
                 </#list>
             </#if>
           </#list>
