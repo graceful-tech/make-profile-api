@@ -34,19 +34,10 @@ public class CreditsServiceImpl implements CreditsService {
 		logger.debug("Service :: getCredits :: Entered");
 
 		List<CreditsDto> creditsDto = new ArrayList<>();
-
 		List<CreditsEntity> findCreditsByUserIdAsList = new ArrayList<>();
 		try {
-			// CreditsEntity creditsEntity = creditsRepository.findCreditsByUserId(userId);
-
 			findCreditsByUserIdAsList = creditsRepository.findCreditsByUserIdAsList(userId);
 
-//			if (Objects.nonNull(creditsEntity)) {
-//				CreditsDto credits = new CreditsDto();
-//				credits = modelMapper.map(creditsEntity, CreditsDto.class);
-//				creditsDto.add(credits);
-//				credits = null;
-//			}
 			if (Objects.nonNull(findCreditsByUserIdAsList) && !CollectionUtils.isEmpty(findCreditsByUserIdAsList)) {
 
 				findCreditsByUserIdAsList.forEach(credit -> {
@@ -55,7 +46,6 @@ public class CreditsServiceImpl implements CreditsService {
 					creditsDto.add(credits);
 					credits = null;
 				});
-
 			}
 			findCreditsByUserIdAsList = null;
 
@@ -75,16 +65,17 @@ public class CreditsServiceImpl implements CreditsService {
 		boolean status = false;
 		CreditsEntity findCreditesByUserId = null;
 		try {
-			findCreditesByUserId = creditsRepository.findCreditsByUserId(creditsDto.getUserId());
+			findCreditesByUserId = creditsRepository.findCreditsByUserIdAndTemplateName(creditsDto.getUserId(),
+					creditsDto.getTemplateName());
 
 			if (Objects.nonNull(findCreditesByUserId)) {
-
 				findCreditesByUserId.setUserId(creditsDto.getUserId());
 				Double CreditAvailable = findCreditesByUserId.getCreditAvailable() == null ? 0.0
 						: findCreditesByUserId.getCreditAvailable();
 				findCreditesByUserId
 						.setCreditAvailable(CreditAvailable + Double.valueOf(creditsDto.getCreditAvailable()));
 				findCreditesByUserId.setId(findCreditesByUserId.getId());
+				findCreditesByUserId.setTemplateName(creditsDto.getTemplateName());
 				findCreditesByUserId.setPaymentDate(LocalDate.now());
 
 				creditsRepository.save(findCreditesByUserId);
@@ -95,14 +86,15 @@ public class CreditsServiceImpl implements CreditsService {
 				CreditsEntity candidateEntity = new CreditsEntity();
 
 				candidateEntity.setUserId(creditsDto.getUserId());
-				candidateEntity.setCandidateId(creditsDto.getCandidateId());
 				candidateEntity.setCreditAvailable(Double.valueOf(creditsDto.getCreditAvailable()));
 				candidateEntity.setPaymentDate(LocalDate.now());
+				candidateEntity.setTemplateName(creditsDto.getTemplateName());
 				creditsRepository.save(candidateEntity);
 
 				candidateEntity = null;
 				status = true;
 			}
+
 			findCreditesByUserId = null;
 
 		} catch (Exception e) {
@@ -121,7 +113,8 @@ public class CreditsServiceImpl implements CreditsService {
 		boolean status = false;
 		try {
 
-			findCreditesByUserId = creditsRepository.findCreditsByUserId(creditsDto.getUserId());
+			findCreditesByUserId = creditsRepository.findCreditsByUserIdAndTemplateName(creditsDto.getUserId(),
+					creditsDto.getTemplateName());
 
 			if (Objects.nonNull(findCreditesByUserId)) {
 				if (findCreditesByUserId.getCreditAvailable() >= 2.0) {
@@ -132,6 +125,7 @@ public class CreditsServiceImpl implements CreditsService {
 					Double creditUsed = findCreditesByUserId.getCreditUsed() == null ? 0.0
 							: findCreditesByUserId.getCreditUsed();
 					findCreditesByUserId.setCreditUsed(creditUsed + Double.valueOf(2));
+					findCreditesByUserId.setTemplateName(findCreditesByUserId.getTemplateName());
 					findCreditesByUserId.setId(findCreditesByUserId.getId());
 
 					creditsRepository.save(findCreditesByUserId);
@@ -139,21 +133,7 @@ public class CreditsServiceImpl implements CreditsService {
 					status = true;
 				}
 			}
-
-//				else {
-//				CreditsEntity creditsEntity = new CreditsEntity();
-//
-//				creditsEntity.setUserId(creditsDto.getUserId());
-//				creditsEntity.setCreditAvailable(creditsDto.getCreditAvailable() - Double.valueOf(2));
-//				creditsEntity.setCreditUsed(Double.valueOf(2));
-//
-//				responceEntity = creditsRepository.save(creditsEntity);
-//
-//				creditsEntity = null;
-//
-//				status = true;
-//			}
-
+			
 			findCreditesByUserId = null;
 		} catch (Exception e) {
 			logger.debug("Service :: useCredit :: Exception" + e.getMessage());

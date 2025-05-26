@@ -10,11 +10,11 @@ public class CreditsDto {
 
 	private Double creditAvailable;
 
-	private Long candidateId;
-
 	private Long userId;
 
 	private LocalDate PaymentDate;
+
+	private String templateName;
 
 	public Long getId() {
 		return id;
@@ -32,20 +32,12 @@ public class CreditsDto {
 		this.creditUsed = creditUsed;
 	}
 
-	public void setCandidateId(Long candidateId) {
-		this.candidateId = candidateId;
-	}
-
 	public Double getCreditAvailable() {
 		return creditAvailable;
 	}
 
 	public void setCreditAvailable(Double creditAvailable) {
 		this.creditAvailable = creditAvailable;
-	}
-
-	public Long getCandidateId() {
-		return candidateId;
 	}
 
 	public Long getUserId() {
@@ -62,6 +54,14 @@ public class CreditsDto {
 
 	public void setPaymentDate(LocalDate paymentDate) {
 		PaymentDate = paymentDate;
+	}
+
+	public String getTemplateName() {
+		return templateName;
+	}
+
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
 	}
 
 }

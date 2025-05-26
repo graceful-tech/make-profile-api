@@ -26,13 +26,13 @@ public class CreditsEntity {
 	private Double creditAvailable;
 
 	@Column(nullable = true)
-	private Long candidateId;
-
-	@Column(nullable = true)
 	private Long userId;
 
 	@Column(nullable = true)
 	private LocalDate PaymentDate;
+
+	@Column(nullable = true)
+	private String templateName;
 
 	public Long getId() {
 		return id;
@@ -40,14 +40,6 @@ public class CreditsEntity {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getCandidateId() {
-		return candidateId;
-	}
-
-	public void setCandidateId(Long candidateId) {
-		this.candidateId = candidateId;
 	}
 
 	public Double getCreditAvailable() {
@@ -80,6 +72,14 @@ public class CreditsEntity {
 
 	public void setPaymentDate(LocalDate paymentDate) {
 		PaymentDate = paymentDate;
+	}
+
+	public String getTemplateName() {
+		return templateName;
+	}
+
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
 	}
 
 }
