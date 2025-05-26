@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,15 +34,31 @@ public class CreditsServiceImpl implements CreditsService {
 		logger.debug("Service :: getCredits :: Entered");
 
 		List<CreditsDto> creditsDto = new ArrayList<>();
-		try {
-			CreditsEntity creditsEntity = creditsRepository.findCreditsByUserId(userId);
 
-			if (Objects.nonNull(creditsEntity)) {
-				CreditsDto credits = new CreditsDto();
-				credits = modelMapper.map(creditsEntity, CreditsDto.class);
-				creditsDto.add(credits);
-				credits = null;
+		List<CreditsEntity> findCreditsByUserIdAsList = new ArrayList<>();
+		try {
+			// CreditsEntity creditsEntity = creditsRepository.findCreditsByUserId(userId);
+
+			findCreditsByUserIdAsList = creditsRepository.findCreditsByUserIdAsList(userId);
+
+//			if (Objects.nonNull(creditsEntity)) {
+//				CreditsDto credits = new CreditsDto();
+//				credits = modelMapper.map(creditsEntity, CreditsDto.class);
+//				creditsDto.add(credits);
+//				credits = null;
+//			}
+			if (Objects.nonNull(findCreditsByUserIdAsList) && !CollectionUtils.isEmpty(findCreditsByUserIdAsList)) {
+
+				findCreditsByUserIdAsList.forEach(credit -> {
+					CreditsDto credits = new CreditsDto();
+					credits = modelMapper.map(credit, CreditsDto.class);
+					creditsDto.add(credits);
+					credits = null;
+				});
+
 			}
+			findCreditsByUserIdAsList = null;
+
 		} catch (Exception e) {
 			logger.debug("Service :: getCredits :: Exception" + e.getMessage());
 		}
