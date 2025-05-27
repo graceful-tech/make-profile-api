@@ -1,11 +1,6 @@
 package com.make_profile.configuration;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.Base64;
 
 public class PasswordEncryptor extends BCryptPasswordEncoder {
 
@@ -25,13 +20,11 @@ public class PasswordEncryptor extends BCryptPasswordEncoder {
 		int j = 2;
 		System.out.println(reversed.length());
 		for (int i = 0; i < reversed.length() - 1; i += j) {
-
 			originalPassword.append(reversed.charAt(i));
 			if (i >= 19) {
 				j = 3;
 			}
 		}
-
 		return originalPassword.toString();
 	}
 

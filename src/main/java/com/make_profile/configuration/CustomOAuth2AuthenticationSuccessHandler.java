@@ -27,18 +27,11 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 	@Lazy
 	UserService userService;
 
-//	private final OAuth2AuthorizedClientService authorizedClientService;
-//
-//	public CustomOAuth2AuthenticationSuccessHandler(OAuth2AuthorizedClientService authorizedClientService) {
-//		this.authorizedClientService = authorizedClientService;
-//	}
-
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException {
 
 		OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
-
 
 		String username = (String) oauth2Token.getPrincipal().getAttributes().get("name");
 
@@ -52,9 +45,6 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 
 		UserDto GoogleUser = userService.createGoogleUser(username, email);
 
-//		String redirectUrl = "http://localhost:4200/#/candidate?token=" + token + "&username=" + username + "&email="
-//				+ email + "&id=" + String.valueOf(GoogleUser.getId());
-
 		String redirectUri = null;
 		if (request.getCookies() != null) {
 			for (Cookie cookie : request.getCookies()) {
@@ -67,8 +57,8 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 		}
 
 		if (redirectUri != null && !redirectUri.isEmpty()) {
-			response.sendRedirect(redirectUri + "?token=" + token + "&username=" + String.valueOf(GoogleUser.getUserName()) + "&email=" + email + "&id="
-					+ String.valueOf(GoogleUser.getId()));
+			response.sendRedirect(redirectUri + "?token=" + token + "&username=" + String.valueOf(GoogleUser.getUserName())
+							+ "&email=" + email + "&id=" + String.valueOf(GoogleUser.getId()));
 		} else {
 			response.sendRedirect("http://localhost:4200/#/candidate");
 		}
