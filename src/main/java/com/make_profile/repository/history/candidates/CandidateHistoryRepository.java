@@ -17,4 +17,7 @@ public interface CandidateHistoryRepository extends JpaRepository<CandidateHisto
 
 	@Query(value = "select count(*) from candidates_history where mobile_number = :mobileNumber", nativeQuery = true)
 	int getCandidateCountMobileNumber(@Param("mobileNumber") String mobileNumber);
+
+	@Query(value = "select * from candidates_history where candidate_id = :candidateId", nativeQuery = true)
+	List<CandidateHistoryEntity> getCandidateHistoryByCandidateId(@Param("candidateId") Long candidateId);
 }

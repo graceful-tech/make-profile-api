@@ -44,12 +44,14 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 	MakeProfileOpenAiService makeProfileOpenAiService;
 
 	@Override
-	public void createResumeTemplate(CandidateDto candidate) {
+	public boolean createResumeTemplate(CandidateDto candidate) {
 		logger.debug("Service :: createResumeTemplate :: Extered");
 
 		Map<String, Object> variables = new HashedMap<>();
 		Template template = null;
 		StringBuilder subject = new StringBuilder();
+
+		boolean status = false;
 		try {
 
 			CandidateDto candidateDto = convertCandidateDtoIntoString(candidate);
@@ -226,10 +228,13 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 			// convertHtmlToDocx(processTemplateIntoString, candidateDto.getName() +
 			// ".docx");
 
+			status = true;
+
 		} catch (Exception e) {
 			logger.debug("Service :: createResumeTemplate :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: createResumeTemplate :: Exited");
+		return status;
 	}
 
 	public static void convertHtmlToPdf(String html, String outputPath) throws Exception {

@@ -2,6 +2,7 @@ package com.make_profile.service.impl.candidates;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -23,6 +24,7 @@ import com.make_profile.repository.common.EnvironmentRepository;
 import com.make_profile.repository.history.candidates.CandidateHistoryRepository;
 import com.make_profile.repository.templates.TemplateAppliedRepository;
 import com.make_profile.repository.templates.UsedTemplateRepository;
+import com.make_profile.repository.user.UserRepository;
 import com.make_profile.service.candidates.CandidateService;
 import com.make_profile.service.candidates.TemplateService;
 import com.make_profile.utility.CommonConstants;
@@ -57,6 +59,9 @@ public class CandidatesServiceimpl implements CandidateService {
 	@Autowired
 	EnvironmentRepository environmentRepository;
 
+	@Autowired
+	UserRepository userRepository;
+
 	@Override
 	public CandidateDto createCandidate(CandidateDto candidateDto, String Username) {
 		logger.debug("Service :: createResumeTemplate :: Entered");
@@ -77,20 +82,25 @@ public class CandidatesServiceimpl implements CandidateService {
 				candidateEntity = modelMapper.map(candidateDto, CandidateEntity.class);
 				candidateEntity.setId(candidateByUserName.getId());
 				candidateEntity.setCreatedUserName(Username);
+				candidateEntity.setModifiedDate(LocalDateTime.now());
+				candidateEntity.setModifiedUser(candidateDto.getCreatedUser());
 			} else {
 				candidateEntity = modelMapper.map(candidateDto, CandidateEntity.class);
 				candidateEntity.setCreatedUserName(Username);
-			}
-
-			if (Objects.nonNull(candidateByUserName)) {
-
-				if (Objects.nonNull(candidateDto.getCreatedUser())) {
-					candidateEntity.setModifiedUser(candidateDto.getCreatedUser());
-				}
-				candidateEntity.setModifiedDate(LocalDateTime.now());
-			} else {
 				candidateEntity.setCreatedUser(candidateDto.getCreatedUser());
+				candidateEntity.setCreatedDate(LocalDateTime.now());
+				candidateEntity.setModifiedDate(LocalDateTime.now());
 			}
+
+//			if (Objects.nonNull(candidateByUserName)) {
+//
+//				if (Objects.nonNull(candidateDto.getCreatedUser())) {
+//					candidateEntity.setModifiedUser(candidateDto.getCreatedUser());
+//				}
+//				candidateEntity.setModifiedDate(LocalDateTime.now());
+//			} else {
+//				
+//			}
 
 			CandidateEntity ResponceCandidateEntity = candidatesRepository.save(candidateEntity);
 
@@ -245,6 +255,10 @@ public class CandidatesServiceimpl implements CandidateService {
 			candidateHistoryEntity.setCreatedUserName(Username);
 			candidateHistoryEntity.setCreatedUser(candidateDto.getCreatedUser());
 			candidateHistoryEntity.setCandidateId(responseId);
+			candidateHistoryEntity.setCreatedDate(LocalDateTime.now());
+			candidateHistoryEntity.setModifiedDate(LocalDateTime.now());
+			candidateHistoryEntity.setModifiedUser(candidateDto.getCreatedUser());
+
 			candidateHistoryEntity.setId(null);
 
 			candidateHistoryRepository.save(candidateHistoryEntity);

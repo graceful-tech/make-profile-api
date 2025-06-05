@@ -36,9 +36,9 @@ public class UserController extends BaseController {
 		logger.debug("UserController :: createUser :: Exited");
 		if (!user) {
 			logger.debug("UserController :: createUser :: Error");
-			return new ResponseEntity<>(buildResponse(CommonConstants.PM_0003), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0003), HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(buildResponse(CommonConstants.PM_0004), HttpStatus.OK);
+		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0004), HttpStatus.OK);
 	}
 
 	@GetMapping("/get_user/{userName}")
@@ -63,9 +63,9 @@ public class UserController extends BaseController {
 		
 		if (!status) {
 			logger.debug("Controller :: updateUser :: Error");
-			return new ResponseEntity<>(buildResponse(CommonConstants.PM_0003), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0003), HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(buildResponse(CommonConstants.PM_0004), HttpStatus.OK);
+		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0004), HttpStatus.OK);
 	
 
 		

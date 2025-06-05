@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.make_profile.controller.BaseController;
 import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.service.resume.CreateResumeTemplateService;
+import com.make_profile.utility.CommonConstants;
 
 @RestController
 @RequestMapping("/resume")
-public class CreateResumeTemplateController {
+public class CreateResumeTemplateController extends BaseController {
 
 	private static final Logger logger = LoggerFactory.getLogger(CreateResumeTemplateController.class);
 
@@ -31,11 +33,16 @@ public class CreateResumeTemplateController {
 
 		logger.debug("Controller :: createResumeTemplate :: Entered");
 
-		createResumeTemplateService.createResumeTemplate(candidateDto);
+		boolean createResumeTemplate = createResumeTemplateService.createResumeTemplate(candidateDto);
 
 		logger.debug("Controller :: createResumeTemplate :: Exited");
 
-		return new ResponseEntity<>("Resume Created successfully", HttpStatus.OK);
+		if (createResumeTemplate) {
+			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0001), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0002), HttpStatus.OK);
+
+		}
 
 	}
 

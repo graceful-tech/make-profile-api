@@ -7,10 +7,10 @@ public interface CommonConstants {
 	String IMAGE_LOCATION = "IMAGE_LOCATION";
 	String HISTORY_IMAGE_LOCATION = "HISTORY_IMAGE_LOCATION";
 
-	String PM_0001 = "PM_0001";
-	String PM_0002 = "PM_0002";
-	String PM_0003 = "PM_0003";
-	String PM_0004 = "PM_0004";
-	String PM_0005 = "PM_0005";
+	String MP_0001 = "MP_0001";
+	String MP_0002 = "MP_0002";
+	String MP_0003 = "MP_0003";
+	String MP_0004 = "MP_0004";
+	String MP_0005 = "MP_0005";
 
 }

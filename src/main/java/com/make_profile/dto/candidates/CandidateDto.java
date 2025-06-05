@@ -1,6 +1,5 @@
 package com.make_profile.dto.candidates;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -62,6 +61,8 @@ public class CandidateDto extends BaseDto {
 	private String careerObjective;
 
 	private String templateName;
+
+	private String createdUserName;
 
 	public Long getId() {
 		return id;
@@ -277,6 +278,14 @@ public class CandidateDto extends BaseDto {
 
 	public void setFresher(boolean isFresher) {
 		this.isFresher = isFresher;
+	}
+
+	public String getCreatedUserName() {
+		return createdUserName;
+	}
+
+	public void setCreatedUserName(String createdUserName) {
+		this.createdUserName = createdUserName;
 	}
 
 }

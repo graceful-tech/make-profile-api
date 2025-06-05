@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.make_profile.controller.BaseController;
 import com.make_profile.dto.master.CreditsDto;
 import com.make_profile.service.master.CreditsService;
 
 @RestController
 @RequestMapping("/credits")
-public class CreditsController {
+public class CreditsController extends BaseController {
 
 	@Autowired
 	CreditsService creditsService;
@@ -40,11 +41,11 @@ public class CreditsController {
 
 	@PostMapping("/redeem")
 	public ResponseEntity<?> useCredits(@RequestBody CreditsDto creditsDto) {
-		logger.debug("Controller :: getcredits :: Entered");
+		logger.debug("Controller :: useCredits :: Entered");
 
 		boolean credits = creditsService.useCredit(creditsDto);
 
-		logger.debug("Controller :: getcredits :: Exited");
+		logger.debug("Controller :: useCredits :: Exited");
 
 		return new ResponseEntity<>(credits, HttpStatus.OK);
 

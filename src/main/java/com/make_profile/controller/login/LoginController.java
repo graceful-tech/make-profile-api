@@ -50,7 +50,7 @@ public class LoginController extends BaseController {
 		} catch (Exception e) {
 			logger.debug("LoginController :: userLogin :: Error");
 		}
-		return new ResponseEntity<>(buildResponse(CommonConstants.PM_0005), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0005), HttpStatus.BAD_REQUEST);
 	}
 
 //	public String refreshToken(UserDto loginDto) {

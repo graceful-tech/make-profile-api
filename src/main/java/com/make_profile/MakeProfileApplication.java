@@ -16,17 +16,28 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import com.make_profile.configuration.MakeProfileInterceptor;
+import com.make_profile.repository.common.EnvironmentRepository;
+
+import jakarta.annotation.PostConstruct;
 
 import java.time.Duration;
 
 @SpringBootApplication
 public class MakeProfileApplication {
 
-	@Value("${openai.key}")
-	private String openaikey;
-
 	@Autowired
 	MakeProfileInterceptor makeProfileInterceptor;
+
+	@Autowired
+	EnvironmentRepository environmentRepository;
+
+	private String openAiKey;
+
+	@PostConstruct
+	private void getOpenAiKeyFromDb() {
+
+		openAiKey = environmentRepository.getEnvironmentValueByKey("OPEN_AI");
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(MakeProfileApplication.class, args);
@@ -49,7 +60,7 @@ public class MakeProfileApplication {
 		RestTemplate restTemplate = builder.setConnectTimeout(Duration.ofSeconds(30))
 				.setReadTimeout(Duration.ofSeconds(30)).build();
 		restTemplate.getInterceptors().add((request, body, execution) -> {
-			request.getHeaders().add("Authorization", "Bearer " + openaikey);
+			request.getHeaders().add("Authorization", "Bearer " + openAiKey);
 			return execution.execute(request, body);
 		});
 		return restTemplate;
@@ -99,5 +110,5 @@ public class MakeProfileApplication {
 //			}
 //		};
 //	}
-	
+
 }

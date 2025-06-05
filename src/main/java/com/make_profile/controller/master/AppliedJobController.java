@@ -35,10 +35,11 @@ public class AppliedJobController extends BaseController {
 		boolean saveAppplication = appliedJobService.saveAppplication(appliedJobDto);
 
 		logger.debug("Controller :: create :: Exited");
+		
 		if (saveAppplication == true) {
-			return new ResponseEntity<>(buildResponse(CommonConstants.PM_0001), HttpStatus.OK);
+			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0002), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(buildResponse(CommonConstants.PM_0002), HttpStatus.OK);
+			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0003), HttpStatus.OK);
 		}
 
 	}

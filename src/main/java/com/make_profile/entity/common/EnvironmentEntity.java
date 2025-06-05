@@ -18,7 +18,7 @@ public class EnvironmentEntity {
 	@Column(nullable = false, length = 30)
 	private String environmentKey;
 
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, length = 200)
 	private String environmentValue;
 
 	public Long getId() {
