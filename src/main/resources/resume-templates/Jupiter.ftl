@@ -4,44 +4,39 @@
   <meta charset="UTF-8" />
   <style>
   
-   @page {
+  @page {
      size: A4;
-     margin: 50px;
-     width:100%;	 
+     margin: 0;	 
      }
 	
    html, body {
       margin: 0;
       padding: 0;
       width: 210mm;
-      font-family: Arial, sans-serif;
+       font-family: Arial, sans-serif;
       font-size: 11pt;
       color: #111;
-    }
-	
- 
-	 .container {
-      width: 200mm;
-     
-      margin: auto;
-      background: white;
       box-sizing: border-box;
-    }
+     }
+	
 	
     h1, h2 {
       color: #003366;
     }
+    
     h1 {
       font-size: 20px;
       text-align: center;
       margin-bottom: 5px;
     }
+    
     h2 {
       font-size: 16px;
       border-bottom: 1px solid #003366;
       margin-top: 25px;
 	  justify-content:center;
     }
+    
     .contact {
       text-align: center;
       font-size: 13px;
@@ -50,23 +45,29 @@
     .section {
       margin-top: 15px;
     }
+    
     .job-title {
       font-weight: bold;
     }
+    
     .job-details {
       margin: 5px 0 10px 0;
     }
+    
     .edu-entry, .strengths, .skills-list, .achievements-list, .org-skills {
       margin-bottom: 10px;
     }
+    
     ul {
       padding-left: 18px;
       margin-top: 5px;
       margin-bottom: 5px;
     }
+    
 	li{
 	padding-bottom:3px;
 	}
+	
     .declaration {
       margin-top: 20px;
       font-style: italic;
@@ -89,36 +90,68 @@
       margin-bottom: 0px;
      }
 
-    .section-title {
-	font-weight: bold;
-	margin-bottom: 5px;
-	padding-bottom: 3px;
-	font-size: 16px;
-	border-bottom: 1px solid #003366;
-	color: #003366;
-	text-align: center;
-}
+     .section-title {
+	 font-weight: bold;
+	  margin-bottom: 5px;
+	  padding-bottom: 3px;
+	  font-size: 16px;
+	  border-bottom: 1px solid #003366;
+	  color: #003366;
+	  text-align: center;
+	   
+     }
 
+	 .education{
+	   padding-bottom: 3px;
+	 }
+	 
+	 .percentage{
+	   font-weight: bold;
+	 }
+	 
+	 .EducationYear{
+	   font-weight: bold; 
+	 }
  
- .education{
-   padding-bottom: 3px;
- }
- 
- .percentage{
-   font-weight: bold;
- }
- 
- .EducationYear{
-   float:right;
-   font-weight: bold; 
- }
- 
+	 .container {
+	       width: 200mm;
+	      padding:10px;
+	      margin: auto;
+	      background: white;
+	      box-sizing: border-box;
+	  }
 
   </style>
 </head>
 <body>
-  <div class="container">
-      
+
+<#function extractYear input>
+  <#if input?is_date>
+    <#return input?string("yyyy")>
+  <#elseif input?? && input?has_content>
+    <#-- Try parsing known formats -->
+    <#attempt>
+      <#-- Try dd/MM/yyyy -->
+      <#local parsedDate = input?date("dd/MM/yyyy")>
+      <#return parsedDate?string("yyyy")>
+    <#recover>
+      <#attempt>
+        <#-- Try yyyy-MM-dd -->
+        <#local parsedDate = input?date("yyyy-MM-dd")>
+        <#return parsedDate?string("yyyy")>
+      <#recover>
+        <#-- Return blank if parsing fails -->
+        <#return "">
+      </#attempt>
+    </#recover>
+  <#else>
+    <#return "">
+  </#if>
+</#function>
+
+
+   
+    <div class="container">  
       <h1>${name}</h1>
       
      <div class="contact">
@@ -160,11 +193,11 @@
 			                <#if experience.companyName?has_content> 
 			         		   <div class="job-title">${experience.companyName} 
 			         		   
-			         		   <#if experience.experienceYearStartDate?has_content> 
+			         		   <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content> 
 				         		    <span class="EducationYear">
-				         		       ${experience.experienceYearStartDate} 
-				         		       <#if experience.experienceYearEndDate?has_content>
-								          - ${experience.experienceYearEndDate}
+				         		        ${extractYear(experience.experienceYearStartDate)} 
+				         		       <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content>
+								          - ${extractYear(experience.experienceYearEndDate)}
 								           <#else>
 								             - Present
 								       </#if>
@@ -245,10 +278,10 @@
 			                                 <#if edu.percentage?has_content>
 			                                  <span class="percentage"> - ${edu.percentage}%</span> 
 			                                 </#if>  
-			                                 <#if edu.qualificationStartYear?has_content> 
-			                                   <span class="EducationYear">${edu.qualificationStartYear} 
-			                                      <#if edu.qualificationEndYear?has_content>
-                                                    - ${edu.qualificationEndYear}
+			                                 <#if edu.qualificationStartYear?? && edu.qualificationStartYear?has_content> 
+			                                   <span class="EducationYear">${extractYear(edu.qualificationStartYear)} 
+			                                      <#if edu.qualificationEndYear?? && edu.qualificationEndYear?has_content>
+                                                    - ${extractYear(edu.qualificationEndYear)}
                                                       <#else>
                                                   - Present </#if></span>
 			                                 </#if>      
@@ -267,10 +300,10 @@
 				        <div class="achievements-list">
 						    <ul>
 						      <#list achievements as achieve>
-						         <#if achieve?achievementsName?has_content>
+						         <#if achieve.achievementsName?? && achieve.achievementsName?has_content>
 						            <li>${achieve.achievementsName} 
-						                <#if achieve?achievementsName?has_content>
-						                  <span class="EducationYear">${edu.achievementsDate} </span>
+						                <#if achieve.achievementsDate?? && achieve.achievementsDate?has_content>
+						                  <span class="EducationYear">${extractYear(achieve.achievementsDate)} </span>
 						                </#if>  
 						            </li>
 						         </#if> 
@@ -282,17 +315,17 @@
 		    
 		    <#if certificates?? && certificates?size gt 0> 
 				 <div class="section">
-				      <div class="section-title">Achievements</div>
+				      <div class="section-title">Certicates</div>
 				        <div class="achievements-list">
 						    <ul>
 						      <#list certificates as certi>
-						         <#if achieve?achievementsName?has_content>
+						         <#if certi.courseName?has_content>
 						            <li>${certi.courseName} 
-						                <#if certi?courseStartDate?has_content>
-						                   <span class="EducationYear">${certi?courseStartDate} 
+						                <#if certi.courseStartDate?? && certi.courseStartDate?has_content>
+						                   <span class="EducationYear">${certi.courseStartDate} 
 						                  
-								                   <#if certi?courseEndDate?has_content>
-		                                                    - ${edu.qualificationEndYear}
+								                   <#if  certi.courseEndDate?? && certi.courseEndDate?has_content>
+		                                                    - ${extractYear(certi.courseEndDate)}
 		                                             </#if>
                                             </span>
 						                </#if>  
@@ -309,7 +342,7 @@
 		              <div class="section-title">Soft Skills</div>
 					          <ul class="skills-list">
 					             <#list softSkills?split(",") as skill>
-					                   <#if skill?has_content>
+					                   <#if skill?? && skill?has_content>
 					                      <li>${skill?trim}</li>
 					                    </#if> 
 					           </#list>
@@ -320,10 +353,10 @@
 		    
 		    <#if competencies?? && competencies?trim?length gt 0> 
 		        <div class="section">
-		              <div class="section-title">Soft Skills</div>
+		              <div class="section-title">Core Competencies</div>
 					          <ul class="skills-list">
 					             <#list competencies?split(",") as comp>
-					                   <#if comp?has_content>
+					                   <#if comp?? && comp?has_content>
 					                      <li>${comp?trim}</li>
 					                    </#if> 
 					           </#list>
@@ -340,8 +373,8 @@
 				  </p>
 			</div>  
   
-   </div> 
+    
   
-
+</div>
 </body>
 </html>

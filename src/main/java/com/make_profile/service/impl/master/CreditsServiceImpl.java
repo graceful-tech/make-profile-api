@@ -133,13 +133,36 @@ public class CreditsServiceImpl implements CreditsService {
 					status = true;
 				}
 			}
-			
+
 			findCreditesByUserId = null;
 		} catch (Exception e) {
 			logger.debug("Service :: useCredit :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: useCredit :: Exited");
 		return status;
+	}	
+
+	@Override
+	public Long getAvailableCredits(String templateName, Long userId) {
+		logger.debug("Service :: getAvailableCredits :: Entered");
+
+		Double availableCredits = null;
+		Long available = null;
+		try {
+
+			availableCredits = creditsRepository.getAvailableCreditsByTemplateName(userId, templateName);
+
+			if (Objects.nonNull(availableCredits)) {
+				available = Math.round(availableCredits);
+			} else {
+				available = 0L;
+			}
+
+		} catch (Exception e) {
+			logger.debug("Service :: getAvailableCredits :: Exception" + e.getMessage());
+		}
+		logger.debug("Service :: getAvailableCredits :: Exited");
+		return available;
 	}
 
 }

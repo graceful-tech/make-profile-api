@@ -12,4 +12,6 @@ public interface CreditsService {
 
 	boolean useCredit(CreditsDto creditsDto);
 
+	Long getAvailableCredits(String templateName, Long userId);
+
 }

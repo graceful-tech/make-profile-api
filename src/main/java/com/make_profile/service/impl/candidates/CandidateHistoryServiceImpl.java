@@ -36,7 +36,6 @@ public class CandidateHistoryServiceImpl implements CandidateHistoryService {
 		Long candidateId = null;
 		List<CandidateHistoryEntity> candidateHistoryList = null;
 		List<CandidateDto> candidateList = new ArrayList<>();
-
 		try {
 			candidateId = candidatesRepository.getCandidateIdByUserName(username);
 			candidateHistoryList = candidateHistoryRepository.getCandidateHistoryByCandidateId(candidateId);
@@ -53,7 +52,6 @@ public class CandidateHistoryServiceImpl implements CandidateHistoryService {
 			logger.debug("Service :: getCandidateHistory :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: getCandidateHistory :: Exited");
-
 		return candidateList;
 	}
 

@@ -40,7 +40,7 @@ public class CreateResumeTemplateController extends BaseController {
 		if (createResumeTemplate) {
 			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0001), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0002), HttpStatus.OK);
+			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0002), HttpStatus.BAD_REQUEST);
 
 		}
 

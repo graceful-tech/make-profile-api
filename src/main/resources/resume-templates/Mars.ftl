@@ -5,8 +5,7 @@
     <style>
         @page {
             size: A4;
-            margin: 30px;
-            width:100%;
+            margin: 0;
         }
 
         html, body {
@@ -22,7 +21,7 @@
 
         .container {
             width: 200mm;
-            height: 277mm;
+          
             padding: 5mm;
             margin: auto;
             background: white;
@@ -157,6 +156,30 @@
 </head>
 <body>
 
+<#function extractYear input>
+  <#if input?is_date>
+    <#return input?string("yyyy")>
+  <#elseif input?? && input?has_content>
+    <#-- Try parsing known formats -->
+    <#attempt>
+      <#-- Try dd/MM/yyyy -->
+      <#local parsedDate = input?date("dd/MM/yyyy")>
+      <#return parsedDate?string("yyyy")>
+    <#recover>
+      <#attempt>
+        <#-- Try yyyy-MM-dd -->
+        <#local parsedDate = input?date("yyyy-MM-dd")>
+        <#return parsedDate?string("yyyy")>
+      <#recover>
+        <#-- Return blank if parsing fails -->
+        <#return "">
+      </#attempt>
+    </#recover>
+  <#else>
+    <#return "">
+  </#if>
+</#function>
+
     <div class="container">
          <div class="header">
             <h1>${name}</h1>
@@ -242,10 +265,10 @@
                                    <#if experience.companyName?has_content>
                                      <strong>${experience.companyName} </strong>  <br />
          						  </#if>
-                               <#if experience.experienceYearStartDate?has_content>
-                                 ${experience.experienceYearStartDate} 
-                                  <#if experience.experienceYearEndDate?has_content> 
-                                 - ${experience.experienceYearEndDate}
+                               <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content>
+                                 ${extractYear(experience.experienceYearStartDate)} 
+                                  <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content> 
+                                 - ${extractYear(experience.experienceYearEndDate)}
                                    <#else> 
                                    - Present 
                                    </#if>
@@ -282,10 +305,10 @@
 									    ${edu.institutionName}
 									 </#if> 
                                      
-                                    <#if edu.qualificationStartYear?has_content> 
-                                     <br />  ${edu.qualificationStartYear} 
-                                            <#if edu.qualificationEndYear?has_content>
-                                           - ${edu.qualificationEndYear}
+                                    <#if edu.qualificationStartYear?? && edu.qualificationStartYear?has_content> 
+                                     <br />  ${extractYear(edu.qualificationStartYear)} 
+                                            <#if edu.qualificationEndYear?? && edu.qualificationEndYear?has_content>
+                                           - ${extractYear(edu.qualificationEndYear)}
                                               <#else>
                                                - Present </#if>
                                      </#if>    
@@ -340,8 +363,8 @@
                        <#list achievements as achieve>
                          <#if achieve?? && achieve.achievementsName?has_content>
                                <p> <strong><a>${achieve.achievementsName}</a></strong>
-                               <#if achieve.achievementsDate?has_content>
-                                <br /> ${achieve.achievementsDate}
+                               <#if achieve.achievementsDate?? && achieve.achievementsDate?has_content>
+                                <br /> ${extractYear(achieve.achievementsDate)}
                                </#if>
                              </p>
                           </#if>
@@ -357,11 +380,11 @@
                         <#if certifi.courseName?has_content>
                           <div class="achievements"><strong><a>${certifi.courseName}</a></strong><br />
                           
-                            <#if certifi.courseStartDate?has_content>
-                               ${certifi.courseStartDate}
+                            <#if certifi.courseStartDate?? && certifi.courseStartDate?has_content>
+                               ${extractYear(certifi.courseStartDate)}
                              </#if>
-                             <#if certifi.courseEndDate?has_content>
-                              - ${certifi.courseEndDate}
+                             <#if certifi.courseEndDate?? && certifi.courseEndDate?has_content>
+                              - ${extractYear(certifi.courseEndDate)}
                              </#if>
                            </div>
                          </#if>  

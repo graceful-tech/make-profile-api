@@ -112,6 +112,33 @@
     </style>
 </head>
 <body>
+
+
+<#function extractYear input>
+  <#if input?is_date>
+    <#return input?string("yyyy")>
+  <#elseif input?? && input?has_content>
+    <#-- Try parsing known formats -->
+    <#attempt>
+      <#-- Try dd/MM/yyyy -->
+      <#local parsedDate = input?date("dd/MM/yyyy")>
+      <#return parsedDate?string("yyyy")>
+    <#recover>
+      <#attempt>
+        <#-- Try yyyy-MM-dd -->
+        <#local parsedDate = input?date("yyyy-MM-dd")>
+        <#return parsedDate?string("yyyy")>
+      <#recover>
+        <#-- Return blank if parsing fails -->
+        <#return "">
+      </#attempt>
+    </#recover>
+  <#else>
+    <#return "">
+  </#if>
+</#function>
+
+
     <div class="container">
         <div class="header">
             <h1>${name}</h1>
@@ -192,9 +219,9 @@
                             
                             <strong><a>${certificate.courseName}</a></strong>
                             &nbsp;&nbsp;
-                       
-                            ${certificate.courseStartDate}</div>
-                            
+                       <#if certificate.courseStartDate?? && certificate.courseStartDate?has_content>    
+                            ${extractYear(certificate.courseStartDate)}</div>
+                           </#if> 
                             
                         </#list>    
                  </div>  
@@ -215,11 +242,11 @@
                            <#if experience.companyName?has_content>
                                ${experience.companyName}
                            </#if> 
-                              <#if experience.experienceYearStartDate?has_content> 
-                                  ${experience.experienceYearStartDate} -
+                              <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content> 
+                                  ${extractYear(experience.experienceYearStartDate)} -
                             
-                                 <#if experience.experienceYearEndDate?has_content> 
-                                      ${experience.experienceYearEndDate}
+                                 <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content> 
+                                      ${extractYear(experience.experienceYearEndDate)}
                                          <#else> Present </#if>
                                
                                </#if>  
@@ -255,10 +282,10 @@
                               ${edu.instutionName} 
                              </#if> 
                               
-                             <#if edu.qualificationStartYear?has_content>  
-                               (${edu.qualificationStartYear} -
-                                  <#if edu.qualificationEndYear?has_content>
-                                      ${edu.qualificationEndYear}
+                             <#if edu.qualificationStartYear?? && edu.qualificationStartYear?has_content>  
+                               (${extractYear(edu.qualificationStartYear)} -
+                                  <#if edu.qualificationEndYear?? && edu.qualificationEndYear?has_content>
+                                      ${extractYear(edu.qualificationEndYear)}
                                        <#else>
                                         Present </#if>)
                               </#if>  

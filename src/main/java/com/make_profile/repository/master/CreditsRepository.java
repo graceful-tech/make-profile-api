@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.make_profile.entity.master.AppliedJobsEntity;
 import com.make_profile.entity.master.CreditsEntity;
 
 import jakarta.transaction.Transactional;
@@ -28,4 +27,7 @@ public interface CreditsRepository extends JpaRepository<CreditsEntity, Long> {
 	@Query(value = "select * from credits where user_id = :userId and template_name = :templateName", nativeQuery = true)
 	CreditsEntity findCreditsByUserIdAndTemplateName(@Param("userId") Long userId,
 			@Param("templateName") String templateName);
+
+	@Query(value = "select credit_available from  credits where user_id = :userId and template_name = :templateName ", nativeQuery = true)
+	Double getAvailableCreditsByTemplateName(@Param("userId") Long userId, @Param("templateName") String templateName);
 }

@@ -6,8 +6,7 @@
      
 	@page {
      size: A4;
-     margin: 50px 30px 30px 30px;
-     width:100%;	 
+     margin:0;
      }
 	
  
@@ -15,7 +14,6 @@
       margin: 0;
       padding: 0;
       width: 210mm;
-      
       font-family: Arial, sans-serif;
       font-size: 11pt;
       color: #111;
@@ -188,6 +186,29 @@
 
 <body>
 
+<#function extractYear input>
+  <#if input?is_date>
+    <#return input?string("yyyy")>
+  <#elseif input?? && input?has_content>
+    <#-- Try parsing known formats -->
+    <#attempt>
+      <#-- Try dd/MM/yyyy -->
+      <#local parsedDate = input?date("dd/MM/yyyy")>
+      <#return parsedDate?string("yyyy")>
+    <#recover>
+      <#attempt>
+        <#-- Try yyyy-MM-dd -->
+        <#local parsedDate = input?date("yyyy-MM-dd")>
+        <#return parsedDate?string("yyyy")>
+      <#recover>
+        <#-- Return blank if parsing fails -->
+        <#return "">
+      </#attempt>
+    </#recover>
+  <#else>
+    <#return "">
+  </#if>
+</#function>
  
      
 
@@ -232,10 +253,10 @@
         <div class="company">${experience.companyName}</div>
       </#if>
       
-      <#if experience.experienceYearStartDate?has_content> 
+      <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content> 
          <div class="meta">
            ${experience.experienceYearStartDate}
-           <#if experience.experienceYearEndDate?has_content>
+           <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content>
           - ${experience.experienceYearEndDate}
            <#else>
              - Present
@@ -295,12 +316,12 @@
           <div class="company">${edu.institutionName}</div>
       </#if>    
        
-      <#if edu.qualificationStartYear?has_content>
+      <#if edu.qualificationStartYear?? && edu.qualificationStartYear?has_content>
           <div class="meta">
-             ${edu.qualificationStartYear} 
+             ${extractYear(edu.qualificationStartYear)} 
                         
-               <#if edu.qualificationEndYear?has_content>
-                     ${edu.qualificationEndYear}
+               <#if edu.qualificationEndYear?? && edu.qualificationEndYear?has_content>
+                     ${extractYear(edu.qualificationEndYear)}
                 <#else>
                      Present </#if>             
 	      </div>
@@ -358,8 +379,8 @@
         <#if certificate.courseName?has_content>
            <div><strong>${certificate.courseName}</strong></div>
         </#if> 
-        <#if certificate.courseStartDate?has_content>
-           <div><strong>${certificate.courseStartDate}</strong></div>
+        <#if certificate.courseStartDate?? && certificate.courseStartDate?has_content>
+           <div><strong>${extractYear(certificate.courseStartDate)}</strong></div>
         </#if>
        </div>
 	 </#list> 

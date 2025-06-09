@@ -51,4 +51,17 @@ public class CreditsController extends BaseController {
 
 	}
 
+	@GetMapping("/get-available-credits")
+	public ResponseEntity<?> getAvailableCredits(@RequestParam("templateName") String templateName,
+			@RequestParam("userId") Long userId) {
+		logger.debug("Controller :: getAvailableCredits :: Entered");
+
+		Long availableCredits = creditsService.getAvailableCredits(templateName, userId);
+
+		logger.debug("Controller :: getAvailableCredits :: Exited");
+
+		return new ResponseEntity<>(availableCredits, HttpStatus.OK);
+
+	}
+
 }
