@@ -184,16 +184,12 @@
          <div class="header">
             <h1>${name}</h1>
             
-			 <#if roleName?has_content>
-			  <h3>Full Stack Developer</h3>
-			</#if> 
-			
             <p class="contact-info">
                Phone: ${phone} | 
-              Mail: ${email} |
+              Mail: ${email} 
            
              <#if linkedin?has_content>
-                LinkedIn: ${linkedin}
+               | LinkedIn: ${linkedin}
              </#if>
             </p>
         </div>
@@ -256,14 +252,14 @@
 			        <#list experiences as experience>
 			        
 			        <#if experience.role?has_content>
-                         <h3>${experience.role}</h3>
+                         <h3>Role: ${experience.role}</h3>
                      </#if>    
                          
                            <#if experience.companyName?has_content ||  experience.experienceYearStartDate?has_content>   
                              
                               <p>
                                    <#if experience.companyName?has_content>
-                                     <strong>${experience.companyName} </strong>  <br />
+                                     <strong>Company: ${experience.companyName} </strong>  <br />
          						  </#if>
                                <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content>
                                  ${extractYear(experience.experienceYearStartDate)} 

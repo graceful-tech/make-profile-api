@@ -39,7 +39,7 @@ public class AppliedJobController extends BaseController {
 		if (saveAppplication == true) {
 			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0002), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0003), HttpStatus.OK);
+			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0006), HttpStatus.OK);
 		}
 
 	}

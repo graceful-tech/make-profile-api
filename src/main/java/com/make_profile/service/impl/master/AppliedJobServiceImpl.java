@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.make_profile.dto.ResponseDto;
 import com.make_profile.dto.candidates.HurecomAppliedJobsDto;
 import com.make_profile.dto.candidates.HurecomCandidateDto;
 import com.make_profile.dto.master.AppliedJobDto;
@@ -76,6 +77,9 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 				hurecomCandidateDto.setByCandidate(true);
 				hurecomCandidateDto.setSkills(Arrays.asList(candidateEntity.getSkills().split(",")));
 				hurecomCandidateDto.setLanguagesKnown(Arrays.asList(candidateEntity.getLanguagesKnown().split(",")));
+				hurecomCandidateDto.setQualification(candidateEntity.getQualification().get(0).getFieldOfStudy() != null
+						? candidateEntity.getQualification().get(0).getFieldOfStudy()
+						: null);
 				hurecomCandidateDto.setId(null);
 			}
 
@@ -107,16 +111,17 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 
 				HttpEntity<HurecomAppliedJobsDto> responseEntity = new HttpEntity<HurecomAppliedJobsDto>(
 						hurecomAppliedJobsDto, headers);
-				ResponseEntity<Long> candidateAppliedJobResponse = restTemplate.exchange(hurecomResponseEndPoint,
-						HttpMethod.POST, responseEntity, Long.class);
+				ResponseEntity<ResponseDto> candidateAppliedJobResponse = restTemplate.exchange(hurecomResponseEndPoint,
+						HttpMethod.POST, responseEntity, ResponseDto.class);
 
-				Long candidateAppliedJobId = candidateAppliedJobResponse.getBody();
+				Long candidateAppliedJobId = candidateAppliedJobResponse.getBody().getId();
 
 				appliedJobsEntity.setCandidateId(appliedJobDto.getCandidateId());
 				appliedJobsEntity.setJobId(appliedJobDto.getJobId());
 				appliedJobsEntity.setTenant(appliedJobDto.getTenant());
 				appliedJobsEntity.setSource("Hurecom");
 				appliedJobsEntity.setSkills(candidateEntity.getSkills());
+				appliedJobsEntity.setStatus("Applied");
 				appliedJobRepository.save(appliedJobsEntity);
 
 				status = true;
@@ -134,7 +139,7 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 	}
 
 	public Long getRequirementId(String tenant, String jobId) {
-		logger.debug("Service :: getJobDescription :: Entered");
+		logger.debug("Service :: getRequirementId :: Entered");
 		Long id = 0L;
 		try {
 			String jobDescriptionQuery = "select id from hurecom_" + tenant + ".requirements where job_id = '" + jobId
@@ -143,14 +148,14 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 			Query query = entityManager.createNativeQuery(jobDescriptionQuery);
 			id = (Long) query.getSingleResult();
 		} catch (Exception e) {
-			logger.debug("Service :: getJobDescription :: Exception" + e.getMessage());
+			logger.debug("Service :: getRequirementId :: Exception" + e.getMessage());
 		}
-		logger.debug("Service :: getJobDescription :: Exited");
+		logger.debug("Service :: getRequirementId :: Exited");
 		return id;
 	}
 
 	public String getUsernameByTenant(String tenant) {
-		logger.debug("Service :: getJobDescription :: Entered");
+		logger.debug("Service :: getUsernameByTenant :: Entered");
 		String userName = "";
 		try {
 			String jobDescriptionQuery = "select user_name from hurecom_" + tenant + ".users where id = 1 ";
@@ -158,9 +163,9 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 			Query query = entityManager.createNativeQuery(jobDescriptionQuery);
 			userName = (String) query.getSingleResult();
 		} catch (Exception e) {
-			logger.debug("Service :: getJobDescription :: Exception" + e.getMessage());
+			logger.debug("Service :: getUsernameByTenant :: Exception" + e.getMessage());
 		}
-		logger.debug("Service :: getJobDescription :: Exited");
+		logger.debug("Service :: getUsernameByTenant :: Exited");
 		return userName;
 	}
 
@@ -169,7 +174,6 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 		logger.debug("Service :: getAppliedJobs :: Entered");
 
 		List<AppliedJobsEntity> appliedJobsEntity = null;
-
 		List<AppliedJobDto> appliedJobDtoList = new ArrayList<>();
 
 		try {
@@ -180,14 +184,12 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 				appliedJobsEntity.forEach(jobs -> {
 					AppliedJobDto appliedJobDto = new AppliedJobDto();
 
-					AppliedJobDto appliedJob = modelMapper.map(jobs, AppliedJobDto.class);
-					appliedJobDtoList.add(appliedJob);
+					appliedJobDto = modelMapper.map(jobs, AppliedJobDto.class);
+					appliedJobDtoList.add(appliedJobDto);
 
 					appliedJobDto = null;
 				});
-
 			}
-
 			appliedJobsEntity = null;
 
 		} catch (Exception e) {

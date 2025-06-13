@@ -41,11 +41,11 @@
 
         h1 {
             margin: 0;
-            font-size: 16px;
+            font-size: 25px;
         }
 
         h2 {
-            font-size: 12px;
+            font-size: 15px;
             color: #003366;
             border-bottom: 1px solid #003366;
             margin-top: 8px;
@@ -54,7 +54,7 @@
 
         h3 {
             margin: 4px 0;
-            font-size: 11px;
+            font-size: 12px;
         }
 
         p, ul {

@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <style>
      
-	@page {
-     size: A4;
-     margin:0;
-     }
+	 @page {
+	  size: A4;
+	  margin: 30px 30px; 
+	  width: 100%; 
+	 }
 	
- 
     html, body {
       margin: 0;
       padding: 0;
@@ -21,10 +21,11 @@
 
     .container {
       width: 200mm;
-      padding:10px;
+      padding: 10mm;
       margin: auto;
       background: white;
       box-sizing: border-box;
+      position: relative;
     }
 
     h1 {
@@ -87,12 +88,13 @@
     }
 
     ul li {
+    
       margin-bottom: 6px;
-      line-height: 1;
+      line-height: 1.3;
     }
 
     p {
-      line-height: 1.2;
+      line-height: 1.3;
     }
 
     .skills, .certs {
@@ -180,6 +182,32 @@
 	.certs {
 	  margin-top:10px;
 	 }
+	 
+	 .skills-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  .skills-table td {
+    padding-left: 20px;
+    padding-bottom: 8px;
+    font-weight: 500;
+    position: relative;
+    vertical-align: top;
+  }
+
+  .skills-table td::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #000;  
+    font-size: 18px;
+    line-height: 1;
+  }
+ 
+	
+	 
 
   </style>
 </head>
@@ -214,13 +242,12 @@
 
   <div class="container">
     <h1>${name}</h1>
-    <h2>Junior Full Stack Developer</h2>
-    <div class="contact">
-      <span>${phone}</span>
-      <span>${email}</span>
+     <div class="contact">
+      <span>Phone: ${phone}</span>
+      <span>Mail: ${email}</span>
 	  
 	  <#if linkedin?has_content>
-      <span>${linkedin}</span>
+      <span>LinkedIn: ${linkedin}</span>
 	  </#if> 
     </div>
 
@@ -246,18 +273,18 @@
        <#list experiences as experience>
   
       <#if experience.role?has_content> 
-         <div class="job-title">${experience.role}</div>
+         <div class="job-title">Role: ${experience.role}</div>
        </#if>
       
       <#if experience.role?has_content> 
-        <div class="company">${experience.companyName}</div>
+        <div class="company">Company: ${experience.companyName}</div>
       </#if>
       
       <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content> 
          <div class="meta">
-           ${experience.experienceYearStartDate}
+           ${extractYear(experience.experienceYearStartDate)}
            <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content>
-          - ${experience.experienceYearEndDate}
+          - ${extractYear(experience.experienceYearEndDate)}
            <#else>
              - Present
           </#if>
@@ -309,21 +336,22 @@
 	 <#list education as edu> 
        
       <#if edu.department?has_content> 
-        <div class="job-title">${edu.department}</div>
+        <div class="job-title">Department: ${edu.department}</div>
       </#if>
        
       <#if edu.institutionName?has_content>
-          <div class="company">${edu.institutionName}</div>
+          <div class="company">Institution: ${edu.institutionName}</div>
       </#if>    
        
       <#if edu.qualificationStartYear?? && edu.qualificationStartYear?has_content>
           <div class="meta">
-             ${extractYear(edu.qualificationStartYear)} 
+ 	            
+              ${extractYear(edu.qualificationStartYear)} 
                         
                <#if edu.qualificationEndYear?? && edu.qualificationEndYear?has_content>
-                     ${extractYear(edu.qualificationEndYear)}
+                   -  ${extractYear(edu.qualificationEndYear)}
                 <#else>
-                     Present </#if>             
+                    - Present </#if>             
 	      </div>
 	  </#if>  
 	     
@@ -332,45 +360,58 @@
     
    </#if> 
    
-   <#if skills?? && skills?trim?length gt 0> 
-    <div class="section">
-      <div class="section-title">SKILLS</div>
-      <div class="skill-container">
-	   <#list skills?split(",") as skill>
-	    <#if skill?has_content>
-          <div class="skill-badge">${skill?trim}</div>
-        </#if> 
-	    </#list>	
-      </div>
-    </div>
-  </#if>
+		<#if skills?? && skills?trim?length gt 0>
+		  <div class="section">
+		    <div class="section-title">SKILLS</div>
+		    <table class="skills-table">
+		      <#assign skillList = skills?split(",")>
+		      <#assign i = 0>
+		      <#list skillList as skill>
+		        <#if i % 2 == 0>
+		          <tr>
+		        </#if>
+		        <td><#if skill?has_content> ${skill?trim}</#if></td>
+		        <#if i % 2 == 1>
+		          </tr>
+		        </#if>
+		        <#assign i = i + 1>
+		      </#list>
+		      <#-- If odd number of items, close the last <tr> -->
+		      <#if (i % 2) != 0>
+		        <td></td></tr>
+		      </#if>
+		    </table>
+		  </div>
+		</#if>
+
+
+		<#if competencies?? && competencies?trim?length gt 0>
+		  <div class="section">
+		    <div class="section-title">CORE COMPETENCIES</div>
+		    <table class="skills-table">
+		      <#assign skillList = competencies?split(",")>
+		      <#assign i = 0>
+		      <#list skillList as skill>
+		        <#if i % 2 == 0>
+		          <tr>
+		        </#if>
+		        <td><#if skill?? && skill?has_content> ${skill?trim}</#if></td>
+		        <#if i % 2 == 1>
+		          </tr>
+		        </#if>
+		        <#assign i = i + 1>
+		      </#list>
+		      <#-- If odd number of items, close the last <tr> -->
+		      <#if (i % 2) != 0>
+		        <td></td></tr>
+		      </#if>
+		    </table>
+		  </div>
+		</#if>
+
+
   
-  <#if softSkills?? && softSkills?trim?length gt 0> 
-    <div class="section">
-      <div class="section-title">SOFT SKILLS</div>
-      <div class="skill-container">
-	   <#list softSkills?split(",") as skill>
-	     <#if skill?has_content>
-           <div class="skill-badge">${skill?trim}</div>
-         </#if> 
-	    </#list>	
-      </div>
-    </div>
-  </#if>
-  
-  <#if competencies?? && competencies?trim?length gt 0> 
-    <div class="section">
-      <div class="section-title">CORE COMPETENCIES</div>
-      <div class="skill-container">
-	   <#list competencies?split(",") as com>
-	     <#if com?has_content>
-            <div class="skill-badge">${com?trim}</div>
-          </#if>  
-	    </#list>	
-      </div>
-    </div>
-  </#if>
-  
+
   <#if certificates?? && certificates?size gt 0>
     <div class="section">
       <div class="section-title">CERTIFICATIONS</div>
@@ -386,6 +427,31 @@
 	 </#list> 
     </div>	
   </#if>
+  
+  <#if softSkills?? && softSkills?trim?length gt 0>
+		  <div class="section">
+		    <div class="section-title">SOFT SKILLS</div>
+		    <table class="skills-table">
+		      <#assign skillList = softSkills?split(",")>
+		      <#assign i = 0>
+		      <#list skillList as skill>
+		        <#if i % 2 == 0>
+		          <tr>
+		        </#if>
+		        <td><#if skill?has_content> ${skill?trim}</#if></td>
+		        <#if i % 2 == 1>
+		          </tr>
+		        </#if>
+		        <#assign i = i + 1>
+		      </#list>
+		      <#-- If odd number of items, close the last <tr> -->
+		      <#if (i % 2) != 0>
+		        <td></td></tr>
+		      </#if>
+		    </table>
+		  </div>
+		</#if>
+   
 	
   </div>
 </body>

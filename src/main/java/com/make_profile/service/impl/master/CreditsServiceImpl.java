@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.make_profile.dto.master.CreditsDto;
+import com.make_profile.entity.master.CreditHistoryEntity;
 import com.make_profile.entity.master.CreditsEntity;
+import com.make_profile.repository.master.CreditHistoryRepository;
 import com.make_profile.repository.master.CreditsRepository;
 import com.make_profile.service.master.CreditsService;
 
@@ -27,6 +29,9 @@ public class CreditsServiceImpl implements CreditsService {
 
 	@Autowired
 	ModelMapper modelMapper;
+
+	@Autowired
+	CreditHistoryRepository creditHistoryRepository;
 
 	// TODO candidate comes from login
 	@Override
@@ -64,6 +69,7 @@ public class CreditsServiceImpl implements CreditsService {
 
 		boolean status = false;
 		CreditsEntity findCreditesByUserId = null;
+		CreditsEntity creditEntity = null;
 		try {
 			findCreditesByUserId = creditsRepository.findCreditsByUserIdAndTemplateName(creditsDto.getUserId(),
 					creditsDto.getTemplateName());
@@ -78,7 +84,7 @@ public class CreditsServiceImpl implements CreditsService {
 				findCreditesByUserId.setTemplateName(creditsDto.getTemplateName());
 				findCreditesByUserId.setPaymentDate(LocalDate.now());
 
-				creditsRepository.save(findCreditesByUserId);
+				creditEntity = creditsRepository.save(findCreditesByUserId);
 
 				findCreditesByUserId = null;
 				status = true;
@@ -89,13 +95,17 @@ public class CreditsServiceImpl implements CreditsService {
 				candidateEntity.setCreditAvailable(Double.valueOf(creditsDto.getCreditAvailable()));
 				candidateEntity.setPaymentDate(LocalDate.now());
 				candidateEntity.setTemplateName(creditsDto.getTemplateName());
-				creditsRepository.save(candidateEntity);
+
+				creditEntity = creditsRepository.save(candidateEntity);
 
 				candidateEntity = null;
 				status = true;
 			}
 
+			saveCreditHistory(creditsDto, creditEntity.getId());
+
 			findCreditesByUserId = null;
+			creditEntity = null;
 
 		} catch (Exception e) {
 			logger.debug("Service :: addCredits :: Exception" + e.getMessage());
@@ -117,14 +127,14 @@ public class CreditsServiceImpl implements CreditsService {
 					creditsDto.getTemplateName());
 
 			if (Objects.nonNull(findCreditesByUserId)) {
-				if (findCreditesByUserId.getCreditAvailable() >= 2.0) {
+				if (findCreditesByUserId.getCreditAvailable() >= 1.0) {
 
 					findCreditesByUserId.setUserId(creditsDto.getUserId());
 					findCreditesByUserId
-							.setCreditAvailable(findCreditesByUserId.getCreditAvailable() - Double.valueOf(2));
+							.setCreditAvailable(findCreditesByUserId.getCreditAvailable() - Double.valueOf(1));
 					Double creditUsed = findCreditesByUserId.getCreditUsed() == null ? 0.0
 							: findCreditesByUserId.getCreditUsed();
-					findCreditesByUserId.setCreditUsed(creditUsed + Double.valueOf(2));
+					findCreditesByUserId.setCreditUsed(creditUsed + Double.valueOf(1));
 					findCreditesByUserId.setTemplateName(findCreditesByUserId.getTemplateName());
 					findCreditesByUserId.setId(findCreditesByUserId.getId());
 
@@ -140,7 +150,7 @@ public class CreditsServiceImpl implements CreditsService {
 		}
 		logger.debug("Service :: useCredit :: Exited");
 		return status;
-	}	
+	}
 
 	@Override
 	public Long getAvailableCredits(String templateName, Long userId) {
@@ -163,6 +173,29 @@ public class CreditsServiceImpl implements CreditsService {
 		}
 		logger.debug("Service :: getAvailableCredits :: Exited");
 		return available;
+	}
+
+	public void saveCreditHistory(CreditsDto creditsDto, Long creditId) {
+		logger.debug("Service :: saveCreditHistory :: Entered");
+
+		try {
+			CreditHistoryEntity creditHistoryEntity = new CreditHistoryEntity();
+
+			creditHistoryEntity.setPaidAmount(creditsDto.getCreditAvailable());
+			creditHistoryEntity.setPaymentDate(LocalDate.now());
+			creditHistoryEntity.setTemplateName(creditsDto.getTemplateName());
+			creditHistoryEntity.setCreditId(creditId);
+			creditHistoryEntity.setUserId(creditsDto.getUserId());
+
+			creditHistoryRepository.save(creditHistoryEntity);
+
+			creditHistoryEntity = null;
+		}
+
+		catch (Exception e) {
+			logger.debug("Service :: saveCreditHistory :: Exception" + e.getMessage());
+		}
+		logger.debug("Service :: saveCreditHistory :: Exited");
 	}
 
 }

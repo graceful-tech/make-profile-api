@@ -1,5 +1,6 @@
 package com.make_profile.service.impl.resume;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -25,6 +26,7 @@ import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.dto.candidates.CandidateExperienceDto;
 import com.make_profile.dto.candidates.CandidateProjectDetailsDto;
 import com.make_profile.dto.candidates.CandidateQualificationDto;
+import com.make_profile.dto.master.ResponcePdfDto;
 import com.make_profile.service.openai.MakeProfileOpenAiService;
 import com.make_profile.service.resume.CreateResumeTemplateService;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
@@ -44,7 +46,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 	MakeProfileOpenAiService makeProfileOpenAiService;
 
 	@Override
-	public boolean createResumeTemplate(CandidateDto candidate) {
+	public ResponcePdfDto createResumeTemplate(CandidateDto candidate) {
 		logger.debug("Service :: createResumeTemplate :: Extered");
 
 		Map<String, Object> variables = new HashedMap<>();
@@ -52,6 +54,9 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 		StringBuilder subject = new StringBuilder();
 
 		boolean status = false;
+		byte[] convertHtmlToPdf = null;
+
+		ResponcePdfDto responcePdfDto = new ResponcePdfDto();
 		try {
 
 			CandidateDto candidateDto = convertCandidateDtoIntoString(candidate);
@@ -223,40 +228,70 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 
 			// makeProfileOpenAiService.makeProfileAi(processTemplateIntoString);
 
-			convertHtmlToPdf(processTemplateIntoString, candidateDto.getName() + ".pdf");
+			convertHtmlToPdf = convertHtmlToPdf(processTemplateIntoString, candidateDto.getName() + ".pdf");
 
 			// convertHtmlToDocx(processTemplateIntoString, candidateDto.getName() +
 			// ".docx");
 
 			status = true;
 
+			responcePdfDto.setResumePdf(convertHtmlToPdf);
+			responcePdfDto.setCandidateName(candidate.getName());
+
 		} catch (Exception e) {
 			logger.debug("Service :: createResumeTemplate :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: createResumeTemplate :: Exited");
-		return status;
+		return responcePdfDto;
 	}
 
-	public static void convertHtmlToPdf(String html, String outputPath) throws Exception {
+//	public static void convertHtmlToPdf(String html, String outputPath) throws Exception {
+//
+//		logger.debug("Service :: convertHtmlToPdf :: Extered");
+//		try {
+//
+//			OutputStream os = new FileOutputStream(outputPath);
+//			PdfRendererBuilder builder = new PdfRendererBuilder();
+//			builder.useDefaultPageSize(210, 297, PdfRendererBuilder.PageSizeUnits.MM); // A4
+//			builder.withHtmlContent(html, new File(".").toURI().toString());
+//			builder.toStream(os);
+//			builder.useFastMode();
+//			builder.run();
+//			System.out.println("PDF generated successfully at: " + outputPath);
+//             
+//		}
+//
+//		catch (Exception e) {
+//			logger.debug("Service :: convertHtmlToPdf :: Exited" + e.getMessage());
+//		}
+//		logger.debug("Service :: convertHtmlToPdf :: Exited");
+//	}
 
-		logger.debug("Service :: convertHtmlToPdf :: Extered");
-		try {
+	public byte[] convertHtmlToPdf(String html, String outputPath) throws Exception {
+		logger.debug("Service :: convertHtmlToPdf :: Entered");
 
-			OutputStream os = new FileOutputStream(outputPath);
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+
 			PdfRendererBuilder builder = new PdfRendererBuilder();
 			builder.useDefaultPageSize(210, 297, PdfRendererBuilder.PageSizeUnits.MM); // A4
-			builder.withHtmlContent(html, null);
-			builder.toStream(os);
+			builder.withHtmlContent(html, new File(".").toURI().toString());
+			builder.toStream(baos);
 			builder.useFastMode();
 			builder.run();
+
+			byte[] pdfBytes = baos.toByteArray();
+
+			builder = null;
+			// TODO erase this after completing
 			System.out.println("PDF generated successfully at: " + outputPath);
 
-		}
+			logger.debug("Service :: convertHtmlToPdf :: Exited");
+			return pdfBytes;
 
-		catch (Exception e) {
-			logger.debug("Service :: convertHtmlToPdf :: Exited" + e.getMessage());
+		} catch (Exception e) {
+			logger.error("Service :: convertHtmlToPdf :: Error" + e.getMessage());
+			return null;
 		}
-		logger.debug("Service :: convertHtmlToPdf :: Exited");
 	}
 
 	public static void convertHtmlToDocx(String html, String outputPath) throws Exception {

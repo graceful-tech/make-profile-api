@@ -2,8 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Resume - John Doe</title>
-    <style>
+     <style>
         @page {
             size: A4;
             margin: 30px;
@@ -143,10 +142,6 @@
         <div class="header">
             <h1>${name}</h1>
         
-            <#if roleName?has_content>
-			  <h3>Full Stack Developer</h3>
-			</#if> 
-			
             <p class="contact-info">Phone: ${phone} | Mail: ${email} |
            
             <#if linkedin?has_content>
@@ -235,12 +230,12 @@
 				 <div class="section">
                       <h2>Work Experience</h2>
                    <#list experiences as experience>
-                        <h3>${experience.role}</h3>
+                        <h3>Role: ${experience.role}</h3>
                         
                         
                            <p><strong>
                            <#if experience.companyName?has_content>
-                               ${experience.companyName}
+                              Company: ${experience.companyName}
                            </#if> 
                               <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content> 
                                   ${extractYear(experience.experienceYearStartDate)} -

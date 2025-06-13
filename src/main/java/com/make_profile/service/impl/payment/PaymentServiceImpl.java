@@ -147,7 +147,7 @@ public class PaymentServiceImpl implements PaymentService {
 		try {
 
 			creditsDto.setUserId(paymentDto.getUserId());
-			creditsDto.setCreditAvailable(10.00);
+			creditsDto.setCreditAvailable(paymentDto.getAmount() / 2);
 			creditsDto.setPaymentDate(LocalDate.now());
 			creditsDto.setTemplateName(paymentDto.getTemplateName());
 
