@@ -96,7 +96,7 @@ public class CommonUtils {
 
 			File dir = new File(targetLocation.toString());
 			if (!dir.exists()) {
-				dir.mkdirs(); 
+				dir.mkdirs();
 			}
 
 			// Create destination file path
@@ -112,5 +112,13 @@ public class CommonUtils {
 		}
 		logger.debug("Service :: moveFileToServer :: Exited");
 		return path;
+	}
+
+	public String generateOtp() {
+		String otp = "";
+		for (int i = 0; i < 6; i++) {
+			otp += (int) (Math.random() * 10);
+		}
+		return otp;
 	}
 }
