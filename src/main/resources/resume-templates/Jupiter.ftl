@@ -334,7 +334,7 @@
 		    
 		    <#if certificates?? && certificates?size gt 0> 
 				 <div class="section">
-				      <div class="section-title">Certicates</div>
+				      <div class="section-title">Certificates</div>
 				        <div class="achievements-list">
 						    <ul>
 						      <#list certificates as certi>

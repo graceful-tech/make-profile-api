@@ -64,6 +64,14 @@ public class CandidateDto extends BaseDto {
 
 	private String createdUserName;
 
+	private boolean coreCompentenciesMandatory;
+
+	private boolean softSkillsMandatory;
+
+	private boolean certificatesMandatory;
+
+	private boolean achievementsMandatory;
+
 	public Long getId() {
 		return id;
 	}
@@ -286,6 +294,38 @@ public class CandidateDto extends BaseDto {
 
 	public void setCreatedUserName(String createdUserName) {
 		this.createdUserName = createdUserName;
+	}
+
+	public boolean isCoreCompentenciesMandatory() {
+		return coreCompentenciesMandatory;
+	}
+
+	public void setCoreCompentenciesMandatory(boolean coreCompentenciesMandatory) {
+		this.coreCompentenciesMandatory = coreCompentenciesMandatory;
+	}
+
+	public boolean isSoftSkillsMandatory() {
+		return softSkillsMandatory;
+	}
+
+	public void setSoftSkillsMandatory(boolean softSkillsMandatory) {
+		this.softSkillsMandatory = softSkillsMandatory;
+	}
+
+	public boolean isCertificatesMandatory() {
+		return certificatesMandatory;
+	}
+
+	public void setCertificatesMandatory(boolean certificatesMandatory) {
+		this.certificatesMandatory = certificatesMandatory;
+	}
+
+	public boolean isAchievementsMandatory() {
+		return achievementsMandatory;
+	}
+
+	public void setAchievementsMandatory(boolean achievementsMandatory) {
+		this.achievementsMandatory = achievementsMandatory;
 	}
 
 }

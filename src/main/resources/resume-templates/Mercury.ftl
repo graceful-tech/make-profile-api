@@ -124,10 +124,10 @@
     <div class="container">
         <div class="header">
             <h1>${name}</h1>
-            <p class="contact-info">Phone: ${phone} | Mail: ${email} | 
+            <p class="contact-info">Phone: ${phone} | Mail: ${email} 
            
            <#if linkedin?has_content>
-            LinkedIn: ${linkedin}
+           | LinkedIn: ${linkedin}
            </#if> 
             </p>
         </div>

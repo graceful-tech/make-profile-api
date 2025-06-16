@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.make_profile.controller.BaseController;
 import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.dto.master.ResponcePdfDto;
+import com.make_profile.exception.MakeProfileException;
 import com.make_profile.service.resume.CreateResumeTemplateService;
 import com.make_profile.utility.CommonConstants;
 
@@ -30,11 +31,11 @@ public class CreateResumeTemplateController extends BaseController {
 
 	@PostMapping("/create")
 	public ResponseEntity<?> createResumeTemplate(@RequestBody CandidateDto candidateDto,
-			@RequestHeader("username") String username) {
+			@RequestHeader("username") String username) throws MakeProfileException {
 
 		logger.debug("Controller :: createResumeTemplate :: Entered");
 
-		ResponcePdfDto createResumeTemplate = createResumeTemplateService.createResumeTemplate(candidateDto);
+		ResponcePdfDto createResumeTemplate = createResumeTemplateService.createResumeTemplate(candidateDto, username);
 
 		logger.debug("Controller :: createResumeTemplate :: Exited");
 

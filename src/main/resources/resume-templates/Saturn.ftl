@@ -7,7 +7,7 @@
     
     @page {
       size: A4;
-	  margin: 0px 30px; 
+	  margin: 30px 30px; 
 	  width: 100%; 
 	}
 	
@@ -364,7 +364,7 @@
 
 		 <div class="section">
 		 
-		    <div class="section-title">KEY ACHIEVEMENTS</div>
+		    <div class="section-title">ACHIEVEMENTS</div>
 		    <ul class="bullets">
 		    <#list achievements as achieve>
 				<#if achieve.achievementsName?? && achieve.achievementsName?has_content>
@@ -404,15 +404,24 @@
 		 </div>
  	</#if> 
 		  
+     <#if competencies?? && competencies?trim?length gt 0> 
+		  <div class="section">
+		    <div class="section-title">CORE COMPETENCIES</div>
+		    <div class="tags">
+			    <#list competencies?split(",") as comp>
+			    	<#if comp?? && comp?has_content>
+ 			           <span class="tag"> ${comp?trim}</span>
+			        </#if>
+			    </#list> 
+		    </div>
+		  </div>
+		  
+    </#if> 		  
 		  
     <#if softSkills?? && softSkills?trim?length gt 0> 
-
 		  <div class="section">
-		  
 		    <div class="section-title">SOFT SKILLS</div>
-		    
 		    <div class="tags">
-		    
 			    <#list softSkills?split(",") as skill>
 			    	<#if skill?? && skill?has_content>
  			           <span class="tag"> ${skill?trim}</span>

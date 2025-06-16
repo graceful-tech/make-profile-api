@@ -64,7 +64,7 @@ public class CandidatesServiceimpl implements CandidateService {
 
 	@Override
 	public CandidateDto createCandidate(CandidateDto candidateDto, String Username) {
-		logger.debug("Service :: createResumeTemplate :: Entered");
+		logger.debug("Service :: createCandidate :: Entered");
 
 		CandidateDto candidateResponseDto = null;
 		CandidateEntity candidateEntity = new CandidateEntity();
@@ -114,9 +114,9 @@ public class CandidatesServiceimpl implements CandidateService {
 			candidateByUserName = null;
 
 		} catch (Exception e) {
-			logger.debug("Service :: createResumeTemplate :: Exception" + e.getMessage());
+			logger.debug("Service :: createCandidate :: Exception" + e.getMessage());
 		}
-		logger.debug("Service :: createResumeTemplate :: Entered");
+		logger.debug("Service :: createCandidate :: Entered");
 		return candidateResponseDto;
 	}
 

@@ -2,8 +2,6 @@ package com.make_profile.service.impl.resume;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +25,14 @@ import com.make_profile.dto.candidates.CandidateExperienceDto;
 import com.make_profile.dto.candidates.CandidateProjectDetailsDto;
 import com.make_profile.dto.candidates.CandidateQualificationDto;
 import com.make_profile.dto.master.ResponcePdfDto;
+import com.make_profile.entity.master.CreditsEntity;
+import com.make_profile.exception.MakeProfileException;
+import com.make_profile.repository.master.CreditsRepository;
+import com.make_profile.repository.user.UserRepository;
+import com.make_profile.service.candidates.CheckResumePageCountService;
 import com.make_profile.service.openai.MakeProfileOpenAiService;
 import com.make_profile.service.resume.CreateResumeTemplateService;
+import com.make_profile.utility.CommonConstants;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import freemarker.template.Configuration;
@@ -45,201 +49,235 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 	@Autowired
 	MakeProfileOpenAiService makeProfileOpenAiService;
 
+	@Autowired
+	CheckResumePageCountService checkResumePageCountService;
+
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	CreditsRepository creditsRepository;
+
 	@Override
-	public ResponcePdfDto createResumeTemplate(CandidateDto candidate) {
+	public ResponcePdfDto createResumeTemplate(CandidateDto candidate, String username) throws MakeProfileException {
 		logger.debug("Service :: createResumeTemplate :: Extered");
 
 		Map<String, Object> variables = new HashedMap<>();
 		Template template = null;
-		StringBuilder subject = new StringBuilder();
+//		StringBuilder subject = new StringBuilder();
 
-		boolean status = false;
 		byte[] convertHtmlToPdf = null;
 
 		ResponcePdfDto responcePdfDto = new ResponcePdfDto();
 		try {
-
 			CandidateDto candidateDto = convertCandidateDtoIntoString(candidate);
 
-			variables.put("phone", candidate.getMobileNumber());
-			variables.put("name", candidate.getName());
-			variables.put("email", candidate.getEmail());
-			// variables.put("summary", candidateDto.getSummary());
+			if (Objects.nonNull(candidateDto)) {
 
-			if (Objects.nonNull(candidate.getLinkedIn()) && !candidate.getLinkedIn().isEmpty()) {
-				variables.put("linkedin", candidate.getLinkedIn());
-			}
+				variables.put("phone", candidate.getMobileNumber());
+				variables.put("name", candidate.getName());
+				variables.put("email", candidate.getEmail());
+				// variables.put("summary", candidateDto.getSummary());
 
-			if (Objects.nonNull(candidateDto.getAddress()) && !candidateDto.getAddress().isEmpty()) {
-				variables.put("address", candidate.getAddress());
-			}
-
-			if (Objects.nonNull(candidateDto.getDob())) {
-				variables.put("dob", candidateDto.getDob());
-			}
-
-			if (Objects.nonNull(candidateDto.getGender()) && !candidateDto.getGender().isEmpty()) {
-				variables.put("gender", candidateDto.getGender());
-			}
-
-			if (Objects.nonNull(candidateDto.getLanguagesKnown()) && !candidateDto.getLanguagesKnown().isEmpty()) {
-				variables.put("languages", candidateDto.getLanguagesKnown());
-			}
-
-			if (Objects.nonNull(candidateDto.getMaritalStatus()) && !candidateDto.getMaritalStatus().isEmpty()) {
-				variables.put("maritalStatus", candidateDto.getMaritalStatus());
-			}
-
-			if (candidateDto.isFresher()) {
-				variables.put("isFresher", candidateDto.isFresher());
-			} else {
-
-				if (Objects.nonNull(candidateDto.getExperiences()) && !candidateDto.getExperiences().isEmpty()) {
-
-					List<CandidateExperienceDto> experienceList = new ArrayList<>();
-					List<CandidateProjectDetailsDto> projectsList = new ArrayList<>();
-
-					candidateDto.getExperiences().forEach(exp -> {
-						CandidateExperienceDto experiences = new CandidateExperienceDto();
-						experiences.setRole(exp.getRole());
-						experiences.setCompanyName(exp.getCompanyName());
-						experiences.setExperienceYearStartDate(exp.getExperienceYearStartDate());
-						experiences.setExperienceYearEndDate(exp.getExperienceYearEndDate());
-						experiences.setResponsibilities(exp.getResponsibilities());
-
-						if (Objects.nonNull(exp.getProjects()) && !exp.getProjects().isEmpty()) {
-							exp.getProjects().forEach(project -> {
-								CandidateProjectDetailsDto pro = new CandidateProjectDetailsDto();
-
-								pro.setProjectRole(project.getProjectRole());
-								pro.setProjectName(project.getProjectName());
-								pro.setProjectDescription(project.getProjectDescription());
-								pro.setProjectSkills(project.getProjectSkills());
-								projectsList.add(pro);
-								pro = null;
-							});
-						}
-						experiences.setProjects(projectsList);
-						experienceList.add(experiences);
-
-						// projectsList.clear();
-						experiences = null;
-					});
-					variables.put("experiences", experienceList);
+				if (Objects.nonNull(candidate.getLinkedIn()) && !candidate.getLinkedIn().isEmpty()) {
+					variables.put("linkedin", candidate.getLinkedIn());
 				}
+
+				if (Objects.nonNull(candidateDto.getAddress()) && !candidateDto.getAddress().isEmpty()) {
+					variables.put("address", candidate.getAddress());
+				}
+
+				if (Objects.nonNull(candidateDto.getDob())) {
+					variables.put("dob", candidateDto.getDob());
+				}
+
+				if (Objects.nonNull(candidateDto.getGender()) && !candidateDto.getGender().isEmpty()) {
+					variables.put("gender", candidateDto.getGender());
+				}
+
+				if (Objects.nonNull(candidateDto.getLanguagesKnown()) && !candidateDto.getLanguagesKnown().isEmpty()) {
+					variables.put("languages", candidateDto.getLanguagesKnown());
+				}
+
+				if (Objects.nonNull(candidateDto.getMaritalStatus()) && !candidateDto.getMaritalStatus().isEmpty()) {
+					variables.put("maritalStatus", candidateDto.getMaritalStatus());
+				}
+
+				if (candidateDto.isFresher()) {
+					variables.put("isFresher", candidateDto.isFresher());
+				} else {
+
+					if (Objects.nonNull(candidateDto.getExperiences()) && !candidateDto.getExperiences().isEmpty()) {
+
+						List<CandidateExperienceDto> experienceList = new ArrayList<>();
+						List<CandidateProjectDetailsDto> projectsList = new ArrayList<>();
+
+						candidateDto.getExperiences().forEach(exp -> {
+							CandidateExperienceDto experiences = new CandidateExperienceDto();
+							experiences.setRole(exp.getRole());
+							experiences.setCompanyName(exp.getCompanyName());
+							experiences.setExperienceYearStartDate(exp.getExperienceYearStartDate());
+							experiences.setExperienceYearEndDate(exp.getExperienceYearEndDate());
+							experiences.setResponsibilities(exp.getResponsibilities());
+
+							if (Objects.nonNull(exp.getProjects()) && !exp.getProjects().isEmpty()) {
+								exp.getProjects().forEach(project -> {
+									CandidateProjectDetailsDto pro = new CandidateProjectDetailsDto();
+
+									pro.setProjectRole(project.getProjectRole());
+									pro.setProjectName(project.getProjectName());
+									pro.setProjectDescription(project.getProjectDescription());
+									pro.setProjectSkills(project.getProjectSkills());
+									projectsList.add(pro);
+									pro = null;
+								});
+							}
+							experiences.setProjects(projectsList);
+							experienceList.add(experiences);
+
+							// projectsList.clear();
+							experiences = null;
+						});
+						variables.put("experiences", experienceList);
+					}
+				}
+
+				if (Objects.nonNull(candidate.getSkills()) && !candidate.getSkills().isEmpty()) {
+					variables.put("skills", candidate.getSkills());
+				}
+
+				if (Objects.nonNull(candidateDto.getCertificates())
+						&& !CollectionUtils.isEmpty(candidateDto.getCertificates())) {
+
+					List<CandidateCertificatesDto> certificatesList = new ArrayList<>();
+
+					candidateDto.getCertificates().forEach(certificate -> {
+						CandidateCertificatesDto cer = new CandidateCertificatesDto();
+
+						cer.setCourseName(certificate.getCourseName());
+						cer.setCourseStartDate(certificate.getCourseStartDate());
+						cer.setCourseEndDate(certificate.getCourseEndDate());
+						certificatesList.add(cer);
+
+						cer = null;
+					});
+
+					variables.put("certificates", candidateDto.getCertificates());
+				}
+
+				if (Objects.nonNull(candidateDto.getQualification())
+						&& !CollectionUtils.isEmpty(candidateDto.getQualification())) {
+					List<CandidateQualificationDto> educationList = new ArrayList<>();
+
+					candidateDto.getQualification().forEach(quali -> {
+						CandidateQualificationDto qulification = new CandidateQualificationDto();
+
+						qulification.setInstitutionName(quali.getInstitutionName());
+						qulification.setDepartment(quali.getDepartment());
+						qulification.setQualificationStartYear(quali.getQualificationStartYear());
+						qulification.setQualificationEndYear(quali.getQualificationEndYear());
+						qulification.setPercentage(quali.getPercentage());
+
+						educationList.add(qulification);
+						qulification = null;
+					});
+					variables.put("education", educationList);
+				}
+
+				if (Objects.nonNull(candidateDto.getSoftSkills()) && !candidateDto.getSoftSkills().isEmpty()) {
+					variables.put("softSkills", candidateDto.getSoftSkills());
+				}
+
+				if (Objects.nonNull(candidateDto.getAchievements())
+						&& !CollectionUtils.isEmpty(candidateDto.getAchievements())) {
+
+					List<CandidateAchievementsDto> achievementsList = new ArrayList<>();
+
+					candidateDto.getAchievements().forEach(achieve -> {
+						CandidateAchievementsDto achievements = new CandidateAchievementsDto();
+
+						achievements.setAchievementsName(achieve.getAchievementsName());
+						achievements.setAchievementsDate(achieve.getAchievementsDate());
+
+						achievementsList.add(achievements);
+						achievements = null;
+					});
+					variables.put("achievements", achievementsList);
+				}
+
+				if (Objects.nonNull(candidateDto.getCoreCompentencies())
+						&& !candidateDto.getCoreCompentencies().isEmpty()) {
+					variables.put("competencies", candidateDto.getCoreCompentencies());
+				}
+
+				if (Objects.nonNull(candidateDto.getCollegeProject())
+						&& !CollectionUtils.isEmpty(candidateDto.getCollegeProject())) {
+
+					List<CandidateCollegeProjectDto> candidateCollegeProjectList = new ArrayList<>();
+
+					candidateDto.getCollegeProject().forEach(project -> {
+						CandidateCollegeProjectDto collegeProject = new CandidateCollegeProjectDto();
+
+						collegeProject.setCollegeProjectName(project.getCollegeProjectName());
+						collegeProject.setCollegeProjectSkills(project.getCollegeProjectSkills());
+						collegeProject.setCollegeProjectDescription(project.getCollegeProjectDescription());
+						candidateCollegeProjectList.add(collegeProject);
+						collegeProject = null;
+					});
+					variables.put("collegeProject", candidateCollegeProjectList);
+				}
+
+				if (Objects.nonNull(candidateDto.getCareerObjective())
+						&& !candidateDto.getCareerObjective().isEmpty()) {
+					variables.put("objective", candidateDto.getCareerObjective());
+				}
+
+				if (Objects.nonNull(candidateDto.getSummary()) && !candidateDto.getSummary().isEmpty()) {
+					variables.put("summary", candidateDto.getSummary());
+				}
+
+				template = configuration.getTemplate(candidate.getTemplateName() + ".ftl");
+
+				String processTemplateIntoString = FreeMarkerTemplateUtils.processTemplateIntoString(template,
+						variables);
+
+				// makeProfileOpenAiService.makeProfileAi(processTemplateIntoString);
+
+				String resumeHtmlCode = checkResumePageCountService.getResumeHtmlCode(processTemplateIntoString,
+						candidate.getId(), username, candidate.getTemplateName());
+
+				convertHtmlToPdf = convertHtmlToPdf(resumeHtmlCode, candidateDto.getName() + ".pdf");
+
+				// convertHtmlToDocx(processTemplateIntoString, candidateDto.getName() +
+				// ".docx");
+
+				responcePdfDto.setResumePdf(convertHtmlToPdf);
+				responcePdfDto.setCandidateName(candidate.getName());
+
 			}
 
-			if (Objects.nonNull(candidate.getSkills()) && !candidate.getSkills().isEmpty()) {
-				variables.put("skills", candidate.getSkills());
+			else {
+				Long userId = userRepository.getUserId(username);
+				CreditsEntity creditsEntity = creditsRepository.findCreditsByUserIdAndTemplateName(userId,
+						candidate.getTemplateName());
+
+				creditsEntity.setCreditAvailable(creditsEntity.getCreditAvailable() + 1);
+				creditsEntity.setCreditUsed(creditsEntity.getCreditUsed() - 1);
+
+				creditsRepository.save(creditsEntity);
+
+				creditsEntity = null;
+				userId = null;
+
+				throw new MakeProfileException(CommonConstants.MP_0007);
+
 			}
 
-			if (Objects.nonNull(candidateDto.getCertificates())
-					&& !CollectionUtils.isEmpty(candidateDto.getCertificates())) {
-
-				List<CandidateCertificatesDto> certificatesList = new ArrayList<>();
-
-				candidateDto.getCertificates().forEach(certificate -> {
-					CandidateCertificatesDto cer = new CandidateCertificatesDto();
-
-					cer.setCourseName(certificate.getCourseName());
-					cer.setCourseStartDate(certificate.getCourseStartDate());
-					cer.setCourseEndDate(certificate.getCourseEndDate());
-					certificatesList.add(cer);
-
-					cer = null;
-				});
-
-				variables.put("certifications", candidateDto.getCertificates());
-			}
-
-			if (Objects.nonNull(candidateDto.getQualification())
-					&& !CollectionUtils.isEmpty(candidateDto.getQualification())) {
-				List<CandidateQualificationDto> educationList = new ArrayList<>();
-
-				candidateDto.getQualification().forEach(quali -> {
-					CandidateQualificationDto qulification = new CandidateQualificationDto();
-
-					qulification.setInstitutionName(quali.getInstitutionName());
-					qulification.setDepartment(quali.getDepartment());
-					qulification.setQualificationStartYear(quali.getQualificationStartYear());
-					qulification.setQualificationEndYear(quali.getQualificationEndYear());
-					qulification.setPercentage(quali.getPercentage());
-
-					educationList.add(qulification);
-					qulification = null;
-				});
-				variables.put("education", educationList);
-			}
-
-			if (Objects.nonNull(candidateDto.getSoftSkills()) && !candidateDto.getSoftSkills().isEmpty()) {
-				variables.put("softSkills", candidateDto.getSoftSkills());
-			}
-
-			if (Objects.nonNull(candidateDto.getAchievements())
-					&& !CollectionUtils.isEmpty(candidateDto.getAchievements())) {
-
-				List<CandidateAchievementsDto> achievementsList = new ArrayList<>();
-
-				candidateDto.getAchievements().forEach(achieve -> {
-					CandidateAchievementsDto achievements = new CandidateAchievementsDto();
-
-					achievements.setAchievementsName(achieve.getAchievementsName());
-					achievements.setAchievementsDate(achieve.getAchievementsDate());
-
-					achievementsList.add(achievements);
-					achievements = null;
-				});
-				variables.put("achievements", achievementsList);
-			}
-
-			if (Objects.nonNull(candidateDto.getCoreCompentencies())
-					&& !candidateDto.getCoreCompentencies().isEmpty()) {
-				variables.put("competencies", candidateDto.getCoreCompentencies());
-			}
-
-			if (Objects.nonNull(candidateDto.getCollegeProject())
-					&& !CollectionUtils.isEmpty(candidateDto.getCollegeProject())) {
-
-				List<CandidateCollegeProjectDto> candidateCollegeProjectList = new ArrayList<>();
-
-				candidateDto.getCollegeProject().forEach(project -> {
-					CandidateCollegeProjectDto collegeProject = new CandidateCollegeProjectDto();
-
-					collegeProject.setCollegeProjectName(project.getCollegeProjectName());
-					collegeProject.setCollegeProjectSkills(project.getCollegeProjectSkills());
-					collegeProject.setCollegeProjectDescription(project.getCollegeProjectDescription());
-					candidateCollegeProjectList.add(collegeProject);
-					collegeProject = null;
-				});
-				variables.put("collegeProject", candidateCollegeProjectList);
-			}
-
-			if (Objects.nonNull(candidateDto.getCareerObjective()) && !candidateDto.getCareerObjective().isEmpty()) {
-				variables.put("objective", candidateDto.getCareerObjective());
-			}
-
-			if (Objects.nonNull(candidateDto.getSummary()) && !candidateDto.getSummary().isEmpty()) {
-				variables.put("summary", candidateDto.getSummary());
-			}
-
-			template = configuration.getTemplate(candidate.getTemplateName() + ".ftl");
-
-			String processTemplateIntoString = FreeMarkerTemplateUtils.processTemplateIntoString(template, variables);
-
-			// makeProfileOpenAiService.makeProfileAi(processTemplateIntoString);
-
-			convertHtmlToPdf = convertHtmlToPdf(processTemplateIntoString, candidateDto.getName() + ".pdf");
-
-			// convertHtmlToDocx(processTemplateIntoString, candidateDto.getName() +
-			// ".docx");
-
-			status = true;
-
-			responcePdfDto.setResumePdf(convertHtmlToPdf);
-			responcePdfDto.setCandidateName(candidate.getName());
-
+		} catch (MakeProfileException e) {
+			logger.error("Service :: getResumeHtmlCode :: MakeProfileException :: " + e.getMessage());
+			throw e;
 		} catch (Exception e) {
-			logger.debug("Service :: createResumeTemplate :: Exception" + e.getMessage());
+			logger.debug("Service :: createResumeTemplate :: Exception " + e.getMessage());
 		}
 		logger.debug("Service :: createResumeTemplate :: Exited");
 		return responcePdfDto;

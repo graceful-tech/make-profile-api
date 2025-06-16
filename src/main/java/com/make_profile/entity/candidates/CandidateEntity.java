@@ -85,6 +85,18 @@ public class CandidateEntity extends BaseEntity {
 	@Column(nullable = true, length = 1000)
 	private String coreCompentencies;
 
+	@Column(nullable = true, length = 10)
+	private boolean coreCompentenciesMandatory;
+
+	@Column(nullable = true, length = 10)
+	private boolean softSkillsMandatory;
+
+	@Column(nullable = true, length = 10)
+	private boolean certificatesMandatory;
+
+	@Column(nullable = true, length = 10)
+	private boolean achievementsMandatory;
+
 	public Long getId() {
 		return id;
 	}
@@ -245,4 +257,37 @@ public class CandidateEntity extends BaseEntity {
 		this.collegeProject = collegeProject;
 	}
 
+	public boolean isCoreCompentenciesMandatory() {
+		return coreCompentenciesMandatory;
+	}
+
+	public void setCoreCompentenciesMandatory(boolean coreCompentenciesMandatory) {
+		this.coreCompentenciesMandatory = coreCompentenciesMandatory;
+	}
+
+	public boolean isSoftSkillsMandatory() {
+		return softSkillsMandatory;
+	}
+
+	public void setSoftSkillsMandatory(boolean softSkillsMandatory) {
+		this.softSkillsMandatory = softSkillsMandatory;
+	}
+
+	public boolean isCertificatesMandatory() {
+		return certificatesMandatory;
+	}
+
+	public void setCertificatesMandatory(boolean certificatesMandatory) {
+		this.certificatesMandatory = certificatesMandatory;
+	}
+
+	public boolean isAchievementsMandatory() {
+		return achievementsMandatory;
+	}
+
+	public void setAchievementsMandatory(boolean achievementsMandatory) {
+		this.achievementsMandatory = achievementsMandatory;
+	}
+
+	
 }

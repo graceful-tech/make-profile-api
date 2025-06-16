@@ -62,12 +62,13 @@
       margin-bottom: 5px;
       border-bottom: 1px solid #000;
       padding-bottom: 3px;
+      color:#1a75cf;
     }
 
     .job-title {
       font-weight: bold;
       font-size: 11pt;
-      margin-top: 15px;
+      margin-top: 10px;
       margin-bottom: 3px;
     }
 
@@ -157,7 +158,6 @@
 	  font-weight: bold;
       font-size: 11.5pt;
       margin-bottom: 5px;
-      padding-bottom: 5px;
 	  color: #1a75cf;
 	  border-bottom: 1px solid #ccc;
 	}
@@ -204,6 +204,12 @@
     color: #000;  
     font-size: 18px;
     line-height: 1;
+  }
+  
+  .certificate{
+     line-height: 1.8;
+     margin-top:3px;
+     
   }
  
 	
@@ -282,11 +288,11 @@
       
       <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content> 
          <div class="meta">
-           ${extractYear(experience.experienceYearStartDate)}
+          ( ${extractYear(experience.experienceYearStartDate)}
            <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content>
-          - ${extractYear(experience.experienceYearEndDate)}
+          - ${extractYear(experience.experienceYearEndDate)} )
            <#else>
-             - Present
+             - Present )
           </#if>
          </div>
      </#if>
@@ -346,12 +352,12 @@
       <#if edu.qualificationStartYear?? && edu.qualificationStartYear?has_content>
           <div class="meta">
  	            
-              ${extractYear(edu.qualificationStartYear)} 
+             ( ${extractYear(edu.qualificationStartYear)} 
                         
                <#if edu.qualificationEndYear?? && edu.qualificationEndYear?has_content>
-                   -  ${extractYear(edu.qualificationEndYear)}
+                   -  ${extractYear(edu.qualificationEndYear)} )
                 <#else>
-                    - Present </#if>             
+                    - Present ) </#if>             
 	      </div>
 	  </#if>  
 	     
@@ -414,16 +420,28 @@
 
   <#if certificates?? && certificates?size gt 0>
     <div class="section">
-      <div class="section-title">CERTIFICATIONS</div>
+      <div class="section-title">CERTIFICATES</div>
 	 <#list certificates as certificate>  
-       <div class="certs">
+       
         <#if certificate.courseName?has_content>
-           <div><strong>${certificate.courseName}</strong></div>
+           <div class="certificate"><strong>${certificate.courseName}</strong>
+           
+            <#if certificate.courseStartDate?? && certificate.courseStartDate?has_content>
+              <span style="padding-left:10px;">  ( ${extractYear(certificate.courseStartDate)}   </span>
+                   
+                    <#if certificate.courseEndDate?? && certificate.courseEndDate?has_content>
+                        <span style="padding-left:3px;">  - ${extractYear(certificate.courseEndDate)} )  </span>
+                         <#else>
+                             )
+                    </#if> 
+                      
+             </#if>
+           
+           
+           </div>
         </#if> 
-        <#if certificate.courseStartDate?? && certificate.courseStartDate?has_content>
-           <div><strong>${extractYear(certificate.courseStartDate)}</strong></div>
-        </#if>
-       </div>
+        
+        
 	 </#list> 
     </div>	
   </#if>

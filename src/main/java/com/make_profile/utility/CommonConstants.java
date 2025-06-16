@@ -14,5 +14,7 @@ public interface CommonConstants {
 	String MP_0005 = "MP_0005";
 	String MP_0006 = "MP_0006";
 	String MP_0007 = "MP_0007";
+	String MP_0008 = "MP_0008";
+	String MP_0009 = "MP_0009";
 
 }

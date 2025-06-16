@@ -355,7 +355,7 @@
 			   
 			  <#if achievements?? && achievements?size gt 0>   
 				  <div class="section">
-                      <div class="content-title">Achievements &amp; Awards</div>
+                      <div class="content-title">Achievements</div>
                        <#list achievements as achieve>
                          <#if achieve?? && achieve.achievementsName?has_content>
                                <p> <strong><a>${achieve.achievementsName}</a></strong>
@@ -390,7 +390,7 @@
                
              <#if competencies?? && competencies?trim?length gt 0>     
 				 <div class="section">
-                     <div class="content-title">Core Compentencies</div>
+                     <div class="content-title">Core Competencies</div>
                         <ul>
                            <#list competencies?split(",") as comp>
                             <#if comp?has_content>
