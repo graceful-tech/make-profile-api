@@ -12,6 +12,8 @@ public interface EmailService{
 	
 	boolean sendEmail(EmailDto emailDto) throws Exception;
 
-	UserDto verifyOtp(PasswordResetTokenDto passwordResetTokenDto);
+	boolean verifyOtp(PasswordResetTokenDto passwordResetTokenDto);
+
+	boolean updatPassword(PasswordResetTokenDto passwordResetTokenDto);
 	
 }

@@ -170,36 +170,40 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public UserDto verifyOtp(PasswordResetTokenDto passwordResetTokenDto) {
+	public boolean verifyOtp(PasswordResetTokenDto passwordResetTokenDto) {
 		logger.debug("Service :: sendPasswordResetToken :: Entered");
-		UserDto userDto = null;
+		boolean status = false;
 		UserEntity userEntity = null;
 
 		userEntity = userRepository.findByEmail(passwordResetTokenDto.getEmail());
 		try {
-			PasswordResetTokenEntity byUserId = passwordResetTokenRepository.findByUserId(userEntity.getId());
+			PasswordResetTokenEntity byUserId = passwordResetTokenRepository.findLastUserId(userEntity.getId());
 			if (byUserId.getOtp().equals(passwordResetTokenDto.getOtp())
 					&& !byUserId.getExpiryDate().isBefore(LocalDateTime.now())) {
-				userDto = convertUserEntityToUserDto(userEntity);
+				status = true;
+				passwordResetTokenRepository.deleteById(byUserId.getId());
 			}
-			passwordResetTokenRepository.deleteById(byUserId.getId());
 		} catch (Exception e) {
 			logger.error("Service :: sendPasswordResetToken :: HurecomException :: " + e);
 		}
 		logger.debug("Service :: sendPasswordResetToken :: Exited");
-		return userDto;
+		return status;
 	}
 
-	public UserDto convertUserEntityToUserDto(UserEntity userEntity) {
-		UserDto userDetails = new UserDto();
-		userDetails.setEmail(userEntity.getEmail());
-		userDetails.setName(userEntity.getName());
-		userDetails.setMobileNumber(userEntity.getMobileNumber());
-		userDetails.setId(userEntity.getId());
-		userDetails.setUserName(userEntity.getUserName());
-//		userDetails.setPassword(passwordEncoder.decryptPassword(userEntity.getPassword()));
-		userDetails.setSignInAccess(userEntity.getSignInAccess());
-		return userDetails;
+	@Override
+	public boolean updatPassword(PasswordResetTokenDto passwordResetTokenDto) {
+		logger.debug("Service :: updatPassword :: Entered");
+		boolean status = false;
+
+		UserEntity userEntity = userRepository.findByEmail(passwordResetTokenDto.getEmail());
+
+		if (userEntity != null) {
+			userEntity.setPassword(passwordEncoder.encode(passwordResetTokenDto.getPassword()));
+			userRepository.save(userEntity);
+			status = true;
+		}
+		logger.debug("Service :: updatPassword :: Exited");
+		return status;
 	}
 
 }

@@ -32,7 +32,7 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.cors().and().csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/login", "/auth/google-login", "/user/create",
-						"/public/**", "/oauth2/authorization/**", "/login/oauth2/**", "/forgot-password/users",
+						"/public/**", "/oauth2/authorization/**", "/login/oauth2/**", "/forgot-password/users","/forgot-password/update-password",
 						"/forgot-password/verify-otp").permitAll().anyRequest().authenticated())
 				.oauth2Login(oauth -> oauth.successHandler(customOAuth2AuthenticationSuccessHandler))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
