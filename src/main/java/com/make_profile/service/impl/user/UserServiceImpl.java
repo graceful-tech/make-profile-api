@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.make_profile.configuration.PasswordEncryptor;
-import com.make_profile.controller.login.LoginController;
 import com.make_profile.dto.user.UserDto;
 import com.make_profile.entity.user.UserEntity;
 import com.make_profile.repository.user.UserRepository;

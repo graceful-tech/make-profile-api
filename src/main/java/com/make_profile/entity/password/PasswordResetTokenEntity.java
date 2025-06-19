@@ -14,9 +14,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="password_reset_tokens")
-public class PasswordResetTokenEntity{
-	
+@Table(name = "password_reset_tokens")
+public class PasswordResetTokenEntity {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -26,7 +26,7 @@ public class PasswordResetTokenEntity{
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private UserEntity user;
+	private UserEntity userId;
 
 	@Column(nullable = false)
 	private LocalDateTime expiryDate;
@@ -37,14 +37,6 @@ public class PasswordResetTokenEntity{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public UserEntity getUser() {
-		return user;
-	}
-
-	public void setUser(UserEntity user) {
-		this.user = user;
 	}
 
 	public LocalDateTime getExpiryDate() {
@@ -62,5 +54,13 @@ public class PasswordResetTokenEntity{
 	public void setOtp(String otp) {
 		this.otp = otp;
 	}
-	
+
+	public UserEntity getUserId() {
+		return userId;
+	}
+
+	public void setUserId(UserEntity userId) {
+		this.userId = userId;
+	}
+
 }

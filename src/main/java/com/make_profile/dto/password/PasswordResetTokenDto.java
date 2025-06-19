@@ -2,11 +2,13 @@ package com.make_profile.dto.password;
 
 import java.time.LocalDateTime;
 
+import com.make_profile.dto.user.UserDto;
+
 public class PasswordResetTokenDto {
 	
 	private String otp;
 
-	private Long userId;
+	private UserDto userId;
 
 	private String userName;
 	
@@ -15,14 +17,6 @@ public class PasswordResetTokenDto {
 	private LocalDateTime expiryDate;
 	
 	private String password;
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
 
 	public String getUserName() {
 		return userName;
@@ -62,6 +56,14 @@ public class PasswordResetTokenDto {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public UserDto getUserId() {
+		return userId;
+	}
+
+	public void setUserId(UserDto userId) {
+		this.userId = userId;
 	}
 	
 }

@@ -15,6 +15,7 @@ import com.make_profile.controller.BaseController;
 import com.make_profile.controller.candidates.CandidateHistoryController;
 import com.make_profile.dto.password.PasswordResetTokenDto;
 import com.make_profile.dto.user.UserDto;
+import com.make_profile.service.forgotpassword.ForgotPasswordService;
 import com.make_profile.service.password.EmailService;
 import com.make_profile.utility.CommonConstants;
 
@@ -24,25 +25,25 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/forgot-password")
 public class ForgotPasswordController extends BaseController {
 
-	private static final Logger logger = LoggerFactory.getLogger(CandidateHistoryController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ForgotPasswordController.class);
 
 	@Autowired
-	EmailService emailService;
+	ForgotPasswordService forgotPasswordService;
 
 	@PostMapping("/users")
 	public ResponseEntity<?> forgotPassword(@RequestBody PasswordResetTokenDto passwordResetTokenDto,
 			HttpServletRequest request) throws Exception {
 		logger.debug("Controller :: sendResetPasswordToken :: Entered");
 
-		boolean status = emailService.sendPasswordResetToken(passwordResetTokenDto, request);
+		PasswordResetTokenDto resetTokenDto = forgotPasswordService.sendPasswordResetToken(passwordResetTokenDto,
+				request);
 
-		if (!status) {
-			logger.debug("Controller :: verifyOtp :: Error");
-			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0005), HttpStatus.BAD_REQUEST);
-//		HM_0126
+		if (resetTokenDto != null) {
+			logger.debug("Controller :: sendResetPasswordToken :: Exited");
+			return new ResponseEntity<>(resetTokenDto, HttpStatus.OK);	// HM_0126
 		}
-		logger.debug("Controller :: sendResetPasswordToken :: Exited");
-		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0004), HttpStatus.OK);
+		logger.debug("Controller :: verifyOtp :: Error");
+		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0005), HttpStatus.BAD_REQUEST);
 //	HM_0125
 	}
 
@@ -50,7 +51,7 @@ public class ForgotPasswordController extends BaseController {
 	public ResponseEntity<?> verifyOtp(@RequestBody PasswordResetTokenDto passwordResetTokenDto) {
 		logger.debug("Controller :: verifyOtp :: Entered");
 
-		boolean status= emailService.verifyOtp(passwordResetTokenDto);
+		boolean status = forgotPasswordService.verifyOtp(passwordResetTokenDto);
 		if (!status) {
 			logger.debug("Controller :: verifyOtp :: Error");
 			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0005), HttpStatus.BAD_REQUEST);
@@ -64,7 +65,7 @@ public class ForgotPasswordController extends BaseController {
 	public ResponseEntity<?> updateNewPassword(@RequestBody PasswordResetTokenDto passwordResetTokenDto) {
 		logger.debug("Controller :: updateNewPassword :: Entered");
 
-		boolean updatPassword = emailService.updatPassword(passwordResetTokenDto);
+		boolean updatPassword = forgotPasswordService.updatPassword(passwordResetTokenDto);
 
 		if (!updatPassword) {
 			logger.debug("Controller :: updateNewPassword :: Error");

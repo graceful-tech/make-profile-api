@@ -49,18 +49,6 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	JavaMailSender javaMailSender;
 
-	@Autowired
-	UserRepository userRepository;
-
-	@Autowired
-	CommonUtils commonUtils;
-
-	@Autowired
-	PasswordEncryptor passwordEncoder;
-
-	@Autowired
-	PasswordResetTokenRepository passwordResetTokenRepository;
-
 	@Override
 	public boolean sendEmail(EmailDto emailDto) throws Exception {
 		logger.debug("Service :: sendEmail :: Entered");
@@ -117,93 +105,93 @@ public class EmailServiceImpl implements EmailService {
 		return status;
 	}
 
-	@Override
-	public boolean sendPasswordResetToken(PasswordResetTokenDto passwordResetTokenDto, HttpServletRequest request)
-			throws Exception {
-		logger.debug("Service :: sendPasswordResetToken :: Entered");
-		boolean status = false;
-		EmailDto emailDto = new EmailDto();
-		List<String> toAddressList = new ArrayList<>();
-		List<String> ccAddressList = new ArrayList<>();
-		Map<String, String> variables = new HashedMap<>();
-		Template template = null;
-		try {
-
-			UserEntity userEntity = userRepository.findByEmail(passwordResetTokenDto.getEmail());
-
-			if (Objects.isNull(userEntity)) {
-				throw new MakeProfileException(CommonConstants.MP_0001);
-//				HM_0124
-			}
-			String otp = commonUtils.generateOtp();
-			PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
-			passwordResetTokenEntity.setOtp(otp);
-			passwordResetTokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(10));
-			passwordResetTokenEntity.setUser(userEntity);
-			passwordResetTokenRepository.save(passwordResetTokenEntity);
-
-//			String url = environmentRepository.getEnvironmentValueByKey("APP_URL");
-
-			variables.put("recipientName", userEntity.getName());
-			variables.put("otp", otp);
-//			variables.put("resetUrl", url + "/#/reset-password?code=" + TenantContext.getCurrentTenant() + "&token="
-//					+ passwordResetTokenEntity.getToken());
-
-			template = configuration.getTemplate("reset_password_mail.ftl");
-
-			String htmlBody = FreeMarkerTemplateUtils.processTemplateIntoString(template, variables);
-
-			toAddressList.add(userEntity.getEmail());
-			emailDto.setToAddressList(toAddressList);
-			emailDto.setCcList(ccAddressList);
-			emailDto.setSubject("Make Profiles - Reset Password");
-			emailDto.setMessage(htmlBody);
-//			sendEmail(emailDto);
-			status = true;
-			otp = null;
-		} catch (Exception e) {
-			logger.error("Service :: sendPasswordResetToken :: Exception :: " + e);
-			throw e;
-		}
-		logger.debug("Service :: sendPasswordResetToken :: Exited");
-		return status;
-	}
-
-	@Override
-	public boolean verifyOtp(PasswordResetTokenDto passwordResetTokenDto) {
-		logger.debug("Service :: sendPasswordResetToken :: Entered");
-		boolean status = false;
-		UserEntity userEntity = null;
-
-		userEntity = userRepository.findByEmail(passwordResetTokenDto.getEmail());
-		try {
-			PasswordResetTokenEntity byUserId = passwordResetTokenRepository.findLastUserId(userEntity.getId());
-			if (byUserId.getOtp().equals(passwordResetTokenDto.getOtp())
-					&& !byUserId.getExpiryDate().isBefore(LocalDateTime.now())) {
-				status = true;
-				passwordResetTokenRepository.deleteById(byUserId.getId());
-			}
-		} catch (Exception e) {
-			logger.error("Service :: sendPasswordResetToken :: HurecomException :: " + e);
-		}
-		logger.debug("Service :: sendPasswordResetToken :: Exited");
-		return status;
-	}
-
-	@Override
-	public boolean updatPassword(PasswordResetTokenDto passwordResetTokenDto) {
-		logger.debug("Service :: updatPassword :: Entered");
-		boolean status = false;
-
-		UserEntity userEntity = userRepository.findByEmail(passwordResetTokenDto.getEmail());
-
-		if (userEntity != null) {
-			userEntity.setPassword(passwordEncoder.encode(passwordResetTokenDto.getPassword()));
-			userRepository.save(userEntity);
-			status = true;
-		}
-		logger.debug("Service :: updatPassword :: Exited");
-		return status;
-	}
+//	@Override
+//	public boolean sendPasswordResetToken(PasswordResetTokenDto passwordResetTokenDto, HttpServletRequest request)
+//			throws Exception {
+//		logger.debug("Service :: sendPasswordResetToken :: Entered");
+//		boolean status = false;
+//		EmailDto emailDto = new EmailDto();
+//		List<String> toAddressList = new ArrayList<>();
+//		List<String> ccAddressList = new ArrayList<>();
+//		Map<String, String> variables = new HashedMap<>();
+//		Template template = null;
+//		try {
+//
+//			UserEntity userEntity = userRepository.findByEmail(passwordResetTokenDto.getEmail());
+//
+//			if (Objects.isNull(userEntity)) {
+//				throw new MakeProfileException(CommonConstants.MP_0001);
+////				HM_0124
+//			}
+//			String otp = commonUtils.generateOtp();
+//			PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+//			passwordResetTokenEntity.setOtp(otp);
+//			passwordResetTokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(10));
+//			passwordResetTokenEntity.setUser(userEntity);
+//			passwordResetTokenRepository.save(passwordResetTokenEntity);
+//
+////			String url = environmentRepository.getEnvironmentValueByKey("APP_URL");
+//
+//			variables.put("recipientName", userEntity.getName());
+//			variables.put("otp", otp);
+////			variables.put("resetUrl", url + "/#/reset-password?code=" + TenantContext.getCurrentTenant() + "&token="
+////					+ passwordResetTokenEntity.getToken());
+//
+//			template = configuration.getTemplate("reset_password_mail.ftl");
+//
+//			String htmlBody = FreeMarkerTemplateUtils.processTemplateIntoString(template, variables);
+//
+//			toAddressList.add(userEntity.getEmail());
+//			emailDto.setToAddressList(toAddressList);
+//			emailDto.setCcList(ccAddressList);
+//			emailDto.setSubject("Make Profiles - Reset Password");
+//			emailDto.setMessage(htmlBody);
+////			sendEmail(emailDto);
+//			status = true;
+//			otp = null;
+//		} catch (Exception e) {
+//			logger.error("Service :: sendPasswordResetToken :: Exception :: " + e);
+//			throw e;
+//		}
+//		logger.debug("Service :: sendPasswordResetToken :: Exited");
+//		return status;
+//	}
+//
+//	@Override
+//	public boolean verifyOtp(PasswordResetTokenDto passwordResetTokenDto) {
+//		logger.debug("Service :: sendPasswordResetToken :: Entered");
+//		boolean status = false;
+//		UserEntity userEntity = null;
+//
+//		userEntity = userRepository.findByEmail(passwordResetTokenDto.getEmail());
+//		try {
+//			PasswordResetTokenEntity byUserId = passwordResetTokenRepository.findLastUserId(userEntity.getId());
+//			if (byUserId.getOtp().equals(passwordResetTokenDto.getOtp())
+//					&& !byUserId.getExpiryDate().isBefore(LocalDateTime.now())) {
+//				status = true;
+//				passwordResetTokenRepository.deleteById(byUserId.getId());
+//			}
+//		} catch (Exception e) {
+//			logger.error("Service :: sendPasswordResetToken :: HurecomException :: " + e);
+//		}
+//		logger.debug("Service :: sendPasswordResetToken :: Exited");
+//		return status;
+//	}
+//
+//	@Override
+//	public boolean updatPassword(PasswordResetTokenDto passwordResetTokenDto) {
+//		logger.debug("Service :: updatPassword :: Entered");
+//		boolean status = false;
+//
+//		UserEntity userEntity = userRepository.findByEmail(passwordResetTokenDto.getEmail());
+//
+//		if (userEntity != null) {
+//			userEntity.setPassword(passwordEncoder.encryptPassword(passwordResetTokenDto.getPassword()));
+//			userRepository.save(userEntity);
+//			status = true;
+//		}
+//		logger.debug("Service :: updatPassword :: Exited");
+//		return status;
+//	}
 
 }
