@@ -30,7 +30,7 @@ public class MessageServiceImpl implements MessageService {
 			MessageEntity messageEntity = messageRepository.getMessageByCode(code);
 			message = modelMapper.map(messageEntity, MessageDto.class);
 		} catch (Exception e) {
-			logger.debug("Service :: getMessageByCode :: Exception :: " + e);
+			logger.error("Service :: getMessageByCode :: Exception :: " + e);
 		}
 		logger.debug("Service :: getMessageByCode :: Exited");
 		return message;

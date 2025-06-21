@@ -60,8 +60,8 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 
 		boolean status = false;
 
-		String hurecomEndPoint = "http://localhost:8080/candidates/create";
-		String hurecomResponseEndPoint = "http://localhost:8080/applied-jobs/save";
+		String hurecomEndPoint = "https://www.hurecom.com/hurecomv2rest/candidates/create";
+		String hurecomResponseEndPoint = "https://www.hurecom.com/hurecomv2rest/applied-jobs/save";
 
 		HurecomCandidateDto hurecomCandidateDto = null;
 		HurecomCandidateDto hurecomCandidate = new HurecomCandidateDto();
@@ -132,7 +132,7 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 			hurecomAppliedJobsDto = null;
 			appliedJobsEntity = null;
 		} catch (Exception e) {
-			logger.debug("Service :: saveAppplication :: Exception" + e.getMessage());
+			logger.error("Service :: saveAppplication :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: saveAppplication :: Exited");
 		return status;
@@ -148,7 +148,7 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 			Query query = entityManager.createNativeQuery(jobDescriptionQuery);
 			id = (Long) query.getSingleResult();
 		} catch (Exception e) {
-			logger.debug("Service :: getRequirementId :: Exception" + e.getMessage());
+			logger.error("Service :: getRequirementId :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: getRequirementId :: Exited");
 		return id;
@@ -163,7 +163,7 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 			Query query = entityManager.createNativeQuery(jobDescriptionQuery);
 			userName = (String) query.getSingleResult();
 		} catch (Exception e) {
-			logger.debug("Service :: getUsernameByTenant :: Exception" + e.getMessage());
+			logger.error("Service :: getUsernameByTenant :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: getUsernameByTenant :: Exited");
 		return userName;
@@ -193,7 +193,7 @@ public class AppliedJobServiceImpl implements AppliedJobService {
 			appliedJobsEntity = null;
 
 		} catch (Exception e) {
-			logger.debug("Service :: getAppliedJobs :: Exception" + e.getMessage());
+			logger.error("Service :: getAppliedJobs :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: getAppliedJobs :: Exited");
 		return appliedJobDtoList;

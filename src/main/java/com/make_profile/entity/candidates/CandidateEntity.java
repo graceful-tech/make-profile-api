@@ -97,6 +97,12 @@ public class CandidateEntity extends BaseEntity {
 	@Column(nullable = true, length = 10)
 	private boolean achievementsMandatory;
 
+	@Column(nullable = true, length = 1500)
+	private String summary;
+
+	@Column(nullable = true, length = 1500)
+	private String careerObjective;
+
 	public Long getId() {
 		return id;
 	}
@@ -289,5 +295,20 @@ public class CandidateEntity extends BaseEntity {
 		this.achievementsMandatory = achievementsMandatory;
 	}
 
-	
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public String getCareerObjective() {
+		return careerObjective;
+	}
+
+	public void setCareerObjective(String careerObjective) {
+		this.careerObjective = careerObjective;
+	}
+
 }

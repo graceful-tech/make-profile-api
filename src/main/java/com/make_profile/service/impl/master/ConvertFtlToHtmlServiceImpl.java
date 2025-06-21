@@ -55,9 +55,9 @@ public class ConvertFtlToHtmlServiceImpl implements ConvertFtlToImageService {
 			base64Image = Base64.getEncoder().encodeToString(outputStream.toByteArray());
 
 		} catch (Exception e) {
-			logger.debug("Service :: hurecomRequirement :: Exception" + e.getMessage());
+			logger.error("Service :: convertFtlToImage :: Exception" + e.getMessage());
 		}
-		logger.debug("Service :: hurecomRequirement :: Exited");
+		logger.debug("Service :: convertFtlToImage :: Exited");
 		return String.valueOf("data:image/png;base64," + base64Image);
 	}
 

@@ -396,7 +396,7 @@ public class ConvertJsonToCandidateDtoServiceImpl implements ConvertJsonIntoCand
 			}
 
 		} catch (Exception e) {
-			logger.debug("Service :: jsonToString :: Exception " + e.getMessage());
+			logger.error("Service :: jsonToString :: Exception " + e.getMessage());
 		}
 		logger.debug("Service :: jsonToString :: Exited ");
 		return candidateDto;

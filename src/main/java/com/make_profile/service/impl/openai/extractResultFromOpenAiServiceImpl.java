@@ -71,7 +71,7 @@ public class extractResultFromOpenAiServiceImpl implements ExtractResultFromOpen
 			resumeMatchResultDto.setRequirementMyresumeFit(requirementLists);
 
 		} catch (Exception e) {
-			logger.debug("Service :: resultFromOpenAi :: Exception ");
+			logger.error("Service :: resultFromOpenAi :: Exception ");
 		}
 		logger.debug("Service :: resultFromOpenAi :: Exited ");
 		return resumeMatchResultDto;

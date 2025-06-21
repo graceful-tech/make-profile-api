@@ -114,7 +114,7 @@ public class ResumeDetailsAiServiceImpl implements ResumeDetailsAiService {
 					userName);
 
 		} catch (Exception e) {
-			logger.debug("Service :: getUploadResumeDetialsFromAi :: Exception " + e.getMessage());
+			logger.error("Service :: getUploadResumeDetialsFromAi :: Exception " + e.getMessage());
 		}
 		logger.debug("Service :: getUploadResumeDetialsFromAi :: Exited ");
 		return responseCandidateDto;
@@ -164,7 +164,7 @@ public class ResumeDetailsAiServiceImpl implements ResumeDetailsAiService {
 				count--;
 				getUploadResumeDetialsFromAi(content, userName);
 			} else {
-				logger.debug("Service :: convertResponseString :: Exception " + e.getMessage());
+				logger.error("Service :: convertResponseString :: Exception " + e.getMessage());
 			}
 		}
 		logger.debug("Service :: convertResponseString :: Exited ");

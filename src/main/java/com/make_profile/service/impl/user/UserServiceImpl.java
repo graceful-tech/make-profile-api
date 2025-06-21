@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 			makeProfileUserEntity = null;
 		} catch (Exception e) {
 			status = false;
-			logger.debug("UserServiceImpl :: createUser :: Error" + e.getMessage());
+			logger.error("UserServiceImpl :: createUser :: Error" + e.getMessage());
 
 		}
 		logger.debug("UserServiceImpl :: createUser :: Exited");
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
 			makeProfileUserEntity = null;
 			findByEmail = null;
 		} catch (Exception e) {
-			logger.debug("UserServiceImpl :: createGoogleUser :: Error" + e.getMessage());
+			logger.error("UserServiceImpl :: createGoogleUser :: Error" + e.getMessage());
 		}
 		logger.debug("UserServiceImpl :: createGoogleUser :: Exited");
 		return userDto;

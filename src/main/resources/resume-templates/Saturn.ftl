@@ -17,7 +17,6 @@
       margin: 0;
       padding: 0;
       width: 210mm;
-      height: 297mm;
       font-family: Arial, sans-serif;
       font-size: 11pt;
       color: #111;
@@ -42,6 +41,10 @@
       border-radius: 50%;
       border: 2px solid #0054a6;
     }
+    
+    p{
+	  line-height:1.2;
+	}
 
     h1 {
       font-size: 32px;
@@ -91,7 +94,7 @@
     }
 
     .bullets li {
-      margin-bottom: 5px;
+      line-height:1.3;
     }
 
     .tags {
@@ -146,14 +149,13 @@
 
     .timeline {
       position: relative;
-      margin-top: 20px;
+      margin-top: 13px;
       padding-left: 20px;
       border-left: 3px dotted #0054a6;
     }
 
     .timeline-item {
       position: relative;
-      margin-bottom: 30px;
       padding-left: 20px;
     }
 
@@ -173,7 +175,6 @@
     .timeline-date {
       font-weight: bold;
       color: #0054a6;
-      margin-bottom: 5px;
     }
 
     .timeline-content .job-title {
@@ -215,7 +216,9 @@
 
  <div class="container">
  
-   <img src="profile.jpg"   class="profile-pic" />
+	 <#if profileImage?? && profileImage?has_content>
+	    <img src="${profileImage}" alt="Profile Image"   class="profile-pic" />
+	 </#if>
 
       <h1>${name}</h1>
   
@@ -260,11 +263,11 @@
           <div class="timeline-date">
             <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content> 	      
               ${extractYear(experience.experienceYearStartDate)} 
-              <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content>
-                - ${extractYear(experience.experienceYearEndDate)}
-              <#else>
-                - Present
-              </#if>	      
+                    <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content>
+                         - ${extractYear(experience.experienceYearEndDate)}
+                              <#else>
+                                  - Present
+                     </#if>	      
             </#if>	
           </div>
 
@@ -372,7 +375,7 @@
 		             <li>${achieve.achievementsName} 
 		             
 		                  <#if achieve.achievementsDate?? && achieve.achievementsDate?has_content>
-						                  - ${extractYear(achieve.achievementsDate)} </span>
+						                  - ${extractYear(achieve.achievementsDate)}  
 						    </#if> 
 		             </li>
 		        </#if>

@@ -43,4 +43,18 @@ public class CreateResumeTemplateController extends BaseController {
 
 	}
 
+	@PostMapping("/get-content")
+	public ResponseEntity<?> getContent(@RequestBody CandidateDto candidateDto,
+			@RequestHeader("username") String username) throws MakeProfileException {
+
+		logger.debug("Controller :: createResumeTemplate :: Entered");
+
+		CandidateDto createResumeTemplate = createResumeTemplateService.getContent(candidateDto, username);
+
+		logger.debug("Controller :: createResumeTemplate :: Exited");
+
+		return new ResponseEntity<>(createResumeTemplate, HttpStatus.OK);
+
+	}
+
 }

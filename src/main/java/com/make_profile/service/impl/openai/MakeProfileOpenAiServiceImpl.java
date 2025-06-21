@@ -81,7 +81,7 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 
 		} catch (Exception e) {
 
-			logger.debug("Service :: makeProfileAi :: Exception " + e.getMessage());
+			logger.error("Service :: makeProfileAi :: Exception " + e.getMessage());
 
 		}
 
@@ -109,7 +109,7 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 				makeProfileAi(content);
 
 			} else {
-				logger.debug("Service :: convertResponseString :: Exception " + e.getMessage());
+				logger.error("Service :: convertResponseString :: Exception " + e.getMessage());
 			}
 
 		}
@@ -163,7 +163,7 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 
 		} catch (Exception e) {
 
-			logger.debug("Service :: getSummaryFromAi :: Exception " + e.getMessage());
+			logger.error("Service :: getSummaryFromAi :: Exception " + e.getMessage());
 		}
 
 		logger.debug("Service :: getSummaryFromAi :: Exited ");
@@ -181,7 +181,6 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 			JsonElement jsonElement = JsonParser.parseString(jsonString + "}");
 			if (jsonElement.isJsonObject()) {
 				jsonObject = jsonElement.getAsJsonObject();
-				System.out.println("JSON Object: " + jsonObject.toString());
 			}
 			responseCandidateDto = convertJsonIntoCandidateDtoService.jsonToString(jsonObject);
 		} catch (Exception e) {
@@ -190,7 +189,7 @@ public class MakeProfileOpenAiServiceImpl implements MakeProfileOpenAiService {
 				getSummaryFromAi(content);
 
 			} else {
-				logger.debug("Service :: convertSummaryResponseString :: Exception " + e.getMessage());
+				logger.error("Service :: convertSummaryResponseString :: Exception " + e.getMessage());
 			}
 		}
 		logger.debug("Service :: convertSummaryResponseString :: Exited ");

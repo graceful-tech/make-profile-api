@@ -2,7 +2,12 @@ package com.make_profile.service.impl.resume;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -14,6 +19,7 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -27,6 +33,7 @@ import com.make_profile.dto.candidates.CandidateQualificationDto;
 import com.make_profile.dto.master.ResponcePdfDto;
 import com.make_profile.entity.master.CreditsEntity;
 import com.make_profile.exception.MakeProfileException;
+import com.make_profile.repository.candidates.CandidateImageRepository;
 import com.make_profile.repository.master.CreditsRepository;
 import com.make_profile.repository.user.UserRepository;
 import com.make_profile.service.candidates.CheckResumePageCountService;
@@ -58,21 +65,25 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 	@Autowired
 	CreditsRepository creditsRepository;
 
+	@Autowired
+	CandidateImageRepository candidateImageRepository;
+
 	@Override
 	public ResponcePdfDto createResumeTemplate(CandidateDto candidate, String username) throws MakeProfileException {
 		logger.debug("Service :: createResumeTemplate :: Extered");
 
 		Map<String, Object> variables = new HashedMap<>();
 		Template template = null;
+		String imageLocation = null;
 //		StringBuilder subject = new StringBuilder();
 
 		byte[] convertHtmlToPdf = null;
 
 		ResponcePdfDto responcePdfDto = new ResponcePdfDto();
 		try {
-			CandidateDto candidateDto = convertCandidateDtoIntoString(candidate);
+//			CandidateDto candidateDto = convertCandidateDtoIntoString(candidate);
 
-			if (Objects.nonNull(candidateDto)) {
+ 			if (Objects.nonNull(candidate)) {
 
 				variables.put("phone", candidate.getMobileNumber());
 				variables.put("name", candidate.getName());
@@ -83,36 +94,36 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 					variables.put("linkedin", candidate.getLinkedIn());
 				}
 
-				if (Objects.nonNull(candidateDto.getAddress()) && !candidateDto.getAddress().isEmpty()) {
+				if (Objects.nonNull(candidate.getAddress()) && !candidate.getAddress().isEmpty()) {
 					variables.put("address", candidate.getAddress());
 				}
 
-				if (Objects.nonNull(candidateDto.getDob())) {
-					variables.put("dob", candidateDto.getDob());
+				if (Objects.nonNull(candidate.getDob())) {
+					variables.put("dob", candidate.getDob());
 				}
 
-				if (Objects.nonNull(candidateDto.getGender()) && !candidateDto.getGender().isEmpty()) {
-					variables.put("gender", candidateDto.getGender());
+				if (Objects.nonNull(candidate.getGender()) && !candidate.getGender().isEmpty()) {
+					variables.put("gender", candidate.getGender());
 				}
 
-				if (Objects.nonNull(candidateDto.getLanguagesKnown()) && !candidateDto.getLanguagesKnown().isEmpty()) {
-					variables.put("languages", candidateDto.getLanguagesKnown());
+				if (Objects.nonNull(candidate.getLanguagesKnown()) && !candidate.getLanguagesKnown().isEmpty()) {
+					variables.put("languages", candidate.getLanguagesKnown());
 				}
 
-				if (Objects.nonNull(candidateDto.getMaritalStatus()) && !candidateDto.getMaritalStatus().isEmpty()) {
-					variables.put("maritalStatus", candidateDto.getMaritalStatus());
+				if (Objects.nonNull(candidate.getMaritalStatus()) && !candidate.getMaritalStatus().isEmpty()) {
+					variables.put("maritalStatus", candidate.getMaritalStatus());
 				}
 
-				if (candidateDto.isFresher()) {
-					variables.put("isFresher", candidateDto.isFresher());
+				if (candidate.isFresher()) {
+					variables.put("isFresher", candidate.isFresher());
 				} else {
 
-					if (Objects.nonNull(candidateDto.getExperiences()) && !candidateDto.getExperiences().isEmpty()) {
+					if (Objects.nonNull(candidate.getExperiences()) && !candidate.getExperiences().isEmpty()) {
 
 						List<CandidateExperienceDto> experienceList = new ArrayList<>();
 						List<CandidateProjectDetailsDto> projectsList = new ArrayList<>();
 
-						candidateDto.getExperiences().forEach(exp -> {
+						candidate.getExperiences().forEach(exp -> {
 							CandidateExperienceDto experiences = new CandidateExperienceDto();
 							experiences.setRole(exp.getRole());
 							experiences.setCompanyName(exp.getCompanyName());
@@ -146,12 +157,12 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 					variables.put("skills", candidate.getSkills());
 				}
 
-				if (Objects.nonNull(candidateDto.getCertificates())
-						&& !CollectionUtils.isEmpty(candidateDto.getCertificates())) {
+				if (Objects.nonNull(candidate.getCertificates())
+						&& !CollectionUtils.isEmpty(candidate.getCertificates())) {
 
 					List<CandidateCertificatesDto> certificatesList = new ArrayList<>();
 
-					candidateDto.getCertificates().forEach(certificate -> {
+					candidate.getCertificates().forEach(certificate -> {
 						CandidateCertificatesDto cer = new CandidateCertificatesDto();
 
 						cer.setCourseName(certificate.getCourseName());
@@ -162,14 +173,14 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 						cer = null;
 					});
 
-					variables.put("certificates", candidateDto.getCertificates());
+					variables.put("certificates", candidate.getCertificates());
 				}
 
-				if (Objects.nonNull(candidateDto.getQualification())
-						&& !CollectionUtils.isEmpty(candidateDto.getQualification())) {
+				if (Objects.nonNull(candidate.getQualification())
+						&& !CollectionUtils.isEmpty(candidate.getQualification())) {
 					List<CandidateQualificationDto> educationList = new ArrayList<>();
 
-					candidateDto.getQualification().forEach(quali -> {
+					candidate.getQualification().forEach(quali -> {
 						CandidateQualificationDto qulification = new CandidateQualificationDto();
 
 						qulification.setInstitutionName(quali.getInstitutionName());
@@ -184,16 +195,16 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 					variables.put("education", educationList);
 				}
 
-				if (Objects.nonNull(candidateDto.getSoftSkills()) && !candidateDto.getSoftSkills().isEmpty()) {
-					variables.put("softSkills", candidateDto.getSoftSkills());
+				if (Objects.nonNull(candidate.getSoftSkills()) && !candidate.getSoftSkills().isEmpty()) {
+					variables.put("softSkills", candidate.getSoftSkills());
 				}
 
-				if (Objects.nonNull(candidateDto.getAchievements())
-						&& !CollectionUtils.isEmpty(candidateDto.getAchievements())) {
+				if (Objects.nonNull(candidate.getAchievements())
+						&& !CollectionUtils.isEmpty(candidate.getAchievements())) {
 
 					List<CandidateAchievementsDto> achievementsList = new ArrayList<>();
 
-					candidateDto.getAchievements().forEach(achieve -> {
+					candidate.getAchievements().forEach(achieve -> {
 						CandidateAchievementsDto achievements = new CandidateAchievementsDto();
 
 						achievements.setAchievementsName(achieve.getAchievementsName());
@@ -205,17 +216,17 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 					variables.put("achievements", achievementsList);
 				}
 
-				if (Objects.nonNull(candidateDto.getCoreCompentencies())
-						&& !candidateDto.getCoreCompentencies().isEmpty()) {
-					variables.put("competencies", candidateDto.getCoreCompentencies());
+				if (Objects.nonNull(candidate.getCoreCompentencies())
+						&& !candidate.getCoreCompentencies().isEmpty()) {
+					variables.put("competencies", candidate.getCoreCompentencies());
 				}
 
-				if (Objects.nonNull(candidateDto.getCollegeProject())
-						&& !CollectionUtils.isEmpty(candidateDto.getCollegeProject())) {
+				if (Objects.nonNull(candidate.getCollegeProject())
+						&& !CollectionUtils.isEmpty(candidate.getCollegeProject())) {
 
 					List<CandidateCollegeProjectDto> candidateCollegeProjectList = new ArrayList<>();
 
-					candidateDto.getCollegeProject().forEach(project -> {
+					candidate.getCollegeProject().forEach(project -> {
 						CandidateCollegeProjectDto collegeProject = new CandidateCollegeProjectDto();
 
 						collegeProject.setCollegeProjectName(project.getCollegeProjectName());
@@ -227,13 +238,22 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 					variables.put("collegeProject", candidateCollegeProjectList);
 				}
 
-				if (Objects.nonNull(candidateDto.getCareerObjective())
-						&& !candidateDto.getCareerObjective().isEmpty()) {
-					variables.put("objective", candidateDto.getCareerObjective());
+				if (Objects.nonNull(candidate.getCareerObjective())
+						&& !candidate.getCareerObjective().isEmpty()) {
+					variables.put("objective", candidate.getCareerObjective());
 				}
 
-				if (Objects.nonNull(candidateDto.getSummary()) && !candidateDto.getSummary().isEmpty()) {
-					variables.put("summary", candidateDto.getSummary());
+				if (Objects.nonNull(candidate.getSummary()) && !candidate.getSummary().isEmpty()) {
+					variables.put("summary", candidate.getSummary());
+				}
+
+				// add photo to the resume
+
+				imageLocation = candidateImageRepository.getImageLocationByCandidateId(candidate.getId());
+
+				if (Objects.nonNull(imageLocation) && !imageLocation.isEmpty()) {
+
+					variables.put("profileImage", "data:image/png;base64,${base64Image}");
 				}
 
 				template = configuration.getTemplate(candidate.getTemplateName() + ".ftl");
@@ -246,15 +266,20 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 				String resumeHtmlCode = checkResumePageCountService.getResumeHtmlCode(processTemplateIntoString,
 						candidate.getId(), username, candidate.getTemplateName());
 
-				convertHtmlToPdf = convertHtmlToPdf(resumeHtmlCode, candidateDto.getName() + ".pdf");
+				if (Objects.nonNull(imageLocation) && !imageLocation.isEmpty()) {
+					String imagePath = "C:/make_profile/Image/" + candidate.getId() + "/" + imageLocation;
+					String base64Image = convertImageToBase64(imagePath);
+					resumeHtmlCode = resumeHtmlCode.replace("${base64Image}", base64Image);
+
+				}
+				convertHtmlToPdf = convertHtmlToPdf(resumeHtmlCode, candidate.getName() + ".pdf");
 
 				// convertHtmlToDocx(processTemplateIntoString, candidateDto.getName() +
 				// ".docx");
 
 				responcePdfDto.setResumePdf(convertHtmlToPdf);
 				responcePdfDto.setCandidateName(candidate.getName());
-
-			}
+ 			}
 
 			else {
 				Long userId = userRepository.getUserId(username);
@@ -277,33 +302,11 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 			logger.error("Service :: getResumeHtmlCode :: MakeProfileException :: " + e.getMessage());
 			throw e;
 		} catch (Exception e) {
-			logger.debug("Service :: createResumeTemplate :: Exception " + e.getMessage());
+			logger.error("Service :: createResumeTemplate :: Exception " + e.getMessage());
 		}
 		logger.debug("Service :: createResumeTemplate :: Exited");
 		return responcePdfDto;
 	}
-
-//	public static void convertHtmlToPdf(String html, String outputPath) throws Exception {
-//
-//		logger.debug("Service :: convertHtmlToPdf :: Extered");
-//		try {
-//
-//			OutputStream os = new FileOutputStream(outputPath);
-//			PdfRendererBuilder builder = new PdfRendererBuilder();
-//			builder.useDefaultPageSize(210, 297, PdfRendererBuilder.PageSizeUnits.MM); // A4
-//			builder.withHtmlContent(html, new File(".").toURI().toString());
-//			builder.toStream(os);
-//			builder.useFastMode();
-//			builder.run();
-//			System.out.println("PDF generated successfully at: " + outputPath);
-//             
-//		}
-//
-//		catch (Exception e) {
-//			logger.debug("Service :: convertHtmlToPdf :: Exited" + e.getMessage());
-//		}
-//		logger.debug("Service :: convertHtmlToPdf :: Exited");
-//	}
 
 	public byte[] convertHtmlToPdf(String html, String outputPath) throws Exception {
 		logger.debug("Service :: convertHtmlToPdf :: Entered");
@@ -311,7 +314,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
 			PdfRendererBuilder builder = new PdfRendererBuilder();
-			builder.useDefaultPageSize(210, 297, PdfRendererBuilder.PageSizeUnits.MM); // A4
+			builder.useDefaultPageSize(210, 297, PdfRendererBuilder.PageSizeUnits.MM);
 			builder.withHtmlContent(html, new File(".").toURI().toString());
 			builder.toStream(baos);
 			builder.useFastMode();
@@ -320,6 +323,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 			byte[] pdfBytes = baos.toByteArray();
 
 			builder = null;
+
 			// TODO erase this after completing
 			System.out.println("PDF generated successfully at: " + outputPath);
 
@@ -343,14 +347,15 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 
 			System.out.println("Word file generated successfully: " + outputPath);
 		} catch (Exception e) {
-			logger.debug("Service :: convertHtmlToDocx :: Exited" + e.getMessage());
+			logger.error("Service :: convertHtmlToDocx :: Exited" + e.getMessage());
 		}
 		logger.debug("Service :: convertHtmlToDocx :: Exited");
 	}
 
 	public CandidateDto convertCandidateDtoIntoString(CandidateDto candidateDto) {
-		CandidateDto ResponseCandidateDetailsFromOpenAi = null;
 		logger.debug("Service :: convertCandidateDtoIntoString :: Extered");
+
+		CandidateDto ResponseCandidateDetailsFromOpenAi = null;
 		try {
 			StringBuilder dtoString = new StringBuilder("CandidateDto: {");
 
@@ -384,11 +389,41 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 		}
 
 		catch (Exception e) {
-			logger.debug("Service :: convertCandidateDtoIntoString :: Exception" + e.getMessage());
+			logger.error("Service :: convertCandidateDtoIntoString :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: convertCandidateDtoIntoString :: Exited");
 		return ResponseCandidateDetailsFromOpenAi;
 
+	}
+
+	public String convertImageToBase64(String imagePath) {
+		logger.debug("Service :: convertImageToBase64 :: Extered");
+
+		Path path = Paths.get(imagePath);
+		byte[] imageBytes = null;
+		try {
+			imageBytes = Files.readAllBytes(path);
+		} catch (Exception e) {
+			logger.error("Service :: convertImageToBase64 :: Exception" + e.getMessage());
+
+		}
+		logger.debug("Service :: convertImageToBase64 :: Exited");
+		return Base64.getEncoder().encodeToString(imageBytes);
+	}
+
+	@Override
+	public CandidateDto getContent(CandidateDto candidateDto, String username) throws MakeProfileException {
+		logger.debug("Service :: getContent :: Extered");
+
+		CandidateDto candidate = null;
+		try {
+			candidate = convertCandidateDtoIntoString(candidateDto);
+
+		} catch (Exception e) {
+			logger.error("Service :: getContent :: Exception" + e.getMessage());
+		}
+		logger.debug("Service :: getContent :: Exited");
+		return candidate;
 	}
 
 }

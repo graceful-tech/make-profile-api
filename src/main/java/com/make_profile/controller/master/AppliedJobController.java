@@ -30,12 +30,12 @@ public class AppliedJobController extends BaseController {
 
 	@PostMapping("/save")
 	public ResponseEntity<?> saveAppplication(@RequestBody AppliedJobDto appliedJobDto) {
-		logger.debug("Controller :: create :: Entered");
+		logger.debug("Controller :: saveAppplication :: Entered");
 
 		boolean saveAppplication = appliedJobService.saveAppplication(appliedJobDto);
 
-		logger.debug("Controller :: create :: Exited");
-		
+		logger.debug("Controller :: saveAppplication :: Exited");
+
 		if (saveAppplication == true) {
 			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0002), HttpStatus.OK);
 		} else {
@@ -50,7 +50,7 @@ public class AppliedJobController extends BaseController {
 
 		List<AppliedJobDto> appliedJobs = appliedJobService.getAppliedJobs(candidateId);
 
-		logger.debug("Controller :: create :: Exited");
+		logger.debug("Controller :: getAppliedJobs :: Exited");
 
 		return new ResponseEntity<>(appliedJobs, HttpStatus.OK);
 

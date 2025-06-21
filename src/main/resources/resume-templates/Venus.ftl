@@ -250,7 +250,7 @@
     <h1>${name}</h1>
      <div class="contact">
       <span>Phone: ${phone}</span>
-      <span>Mail: ${email}</span>
+      <span>| Mail: ${email}</span>
 	  
 	  <#if linkedin?has_content>
       <span>LinkedIn: ${linkedin}</span>

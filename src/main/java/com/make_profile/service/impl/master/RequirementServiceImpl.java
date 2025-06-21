@@ -29,7 +29,7 @@ public class RequirementServiceImpl implements RequirementService {
 			Pageable pageable = PageRequest.of(hurecomRequirementsDto.getPage(), hurecomRequirementsDto.getLimit());
 			wrapperDto = requirementRepository.hurecomRequirement(hurecomRequirementsDto, pageable);
 		} catch (Exception e) {
-			logger.debug("Service :: hurecomRequirement :: Exception" + e.getMessage());
+			logger.error("Service :: hurecomRequirement :: Exception" + e.getMessage());
 
 		}
 		logger.debug("Service :: hurecomRequirement :: Exited");

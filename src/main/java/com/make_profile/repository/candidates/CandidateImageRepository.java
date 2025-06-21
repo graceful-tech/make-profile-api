@@ -17,4 +17,7 @@ public interface CandidateImageRepository extends JpaRepository<CandidateImageEn
 	@Query(value = "select * from candidate_images where candidate_id  = :candidateId ", nativeQuery = true)
 	CandidateImageEntity getImageByCandidateId(@Param("candidateId") Long candidateId);
 
+	@Query(value = "select file_name from candidate_images where candidate_id  = :candidateId ", nativeQuery = true)
+	String getImageLocationByCandidateId(@Param("candidateId") Long candidateId);
+
 }

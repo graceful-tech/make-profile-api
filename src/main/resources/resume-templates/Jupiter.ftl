@@ -10,13 +10,15 @@
      }
 	
    html, body {
-      margin: 0;
-      padding: 0;
-      width: 210mm;
-      font-family: Arial, sans-serif;
-      font-size: 11pt;
-      color: #111;
-      box-sizing: border-box;
+       margin: 0;
+	  padding: 0;
+	  width: 210mm;
+	  font-family: Arial, sans-serif;
+	  font-size: 11pt;
+	  color: #111;
+	  box-sizing: border-box;
+	  overflow-x: hidden;
+	  word-break: break-word;
      }
 	
     h1, h2 {
@@ -25,6 +27,8 @@
     
     p{
        line-height:1.3;
+       word-break: break-word;
+       overflow-wrap: break-word;
     }
     
     h1 {
@@ -55,6 +59,7 @@
     
     .job-details {
       margin: 5px 0 10px 0;
+      line-height: 1.5;
     }
     
     .edu-entry, .strengths, .skills-list, .achievements-list, .org-skills {
@@ -118,11 +123,10 @@
 	 }
  
 	 .container {
-	       width: 200mm;
-	      padding:10px;
-	      margin: auto;
-	      background: white;
-	      box-sizing: border-box;
+	      max-width: 190mm;
+		  margin: auto;
+		  padding: 10px 15px;
+		  box-sizing: border-box;
 	  }
 
   </style>
@@ -341,10 +345,10 @@
 						         <#if certi.courseName?has_content>
 						            <li>${certi.courseName} 
 						                <#if certi.courseStartDate?? && certi.courseStartDate?has_content>
-						                   <span class="EducationYear">${certi.courseStartDate} 
+						                   <span class="EducationYear"> ( ${extractYear(certi.courseStartDate)} 
 						                  
 								                   <#if  certi.courseEndDate?? && certi.courseEndDate?has_content>
-		                                                    - ${extractYear(certi.courseEndDate)}
+		                                                    - ${extractYear(certi.courseEndDate)} )
 		                                             </#if>
                                             </span>
 						                </#if>  

@@ -48,7 +48,7 @@ public class LoginController extends BaseController {
 			logger.debug("LoginController :: userLogin :: Exited");
 			return ResponseEntity.ok(userDto);
 		} catch (Exception e) {
-			logger.debug("LoginController :: userLogin :: Error");
+			logger.error("LoginController :: userLogin :: Error");
 		}
 		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0005), HttpStatus.BAD_REQUEST);
 	}

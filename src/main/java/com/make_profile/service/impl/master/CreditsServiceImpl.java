@@ -55,7 +55,7 @@ public class CreditsServiceImpl implements CreditsService {
 			findCreditsByUserIdAsList = null;
 
 		} catch (Exception e) {
-			logger.debug("Service :: getCredits :: Exception" + e.getMessage());
+			logger.error("Service :: getCredits :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: getCredits :: Exited");
 		return creditsDto;
@@ -108,7 +108,7 @@ public class CreditsServiceImpl implements CreditsService {
 			creditEntity = null;
 
 		} catch (Exception e) {
-			logger.debug("Service :: addCredits :: Exception" + e.getMessage());
+			logger.error("Service :: addCredits :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: addCredits :: Exited");
 		return status;
@@ -146,7 +146,7 @@ public class CreditsServiceImpl implements CreditsService {
 
 			findCreditesByUserId = null;
 		} catch (Exception e) {
-			logger.debug("Service :: useCredit :: Exception" + e.getMessage());
+			logger.error("Service :: useCredit :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: useCredit :: Exited");
 		return status;
@@ -169,7 +169,7 @@ public class CreditsServiceImpl implements CreditsService {
 			}
 
 		} catch (Exception e) {
-			logger.debug("Service :: getAvailableCredits :: Exception" + e.getMessage());
+			logger.error("Service :: getAvailableCredits :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: getAvailableCredits :: Exited");
 		return available;
@@ -193,7 +193,7 @@ public class CreditsServiceImpl implements CreditsService {
 		}
 
 		catch (Exception e) {
-			logger.debug("Service :: saveCreditHistory :: Exception" + e.getMessage());
+			logger.error("Service :: saveCreditHistory :: Exception" + e.getMessage());
 		}
 		logger.debug("Service :: saveCreditHistory :: Exited");
 	}

@@ -8,4 +8,6 @@ public interface CreateResumeTemplateService {
 
 	ResponcePdfDto createResumeTemplate(CandidateDto candidateDto, String username) throws MakeProfileException;
 
+	CandidateDto getContent(CandidateDto candidateDto, String username) throws MakeProfileException;
+
 }
