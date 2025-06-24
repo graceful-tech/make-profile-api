@@ -2,7 +2,9 @@ package com.make_profile.service.impl.resume;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -83,7 +85,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 		try {
 //			CandidateDto candidateDto = convertCandidateDtoIntoString(candidate);
 
- 			if (Objects.nonNull(candidate)) {
+			if (Objects.nonNull(candidate)) {
 
 				variables.put("phone", candidate.getMobileNumber());
 				variables.put("name", candidate.getName());
@@ -216,8 +218,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 					variables.put("achievements", achievementsList);
 				}
 
-				if (Objects.nonNull(candidate.getCoreCompentencies())
-						&& !candidate.getCoreCompentencies().isEmpty()) {
+				if (Objects.nonNull(candidate.getCoreCompentencies()) && !candidate.getCoreCompentencies().isEmpty()) {
 					variables.put("competencies", candidate.getCoreCompentencies());
 				}
 
@@ -238,8 +239,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 					variables.put("collegeProject", candidateCollegeProjectList);
 				}
 
-				if (Objects.nonNull(candidate.getCareerObjective())
-						&& !candidate.getCareerObjective().isEmpty()) {
+				if (Objects.nonNull(candidate.getCareerObjective()) && !candidate.getCareerObjective().isEmpty()) {
 					variables.put("objective", candidate.getCareerObjective());
 				}
 
@@ -256,6 +256,11 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 					variables.put("profileImage", "data:image/png;base64,${base64Image}");
 				}
 
+				variables.put("calendarIcon", "${canlendarIcon}");
+				variables.put("phoneIcon", "${phoneIcon}");
+				variables.put("mailIcon", "${mailIcon}");
+
+
 				template = configuration.getTemplate(candidate.getTemplateName() + ".ftl");
 
 				String processTemplateIntoString = FreeMarkerTemplateUtils.processTemplateIntoString(template,
@@ -266,12 +271,30 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 				String resumeHtmlCode = checkResumePageCountService.getResumeHtmlCode(processTemplateIntoString,
 						candidate.getId(), username, candidate.getTemplateName());
 
-				if (Objects.nonNull(imageLocation) && !imageLocation.isEmpty()) {
+				if (Objects.nonNull(imageLocation) && !imageLocation.isEmpty()
+						&& resumeHtmlCode.contains("${base64Image}")) {
 					String imagePath = "C:/make_profile/Image/" + candidate.getId() + "/" + imageLocation;
 					String base64Image = convertImageToBase64(imagePath);
 					resumeHtmlCode = resumeHtmlCode.replace("${base64Image}", base64Image);
 
 				}
+
+				if (resumeHtmlCode.contains("${canlendarIcon}")) {
+					resumeHtmlCode = resumeHtmlCode.replace("${canlendarIcon}",
+							"data:image/png;base64," + convertImageToBase64("C:/make_profile/calendar.png"));
+				}
+				
+				if (resumeHtmlCode.contains("${phoneIcon}")) {
+					resumeHtmlCode = resumeHtmlCode.replace("${phoneIcon}",
+							"data:image/png;base64," + convertImageToBase64("C:/make_profile/phone.png"));
+				}
+				
+				if (resumeHtmlCode.contains("${mailIcon}")) {
+					resumeHtmlCode = resumeHtmlCode.replace("${mailIcon}",
+							"data:image/png;base64," + convertImageToBase64("C:/make_profile/mail.png"));
+				}
+
+
 				convertHtmlToPdf = convertHtmlToPdf(resumeHtmlCode, candidate.getName() + ".pdf");
 
 				// convertHtmlToDocx(processTemplateIntoString, candidateDto.getName() +
@@ -279,7 +302,7 @@ public class CreateResumeTemplateTemplateServiceImpl implements CreateResumeTemp
 
 				responcePdfDto.setResumePdf(convertHtmlToPdf);
 				responcePdfDto.setCandidateName(candidate.getName());
- 			}
+			}
 
 			else {
 				Long userId = userRepository.getUserId(username);

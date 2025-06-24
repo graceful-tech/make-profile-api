@@ -124,7 +124,7 @@
     <div class="container">
         <div class="header">
             <h1>${name}</h1>
-            <p class="contact-info">Phone: ${phone} | Mail: ${email} 
+            <p class="contact-info"> <img src="${phoneIcon}" style="width:16px; height:16px; vertical-align:middle; margin-top:6px;" />  ${phone} | <img src="${mailIcon}" style="width:16px; height:16px; vertical-align:middle; margin-top:9px;" />  ${email} 
            
            <#if linkedin?has_content>
            | LinkedIn: ${linkedin}
@@ -166,7 +166,13 @@
                         </#if>   
                         
                      <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content>    
-                        (${extractYear(experience.experienceYearStartDate)} -
+                     
+                      
+                     
+                      <img src="${calendarIcon}" style="width:16px; height:16px; vertical-align:middle; margin-top:10px;" />  
+                      
+                      
+                      (${extractYear(experience.experienceYearStartDate)} -
                         <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content> 
                          ${extractYear(experience.experienceYearEndDate)}
                       <#else> 
@@ -190,6 +196,33 @@
                 </div>
             </#if> 
             
+            
+            
+            <#if collegeProject?? && collegeProject?size gt 0>
+                <div class="section">
+                     <h2>Academic Project</h2>
+                         <#list collegeProject as project>
+		                       <#if project.collegeProjectName?has_content>
+		                          <h3><strong>Title: </strong>${project.collegeProjectName}</h3>
+		                       </#if>
+		                          
+		                          <#if project.collegeProjectSkills?has_content && project.collegeProjectSkill?trim?length gt 0>
+			                          <ul>
+					                       <#list project.collegeProjectSkills?split(",") as skill>
+					                           <#if skill?has_content>
+					                              <li>${skill?trim}</li>
+					                           </#if>   
+					                        </#list>
+					                   </ul>
+				                    </#if>
+				                    
+				                   <#if project.collegeProjectDescription?has_content>
+                                      <p><strong>Project Description:</strong> ${project.collegeProjectDescription}</p>
+                                     </#if>
+		                 </#list>    
+                </div>
+            </#if>
+            
       </div>  
             <div class="right-column">
             
@@ -205,6 +238,8 @@
                     </ul>
                 </div>
             </#if>   
+            
+            
             
          <#if softSkills?? && softSkills?trim?length gt 0>
                 <div class="section">

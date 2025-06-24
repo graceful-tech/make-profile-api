@@ -142,10 +142,10 @@
         <div class="header">
             <h1>${name}</h1>
         
-            <p class="contact-info">Phone: ${phone} | Mail: ${email} |
+            <p class="contact-info">Phone: ${phone} | Mail: ${email} 
            
             <#if linkedin?has_content>
-            LinkedIn: ${linkedin}</p>
+             |LinkedIn: ${linkedin}</p>
             </#if> 
                
                </p>
@@ -213,7 +213,7 @@
                             <div class="certificates">
                             
                             <strong><a>${certificate.courseName}</a></strong>
-                            &nbsp;&nbsp;
+                            
                        <#if certificate.courseStartDate?? && certificate.courseStartDate?has_content>    
                             ${extractYear(certificate.courseStartDate)}</div>
                            </#if> 
@@ -238,11 +238,11 @@
                               Company: ${experience.companyName}
                            </#if> 
                               <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content> 
-                                  ${extractYear(experience.experienceYearStartDate)} -
+                                 ( ${extractYear(experience.experienceYearStartDate)} -
                             
                                  <#if experience.experienceYearEndDate?? && experience.experienceYearEndDate?has_content> 
-                                      ${extractYear(experience.experienceYearEndDate)}
-                                         <#else> Present </#if>
+                                      ${extractYear(experience.experienceYearEndDate)} )
+                                         <#else> Present ) </#if>
                                
                                </#if>  
                             </strong> 
@@ -251,6 +251,34 @@
                            <#if  experience?? && experience.responsibilities?? && experience.responsibilities?trim?length gt 0>
                               <ul>
                                   <#list  experience.responsibilities?split(",") as item>
+                                     <#if item?has_content> 
+                                        <li>${item?trim}</li>
+                                      </#if>   
+                                   </#list>
+                              </ul>
+                           </#if>  
+                    </#list>        
+                  </div>
+			</#if>
+			
+			
+		<#if collegeProject?? && collegeProject?size gt 0>	
+				 <div class="section">
+                      <h2>Academic Project</h2>
+                   <#list collegeProject as project>
+                        <h3>Title: ${project.collegeProjectName}</h3>
+                        
+                   <#if  project?? &&  project.collegeProjectSkill?? &&  project.collegeProjectSkill?trim?length gt 0>
+                          <h3>Skills: </h3> <br/>
+                        <p class="skills-text">
+                             <#list project.collegeProjectSkills?split(",") as skill>${skill?trim}<#if skill_has_next>, </#if></#list>
+                          </p>
+                    </#if> 
+                        
+                           <#if  project?? && project.collegeProjectDescription?? && project.collegeProjectDescription?trim?length gt 0>
+                              <h3>Descrption: </h3> <br/>
+                              <ul>
+                                  <#list  project.collegeProjectDescription?split(",") as item>
                                      <#if item?has_content> 
                                         <li>${item?trim}</li>
                                       </#if>   

@@ -282,9 +282,9 @@
          <div class="job-title">Role: ${experience.role}</div>
        </#if>
       
-      <#if experience.role?has_content> 
-        <div class="company">Company: ${experience.companyName}</div>
-      </#if>
+	      <#if experience.role?has_content> 
+	        <div class="company">Company: ${experience.companyName}</div>
+	      </#if>
       
       <#if experience.experienceYearStartDate?? && experience.experienceYearStartDate?has_content> 
          <div class="meta">
@@ -334,8 +334,41 @@
 	</#list> 
    </div>
  </#if>
-
  
+ 
+  <#if collegeProject?? && collegeProject?size gt 0>
+		 <div class="section">
+		     <div class="section-title">Academic Project</div>
+		       <#list collegeProject as project>
+		  
+		      <#if project.collegeProjectName?has_content> 
+		         <div class="job-title">Title: ${project.collegeProjectName}</div>
+		       </#if>
+		       
+		       <#if  project.collegeProjectSkills?? && project.collegeProjectSkills?trim?length gt 0> 
+			        <ul>
+		                <#list project.collegeProjectSkills?split(",") as pro>
+		                    <#if pro?has_content>
+							   <li>${pro?trim}</li>
+							</#if>   
+					      </#list>		
+		             </ul>
+			     </#if>
+			     
+			     
+			   <#if project.collegeProjectDescription?? && project.collegeProjectDescription?trim?length gt 0>
+			        <ul>
+			          <#list project.collegeProjectDescription?split(",") as item>
+			            <#if item?has_content>
+			              <li>${item?trim}</li>
+			            </#if>
+			          </#list>
+			        </ul>
+		      </#if>
+		       
+		 <div>      
+    </#if>
+    
   <#if education?? && education?size gt 0>   
      <div class="section">
       <div class="section-title">EDUCATION</div>
