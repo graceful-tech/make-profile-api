@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.make_profile.controller.BaseController;
-import com.make_profile.controller.candidates.CandidateHistoryController;
 import com.make_profile.dto.password.PasswordResetTokenDto;
-import com.make_profile.dto.user.UserDto;
 import com.make_profile.service.forgotpassword.ForgotPasswordService;
-import com.make_profile.service.password.EmailService;
-import com.make_profile.utility.CommonConstants;
+
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -40,11 +37,10 @@ public class ForgotPasswordController extends BaseController {
 
 		if (resetTokenDto != null) {
 			logger.debug("Controller :: sendResetPasswordToken :: Exited");
-			return new ResponseEntity<>(resetTokenDto, HttpStatus.OK);	// HM_0126
+			return new ResponseEntity<>(resetTokenDto, HttpStatus.OK);
 		}
 		logger.debug("Controller :: verifyOtp :: Error");
-		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0005), HttpStatus.BAD_REQUEST);
-//	HM_0125
+		return new ResponseEntity<>(resetTokenDto, HttpStatus.BAD_REQUEST);
 	}
 
 	@PostMapping("/verify-otp")
@@ -54,10 +50,10 @@ public class ForgotPasswordController extends BaseController {
 		boolean status = forgotPasswordService.verifyOtp(passwordResetTokenDto);
 		if (!status) {
 			logger.debug("Controller :: verifyOtp :: Error");
-			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0005), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(status, HttpStatus.BAD_REQUEST);
 		}
 		logger.debug("Controller :: verifyOtp :: EXited");
-		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0004), HttpStatus.OK);
+		return new ResponseEntity<>(status, HttpStatus.OK);
 
 	}
 
@@ -69,11 +65,11 @@ public class ForgotPasswordController extends BaseController {
 
 		if (!updatPassword) {
 			logger.debug("Controller :: updateNewPassword :: Error");
-			return new ResponseEntity<>(buildResponse(CommonConstants.MP_0005), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(updatPassword, HttpStatus.BAD_REQUEST);
 		}
 
 		logger.debug("Controller :: updateNewPassword :: Exited");
-		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0004), HttpStatus.OK);
+		return new ResponseEntity<>(updatPassword, HttpStatus.OK);
 
 	}
 

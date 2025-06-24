@@ -24,7 +24,6 @@ import com.make_profile.repository.password.PasswordResetTokenRepository;
 import com.make_profile.repository.user.UserRepository;
 import com.make_profile.service.forgotpassword.ForgotPasswordService;
 import com.make_profile.service.password.EmailService;
-import com.make_profile.utility.CommonConstants;
 import com.make_profile.utility.CommonUtils;
 
 import freemarker.template.Configuration;
@@ -72,8 +71,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 			UserEntity userEntity = userRepository.findByEmail(passwordResetTokenDto.getEmail());
 
 			if (Objects.isNull(userEntity)) {
-				throw new MakeProfileException(CommonConstants.MP_0001);
-//				HM_0124
+				throw new MakeProfileException("User not found");
 			}
 			String otp = commonUtils.generateOtp();
 			PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
