@@ -2,7 +2,6 @@ package com.make_profile.service.impl.candidates;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -106,6 +105,8 @@ public class CandidatesServiceimpl implements CandidateService {
 
 			// save candidate in history
 			saveCandidateInHistory(candidateDto, Username, ResponceCandidateEntity.getId());
+
+			saveCandidateInHurecomv2(candidateDto);
 
 			candidateResponseDto = modelMapper.map(ResponceCandidateEntity, CandidateDto.class);
 
@@ -268,6 +269,34 @@ public class CandidatesServiceimpl implements CandidateService {
 		}
 		logger.debug("Service :: saveCandidateInHistory :: Exited");
 
+	}
+
+	public void saveCandidateInHurecomv2(CandidateDto candidateDto) {
+		logger.debug("Service :: saveCandidateInHurecomv2 :: Entered");
+
+		try {
+
+			if (candidatesRepository.findCandidateByMobileNumber(candidateDto.getMobileNumber()) == 1) {
+
+				candidatesRepository.UpdateCandidateInHurecomV2(candidateDto.getName(), candidateDto.getMobileNumber(),
+						candidateDto.getSkills(), candidateDto.getEmail());
+			} else {
+				String candidateQualification = candidateDto.getQualification().get(0).getDepartment() != null
+						? candidateDto.getQualification().get(0).getDepartment()
+						: "NA";
+
+				candidatesRepository.saveCandidateInHurecomV2(candidateDto.getName(), candidateDto.getMobileNumber(),
+						candidateDto.getSkills(), candidateDto.getEmail(),
+						candidateDto.getGender() != null ? candidateDto.getGender() : "Male", candidateQualification,
+						candidateDto.isFresher());
+
+				candidateQualification = null;
+			}
+
+		} catch (Exception e) {
+			logger.error("Service :: saveCandidateInHurecomv2 :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: saveCandidateInHurecomv2 :: Exited");
 	}
 
 }

@@ -199,29 +199,33 @@
             
             
             <#if collegeProject?? && collegeProject?size gt 0>
-                <div class="section">
-                     <h2>Academic Project</h2>
-                         <#list collegeProject as project>
-		                       <#if project.collegeProjectName?has_content>
-		                          <h3><strong>Title: </strong>${project.collegeProjectName}</h3>
-		                       </#if>
-		                          
-		                          <#if project.collegeProjectSkills?has_content && project.collegeProjectSkill?trim?length gt 0>
-			                          <ul>
-					                       <#list project.collegeProjectSkills?split(",") as skill>
-					                           <#if skill?has_content>
-					                              <li>${skill?trim}</li>
-					                           </#if>   
-					                        </#list>
-					                   </ul>
-				                    </#if>
-				                    
-				                   <#if project.collegeProjectDescription?has_content>
-                                      <p><strong>Project Description:</strong> ${project.collegeProjectDescription}</p>
-                                     </#if>
-		                 </#list>    
-                </div>
-            </#if>
+				    <div class="section">
+				        <h2>Academic Project</h2>
+				        <#list collegeProject as project>
+				            <#if project.collegeProjectName?has_content>
+				                <h3><strong>Title: </strong>${project.collegeProjectName}</h3>
+				            </#if>
+				
+				            <#if project.collegeProjectSkills?has_content && project.collegeProjectSkills?trim?length gt 0>
+				            
+				            <h3><strong>Project Skills:</strong></h3>
+				            
+				                <ul>
+				                    <#list project.collegeProjectSkills?split(",") as skill>
+				                        <#if skill?has_content>
+				                            <li>${skill?trim}</li>
+				                        </#if>
+				                    </#list>
+				                </ul>
+				            </#if>
+				
+				            <#if project.collegeProjectDescription?has_content>
+				                <p><strong>Project Description:</strong> ${project.collegeProjectDescription}</p>
+				            </#if>
+				        </#list>
+				    </div>
+          </#if>
+
             
       </div>  
             <div class="right-column">

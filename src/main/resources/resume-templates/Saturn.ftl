@@ -186,6 +186,13 @@
       font-size: 14px;
       margin-bottom: 8px;
     }
+    
+     ul{
+     line-height: 1.5;
+     margin-bottom: 5px;
+     }
+
+         
   </style>
 </head>
 <body>
@@ -225,6 +232,8 @@
    <div class="contact">
    
 	   <#if phone?has_content>
+	   
+	   
 	       Phone: ${phone}
 	    </#if>
 	    
@@ -296,6 +305,40 @@
     </div>
   </div>
 </#if>
+
+  <#if  collegeProject?? && collegeProject?size gt 0>
+  
+  <div class="section">
+     <div class="section-title">ACADEMIC PROJECT</div>
+     
+         <#list collegeProject as project>
+             
+              <div style="margin-top:8px;">
+	                <#if project.collegeProjectName?has_content>
+	                 <div><strong>Project Title: </strong> ${project.collegeProjectName}</div>
+	                </#if>	
+	           </div>
+	                <#if project.collegeProjectSkills?? &&  project.collegeProjectSkills?trim?length gt 0>
+	                    <div style="text-align:left; margin-top:7px;">  <strong>Project Skills: </strong> <br/></div> 
+			                   <ul class="bullets">
+					                <#list project.collegeProjectSkills?split(",") as item>
+					                  <#if item?has_content>
+					                    <li>${item?trim}</li>
+					                  </#if>
+					                </#list>
+			                    </ul>
+			                 
+	               </#if>
+
+		            <#if project.collegeProjectDescription?? && project.collegeProjectDescription?trim?length gt 0>
+		               <p><strong>Project Description:</strong> ${project.collegeProjectDescription}</p>
+		            </#if>
+             
+         
+  
+        </#list>
+  </div>
+  </#if>
 
   
  <#if education?? && education?size gt 0> 
@@ -393,7 +436,7 @@
 				<#if certi.courseName?? && certi.courseName?has_content>
 		             <li>${certi.courseName} 
 		                  <#if certi.courseStartDate?? && certi.courseStartDate?has_content>
-						            ( ${certi.courseStartDate} 
+						            ( ${extractYear(certi.courseStartDate)} 
  								          <#if  certi.courseEndDate?? && certi.courseEndDate?has_content>
 		                                        - ${extractYear(certi.courseEndDate)} )
 		                                                <#else>

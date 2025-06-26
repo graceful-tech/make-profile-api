@@ -268,15 +268,15 @@
                    <#list collegeProject as project>
                         <h3>Title: ${project.collegeProjectName}</h3>
                         
-                   <#if  project?? &&  project.collegeProjectSkill?? &&  project.collegeProjectSkill?trim?length gt 0>
-                          <h3>Skills: </h3> <br/>
+                   <#if  project?? &&  project.collegeProjectSkills?? &&  project.collegeProjectSkills?trim?length gt 0>
+                           <strong>Project Skills: </strong> <br/>
                         <p class="skills-text">
                              <#list project.collegeProjectSkills?split(",") as skill>${skill?trim}<#if skill_has_next>, </#if></#list>
                           </p>
                     </#if> 
                         
                            <#if  project?? && project.collegeProjectDescription?? && project.collegeProjectDescription?trim?length gt 0>
-                              <h3>Descrption: </h3> <br/>
+                              <strong>Project Descrption: </strong> <br/>
                               <ul>
                                   <#list  project.collegeProjectDescription?split(",") as item>
                                      <#if item?has_content> 
@@ -301,8 +301,8 @@
                                    <strong>${edu.department}</strong><br />
                                 </#if> 
                              
-                             <#if edu.instutionName?has_content>
-                              ${edu.instutionName} 
+                             <#if edu.institutionName?has_content>
+                              ${edu.institutionName} 
                              </#if> 
                               
                              <#if edu.qualificationStartYear?? && edu.qualificationStartYear?has_content>  

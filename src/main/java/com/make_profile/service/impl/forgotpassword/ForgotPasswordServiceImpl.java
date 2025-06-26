@@ -76,7 +76,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 			String otp = commonUtils.generateOtp();
 			PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
 			passwordResetTokenEntity.setOtp(otp);
-			passwordResetTokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(2));
+			passwordResetTokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(10));
 			passwordResetTokenEntity.setUserId(userEntity);
 			passwordResetTokenRepository.save(passwordResetTokenEntity);
 
@@ -96,7 +96,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 			emailDto.setCcList(ccAddressList);
 			emailDto.setSubject("Make Profiles - Reset Password");
 			emailDto.setMessage(htmlBody);
-//			emailService.sendEmail(emailDto);
+			emailService.sendEmail(emailDto);
 
 			resetTokenDto = modelMapper.map(passwordResetTokenEntity, PasswordResetTokenDto.class);
 			otp = null;

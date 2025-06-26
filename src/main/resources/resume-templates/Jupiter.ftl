@@ -235,42 +235,42 @@
          </#if>
          
          
-             <#if collegeProject?? && collegeProject?size gt 0> 
-			 <div class="section">
-			     <div class="section-title">Academic Project</div>
-			             
-			           <#list collegeProject as project>
-			                
-			                <#if project.collegeProjectName?has_content> 
-			         		   <div class="job-title">Title: ${project.collegeProjectName} 
- 			         		    
-			         		    </div>
-			                 </#if>
-			                <#if project.collegeProjectSkills?has_content >
-			           			<div class="job-details"> 
-			             			    <#if project.collegeProjectSkills?? && project.collegeProjectSkills?trim?length gt 0>
-			             			    <strong>Skills:</strong> <br/>
-									            <ul>
-								                     <#list project.collegeProjectSkills?split(",") as item>
-												            <#if item?has_content>
-												              <li>${item?trim}</li>
-												            </#if>
-												      </#list>
- 									            </ul>
-									    </#if>           
-			            		</div>
-			                 </#if>	
-			                 
-			                 <if project.collegeProjectDescription?has_content >
-			                        <div class="job-details">
-			                        <strong>Description:</strong> <br/>
-			                            <p> ${project.collegeProjectDescription}</p>
-			                        <div>
-			                 
-			                 </#if>	
-			            </#list>   		
-			     </div>  
-         </#if>
+         <#if collegeProject?? && collegeProject?size gt 0> 
+			    <div class="section">
+			        <div class="section-title">Academic Project</div>
+			        
+			        <#list collegeProject as project>
+			        
+			            <#if project.collegeProjectName?has_content> 
+			                <div><strong>Project Title:</strong> ${project.collegeProjectName}</div>
+			            </#if>
+			            
+			            <#if project.collegeProjectSkills?has_content>
+			                <div class="job-details"> 
+			                    <#if project.collegeProjectSkills?? && project.collegeProjectSkills?trim?length gt 0>
+			                        <strong>Project Skills:</strong> <br/>
+			                        <ul>
+			                            <#list project.collegeProjectSkills?split(",") as item>
+			                                <#if item?has_content>
+			                                    <li>${item?trim}</li>
+			                                </#if>
+			                            </#list>
+			                        </ul>
+			                    </#if>           
+			                </div>
+			            </#if>	
+			            
+			            <#if project.collegeProjectDescription?has_content>
+			                <div class="job-details">
+			                    
+			                    <p> <strong>Project Description:</strong> ${project.collegeProjectDescription}</p>
+			                </div>
+			            </#if>
+			        
+			        </#list>   		
+			    </div>  
+      </#if>
+
          
          
 	          

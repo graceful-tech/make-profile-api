@@ -185,7 +185,7 @@
             <h1>${name}</h1>
             
             <p class="contact-info">
-               Phone: ${phone} | 
+              Phone: ${phone} | 
               Mail: ${email} 
            
              <#if linkedin?has_content>

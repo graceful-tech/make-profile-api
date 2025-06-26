@@ -71,6 +71,19 @@
       margin-top: 10px;
       margin-bottom: 3px;
     }
+    
+    .college-project-title {
+      font-weight: bold;
+      font-size: 11pt;
+      margin-top: 10px;
+       margin-bottom: 3px;
+    }
+    
+    .college-project{
+      font-weight: bold;
+      font-size: 11pt;
+      margin-top: 10px;
+    }
 
     .company {
       color: #1a75cf;
@@ -337,67 +350,70 @@
  
  
   <#if collegeProject?? && collegeProject?size gt 0>
-		 <div class="section">
-		     <div class="section-title">Academic Project</div>
-		       <#list collegeProject as project>
-		  
-		      <#if project.collegeProjectName?has_content> 
-		         <div class="job-title">Title: ${project.collegeProjectName}</div>
-		       </#if>
-		       
-		       <#if  project.collegeProjectSkills?? && project.collegeProjectSkills?trim?length gt 0> 
-			        <ul>
-		                <#list project.collegeProjectSkills?split(",") as pro>
-		                    <#if pro?has_content>
-							   <li>${pro?trim}</li>
-							</#if>   
-					      </#list>		
-		             </ul>
-			     </#if>
-			     
-			     
-			   <#if project.collegeProjectDescription?? && project.collegeProjectDescription?trim?length gt 0>
-			        <ul>
-			          <#list project.collegeProjectDescription?split(",") as item>
-			            <#if item?has_content>
-			              <li>${item?trim}</li>
-			            </#if>
-			          </#list>
-			        </ul>
-		      </#if>
-		       
-		 <div>      
-    </#if>
+  <div class="section">
+    <div class="section-title">ACADEMIC PROJECT</div>
     
-  <#if education?? && education?size gt 0>   
-     <div class="section">
-      <div class="section-title">EDUCATION</div>
-	 <#list education as edu> 
-       
-      <#if edu.department?has_content> 
-        <div class="job-title">Department: ${edu.department}</div>
+    <#list collegeProject as project>
+    
+      <#if project.collegeProjectName?has_content> 
+        <div class="college-project">Title: ${project.collegeProjectName}</div>
       </#if>
        
-      <#if edu.institutionName?has_content>
-          <div class="company">Institution: ${edu.institutionName}</div>
-      </#if>    
+      <#if project.collegeProjectSkills?? && project.collegeProjectSkills?trim?length gt 0> 
+         <div class="college-project-title">Project Skills:</div>
+      
+        <ul>
+          <#list project.collegeProjectSkills?split(",") as pro>
+            <#if pro?has_content>
+              <li>${pro?trim}</li>
+            </#if>   
+          </#list>    
+        </ul>
+      </#if>
        
-      <#if edu.qualificationStartYear?? && edu.qualificationStartYear?has_content>
-          <div class="meta">
- 	            
-             ( ${extractYear(edu.qualificationStartYear)} 
-                        
-               <#if edu.qualificationEndYear?? && edu.qualificationEndYear?has_content>
-                   -  ${extractYear(edu.qualificationEndYear)} )
-                <#else>
-                    - Present ) </#if>             
-	      </div>
-	  </#if>  
-	     
-	 </#list> 
-    </div>
+      <#if project.collegeProjectDescription?? && project.collegeProjectDescription?trim?length gt 0>
+           
+                <p> <strong>Project Description:</strong> ${project.collegeProjectDescription}</p>
+      </#if>
     
-   </#if> 
+    </#list>  
+  </div>
+</#if>
+
+  <#if education?? && education?size gt 0>   
+  <div class="section">
+    <div class="section-title">EDUCATION</div>
+    
+    <#list education as edu> 
+      <div class="education-entry">
+
+        <#if edu.department?has_content> 
+          <div class="job-title">Department: ${edu.department}</div>
+        </#if>
+         
+        <#if edu.institutionName?has_content>
+          <div class="company">Institution: ${edu.institutionName}</div>
+        </#if>    
+
+        <#if edu.qualificationStartYear?? && edu.qualificationStartYear?has_content>
+          <div class="meta">
+            (
+            ${extractYear(edu.qualificationStartYear)}
+            <#if edu.qualificationEndYear?? && edu.qualificationEndYear?has_content>
+              - ${extractYear(edu.qualificationEndYear)}
+            <#else>
+              - Present
+            </#if>
+            )
+          </div>
+        </#if>
+
+      </div>
+    </#list> 
+
+  </div>
+</#if>  
+
    
 		<#if skills?? && skills?trim?length gt 0>
 		  <div class="section">
