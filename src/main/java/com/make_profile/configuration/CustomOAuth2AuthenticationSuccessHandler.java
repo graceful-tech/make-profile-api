@@ -60,7 +60,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 			response.sendRedirect(redirectUri + "?token=" + token + "&username=" + String.valueOf(GoogleUser.getUserName())
 							+ "&email=" + email + "&id=" + String.valueOf(GoogleUser.getId()));
 		} else {
-			response.sendRedirect("http://localhost:4200/#/candidate");
+			response.sendRedirect("https://localhost:4200/#/candidate");
 		}
 
 	}
