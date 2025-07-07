@@ -1,5 +1,6 @@
 package com.make_profile.service.candidates;
 
+import com.make_profile.dto.candidates.CandidateAdditionalDetailsDto;
 import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.dto.candidates.CandidateImageDto;
 
@@ -12,5 +13,9 @@ public interface CandidateService {
 	byte[] uploadCandidateImage(CandidateImageDto candidateImageDto);
 
 	byte[] getCandidateImage(Long candidateId);
+
+	boolean saveAdditionalDetails(CandidateAdditionalDetailsDto candidateAdditionalDetailsDto);
+
+	CandidateAdditionalDetailsDto getCandidateDetails(String mobile);
 
 }

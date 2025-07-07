@@ -12,11 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.make_profile.dto.candidates.CandidateAdditionalDetailsDto;
 import com.make_profile.dto.candidates.CandidateDto;
 import com.make_profile.dto.candidates.CandidateImageDto;
+import com.make_profile.entity.candidates.CandidateAdditionalDetailsEntity;
 import com.make_profile.entity.candidates.CandidateEntity;
 import com.make_profile.entity.candidates.CandidateImageEntity;
 import com.make_profile.entity.history.candidates.CandidateHistoryEntity;
+import com.make_profile.repository.candidates.CandidateAdditionalDetailsRepository;
 import com.make_profile.repository.candidates.CandidateImageRepository;
 import com.make_profile.repository.candidates.CandidatesRepository;
 import com.make_profile.repository.common.EnvironmentRepository;
@@ -60,6 +63,9 @@ public class CandidatesServiceimpl implements CandidateService {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	CandidateAdditionalDetailsRepository candidateAdditionalDetailsRepository;
 
 	@Override
 	public CandidateDto createCandidate(CandidateDto candidateDto, String Username) {
@@ -279,7 +285,8 @@ public class CandidatesServiceimpl implements CandidateService {
 			if (candidatesRepository.findCandidateByMobileNumber(candidateDto.getMobileNumber()) == 1) {
 
 				candidatesRepository.UpdateCandidateInHurecomV2(candidateDto.getName(), candidateDto.getMobileNumber(),
-						candidateDto.getSkills(), candidateDto.getEmail());
+						candidateDto.getSkills(), candidateDto.getEmail(), candidateDto.isFresher(),
+						candidateDto.getGender());
 			} else {
 				String candidateQualification = candidateDto.getQualification().get(0).getDepartment() != null
 						? candidateDto.getQualification().get(0).getDepartment()
@@ -297,6 +304,109 @@ public class CandidatesServiceimpl implements CandidateService {
 			logger.error("Service :: saveCandidateInHurecomv2 :: Exception :: " + e.getMessage());
 		}
 		logger.debug("Service :: saveCandidateInHurecomv2 :: Exited");
+	}
+
+	@Override
+	public boolean saveAdditionalDetails(CandidateAdditionalDetailsDto candidateAdditionalDetailsDto) {
+		logger.debug("Service :: saveAdditionalDetails :: Entered");
+
+		boolean status = false;
+
+		CandidateAdditionalDetailsEntity detailsEntity = null;
+		CandidateAdditionalDetailsEntity additionalDetails = null;
+
+		try {
+			if (Objects.nonNull(candidateAdditionalDetailsDto)) {
+				additionalDetails = candidateAdditionalDetailsRepository
+						.getAdditionalDetailsByMobileNumber(candidateAdditionalDetailsDto.getMobileNumber());
+
+				if (Objects.nonNull(additionalDetails)) {
+					detailsEntity = modelMapper.map(candidateAdditionalDetailsDto,
+							CandidateAdditionalDetailsEntity.class);
+
+					detailsEntity.setId(additionalDetails.getId());
+
+					candidateAdditionalDetailsRepository.save(detailsEntity);
+
+					updateHurecomV2CandidateDetails(candidateAdditionalDetailsDto);
+				} else {
+					detailsEntity = modelMapper.map(candidateAdditionalDetailsDto,
+							CandidateAdditionalDetailsEntity.class);
+
+					candidateAdditionalDetailsRepository.save(detailsEntity);
+
+					updateHurecomV2CandidateDetails(candidateAdditionalDetailsDto);
+
+				}
+				status = true;
+				additionalDetails = null;
+				detailsEntity = null;
+			}
+		} catch (Exception e) {
+			logger.error("Service :: saveAdditionalDetails :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: saveAdditionalDetails :: Exited");
+		return status;
+	}
+
+	@Override
+	public CandidateAdditionalDetailsDto getCandidateDetails(String mobile) {
+		logger.debug("Service :: getCandidateDetails :: Entered");
+
+		CandidateAdditionalDetailsEntity additionalDetails = null;
+		CandidateAdditionalDetailsDto candidateAdditionalDetailsDto = null;
+		try {
+			additionalDetails = candidateAdditionalDetailsRepository.getAdditionalDetailsByMobileNumber(mobile);
+			candidateAdditionalDetailsDto = modelMapper.map(additionalDetails, CandidateAdditionalDetailsDto.class);
+
+			additionalDetails = null;
+		} catch (Exception e) {
+			logger.error("Service :: getCandidateDetails :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: getCandidateDetails :: Exited");
+		return candidateAdditionalDetailsDto;
+	}
+
+	public void updateHurecomV2CandidateDetails(CandidateAdditionalDetailsDto candidateAdditionalDetailsDto) {
+		logger.debug("Service :: updateHurecomV2CandidateDetails :: Entered");
+
+		try {
+
+			String mobileNumberById = candidatesRepository
+					.getMobileNumberById(candidateAdditionalDetailsDto.getCandidateId());
+
+			candidatesRepository.UpdateCandidateProfessionalDetailsInHurecomV2(
+
+					candidateAdditionalDetailsDto.getPreferredLocation() != null
+							? candidateAdditionalDetailsDto.getPreferredLocation()
+							: "NA",
+					candidateAdditionalDetailsDto.getRelevantExperience() != null
+							? candidateAdditionalDetailsDto.getRelevantExperience()
+							: 0,
+					candidateAdditionalDetailsDto.getTotalWorkExperience() != null
+							? candidateAdditionalDetailsDto.getTotalWorkExperience()
+							: 0,
+					candidateAdditionalDetailsDto.getCurrentCostToCompany() != null
+							? candidateAdditionalDetailsDto.getCurrentCostToCompany()
+							: 0,
+					candidateAdditionalDetailsDto.getExpectedCostToCompany() != null
+							? candidateAdditionalDetailsDto.getExpectedCostToCompany()
+							: 0,
+					candidateAdditionalDetailsDto.getCompanyName() != null
+							? candidateAdditionalDetailsDto.getCompanyName()
+							: "NA",
+					mobileNumberById,
+					candidateAdditionalDetailsDto.getQualification() != null
+							? candidateAdditionalDetailsDto.getQualification()
+							: "NA");
+
+			mobileNumberById = null;
+
+		} catch (Exception e) {
+			logger.error("Service :: updateHurecomV2CandidateDetails :: Exception :: " + e.getMessage());
+		}
+		logger.debug("Service :: updateHurecomV2CandidateDetails :: Exited");
+
 	}
 
 }

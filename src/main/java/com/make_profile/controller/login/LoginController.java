@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,17 +35,17 @@ public class LoginController extends BaseController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
-		logger.debug("LoginController :: login :: Entered");
+		logger.debug("Controller :: login :: Entered");
 		UserDto userDto = null;
 		try {
 			userDto = loginService.findByMobileNumber(loginDto);
 			String token = jwtUtil.generateToken(userDto.getUserName());
 			userDto.setToken(token);
 
-			logger.debug("LoginController :: userLogin :: Exited");
+			logger.debug("Controller :: userLogin :: Exited");
 			return ResponseEntity.ok(userDto);
 		} catch (Exception e) {
-			logger.error("LoginController :: userLogin :: Error");
+			logger.error("Controller :: userLogin :: Error " + e.getMessage());
 		}
 		return new ResponseEntity<>(buildResponse(CommonConstants.MP_0005), HttpStatus.BAD_REQUEST);
 	}

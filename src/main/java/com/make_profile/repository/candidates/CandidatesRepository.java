@@ -33,14 +33,27 @@ public interface CandidatesRepository extends JpaRepository<CandidateEntity, Lon
 			+ "values(:name,:mobileNumber,:skills,:email,:gender,:qualification,:isFresher); ", nativeQuery = true)
 	void saveCandidateInHurecomV2(@Param("name") String name, @Param("mobileNumber") String mobileNumber,
 			@Param("skills") String skills, @Param("email") String email, @Param("gender") String gender,
-			@Param("qualification") String qualification, @Param("isFresher") boolean isFresher);
+			@Param("qualification") String qualification, @Param("isFresher") Boolean isFresher);
 
 	@Modifying
-	@Query(value = "update hurecom_v2.candidates set name = :name,mobile_number = :mobileNumber,skills = :skills,email = :email where mobile_number =:mobileNumber  ", nativeQuery = true)
+	@Query(value = "update hurecom_v2.candidates set name = :name,mobile_number = :mobileNumber,skills = :skills,email = :email,is_fresher = :isFresher,gender = :gender where mobile_number =:mobileNumber  ", nativeQuery = true)
 	void UpdateCandidateInHurecomV2(@Param("name") String name, @Param("mobileNumber") String mobileNumber,
-			@Param("skills") String skills, @Param("email") String email);
+			@Param("skills") String skills, @Param("email") String email, @Param("isFresher") boolean isFresher,
+			@Param("gender") String gender);
 
 	@Query(value = "select count(*) from hurecom_v2.candidates where mobile_number = :mobileNumber ", nativeQuery = true)
 	int findCandidateByMobileNumber(@Param("mobileNumber") String mobileNumber);
+
+	@Query(value = "select mobile_number from candidates where id  = :id ", nativeQuery = true)
+	String getMobileNumberById(@Param("id") Long id);
+
+	@Modifying
+	@Query(value = "update hurecom_v2.candidates set preferred_location = :preferredLocation,relevant_experience = :relevantExperience,total_work_experience = :totalWorkExperience,current_cost_to_company = :currentCostToCompany,expected_cost_to_company = :expectedCostToCompany,company_name =:companyName,qualification = :qualification where mobile_number = :mobileNumber", nativeQuery = true)
+	void UpdateCandidateProfessionalDetailsInHurecomV2(@Param("preferredLocation") String preferredLocation,
+			@Param("relevantExperience") Double relevantExperience,
+			@Param("totalWorkExperience") Double totalWorkExperience,
+			@Param("currentCostToCompany") Double currentCostToCompany,
+			@Param("expectedCostToCompany") Double expectedCostToCompany, @Param("companyName") String companyName,
+			@Param("mobileNumber") String mobileNumber, @Param("qualification") String qualification);
 
 }
