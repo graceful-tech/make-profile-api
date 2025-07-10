@@ -82,12 +82,12 @@ public class CheckResumePageCountServiceImpl implements CheckResumePageCountServ
 				pdfPageCount = getPdfPageCount(resume);
 
 				if (pdfPageCount == 1) {
-					addSpaceString = addSpace(resume);
+					addSpaceString = addOnePageSpace(resume);
 
 					reCheckPageCount = getPdfPageCount(addSpaceString);
 
 					if (reCheckPageCount == 2) {
-						removeSpaceString = removeSpace(addSpaceString);
+						removeSpaceString = removeOnePageSpace(addSpaceString);
 
 						addSpaceString = null;
 						removeSectionByTitle = null;
@@ -105,11 +105,11 @@ public class CheckResumePageCountServiceImpl implements CheckResumePageCountServ
 							reCheckPageCount = getPdfPageCount(heightIncreament);
 
 							if (reCheckPageCount == 1) {
-								addSpaceString = addSpace(heightDecrement);
+								addSpaceString = addOnePageSpace(heightDecrement);
 								reCheckPageCount = getPdfPageCount(addSpaceString);
 
 								if (reCheckPageCount == 2) {
-									removeSpaceString = removeSpace(addSpaceString);
+									removeSpaceString = removeOnePageSpace(addSpaceString);
 									return removeSpaceString;
 								}
 							}
@@ -404,5 +404,38 @@ public class CheckResumePageCountServiceImpl implements CheckResumePageCountServ
 		return null;
 
 	}
+	
+	public String addOnePageSpace(String resume) {
+	    logger.debug("Service :: addOnePageSpace :: Entered");
+
+	    try {
+	        int lastDivIndex = resume.lastIndexOf("</div>");
+	        int bodyIndex = resume.indexOf("</body>");
+	        
+ 	        if (lastDivIndex != -1 && lastDivIndex < bodyIndex) {
+	            String before = resume.substring(0, lastDivIndex);
+	            String after = resume.substring(lastDivIndex);
+	            resume = before + "<div style=\"height: 60.1mm;\"></div>" + after;
+	        }
+	    } catch (Exception e) {
+	        logger.error("Service :: addOnePageSpace :: Exception" + e.getMessage());
+	    }
+	    logger.debug("Service :: addOnePageSpace :: Exited");
+	    return resume;
+	}
+
+	
+	public String removeOnePageSpace(String resume) {
+	    logger.debug("Service :: removeOnePageSpace :: Entered");
+	    
+	    try {
+	        resume = resume.replace("<div style=\"height: 60.1mm;\"></div>", "");
+	    } catch (Exception e) {
+	        logger.error("Service :: removeOnePageSpace :: Exception" + e.getMessage());
+	    }
+	    logger.debug("Service :: removeOnePageSpace :: Exited");
+	    return resume;
+	}
+
 
 }
